@@ -15,11 +15,11 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         $localstorage.saveItems($scope.itemsHash);
     });
 
-    // not currently being used
     $scope.onItemDelete=function(item){
         Todo.delete(item.objectId).success(function(){
-            // Note needed currently with DB writes but for good housekeeping :)
-             // pull existing hash from localstorage
+            // Note needed currently with DB writes but for good housekeeping,
+            // specifically to avoid a memory leak.
+            // pull existing hash from localstorage
             $scope.itemsHash = $localstorage.getObject("items");
             // update item that was changed
             delete $scope.itemsHash[item.objectId];
@@ -82,46 +82,33 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         $scope.$broadcast('scroll.refreshComplete');
     };
 
+    $scope.getDeadline = function(item) {
+        var deadline = "";
+        console.log(item);
+        if(item.deadlinetime != null) {
+            deadline = item.deadlinedate + " @ " + item.deadlinetime;
+        } else {
+            deadline = item.deadlinedate;
+        }
+        return(deadline);
+    }
 
-}]).controller('TodoCreationController',['$scope','Todo','$state','$localstorage',function($scope,Todo,$state,$localstorage){
+}]).controller('TodoCreationController',['$scope','Todo','$state','DateUtil','DEFAULTS',function($scope,Todo,$state,DateUtil,DEFAULTS){
 
     $scope.todo={};
 
     // establish default options
-    if($scope.todo.goal != true) $scope.todo.goal = false;
-    $scope.todo.softdeadline = "today";
-    $scope.todo.duration = "0.25";
+    //if($scope.todo.goal != true) $scope.todo.goal = false;
+    $scope.todo.goal = DEFAULTS.GOAL;
+    $scope.todo.softdeadline = DEFAULTS.SOFT_DEADLINE;//"today";
+    $scope.todo.duration = DEFAULTS.DURATION;//"0.25";
 
     $scope.create=function(){
-        // calculate deadline
-        if($scope.todo.deadlinedate != null) {
-              $scope.todo.deadline = $scope.todo.deadlinedate;
-             
-        } else {
-            switch($scope.todo.softdeadline) {
-                case 'choose a date':
-                    $scope.todo.deadline = 'error';
-                    break;
-                case 'today':
-                    //$scope.todo.deadline = new Date();
-                    $scope.todo.deadline = new Date().toLocaleDateString();
-                    //$scope.todo.deadline = new Date().toUTCString;
-                    //$scope.todo.deadline = dateTool.today();
-                    break;
-                case 'tomorrow':
-                case 'this week':
-                case 'this weekend':
-                case 'next week':
-                case 'next weekend':
-                case 'this month':
-                case 'next month':
-                case 'within three months':
-                case 'this year':
-                case 'someday':
-                default:
-                    $scope.todo.deadline = 'no case matched';
-            }
-        }
+        /*
+          DateUtil Service calculates all the soft deadlines and 
+          ensures consistent date formats.
+        */
+        $scope.todo = DateUtil.setDeadlines($scope.todo);  
 
         Todo.create({
             content:$scope.todo.content,
@@ -137,25 +124,12 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         });
     }
 
-}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage',function($scope,Todo,$state,$stateParams,$localstorage){
+}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil){
 
     // get todo id from params
-    $scope.todo={
-        objectId:$stateParams.id
-        /*,
-        content:$stateParams.content,
-        done:$stateParams.done,
-        goal:$stateParams.goal,
-        duration:$stateParams.duration,
-        deadline:$stateParams.deadline,
-        softdeadline:$stateParams.softdeadline,
-        deadlinetime:$stateParams.deadlinetime,
-        deadlinedate:$stateParams.deadlinedate
-        */
-    };
+    $scope.todo={ objectId:$stateParams.id };
 
     //console.log($scope.todo);
-
     // pull todo object from hash memory in localstorage
     $scope.itemsHash = $localstorage.getObject("items");
     //console.log($scope.itemsHash[$scope.todo.objectId]);
@@ -176,35 +150,11 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     }
 
     $scope.edit=function(){
-        // calculate deadline HOW DO I ONLY WRITE THIS CODE ONCE???
-        if($scope.todo.deadlinedate != null) {
-            $scope.todo.deadline = $scope.todo.deadlinedate;//.toLocaleDateString();
-            $scope.todo.deadlinedate = $scope.todo.deadlinedate;//.toLocaleDateString();  
-        } else {
-            switch($scope.todo.softdeadline) {
-                case 'choose a date':
-                    $scope.todo.deadline = 'error';
-                    break;
-                case 'today':
-                    $scope.todo.deadline = new Date();
-                    //$scope.todo.deadline = new Date().toLocaleDateString();
-                    //$scope.todo.deadline = new Date().toUTCString;
-                    //$scope.todo.deadline = dateTool.today();
-                    break;
-                case 'tomorrow':
-                case 'this week':
-                case 'this weekend':
-                case 'next week':
-                case 'next weekend':
-                case 'this month':
-                case 'next month':
-                case 'within three months':
-                case 'this year':
-                case 'someday':
-                default:
-                    $scope.todo.deadline = 'no case matched';
-            }
-        }
+        /*
+          DateUtil Service calculates all the soft deadlines and 
+          ensures consistent date formats.
+        */
+        $scope.todo = DateUtil.setDeadlines($scope.todo);        
 
         Todo.edit($scope.todo.objectId,{
             content:$scope.todo.content,
@@ -223,6 +173,14 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
     $scope.onItemDelete=function(){
         Todo.delete($scope.todo.objectId).success(function(data){
+            // Note needed currently with DB writes but for good housekeeping,
+            // specifically to avoid a memory leak.
+            // pull existing hash from localstorage
+            $scope.itemsHash = $localstorage.getObject("items");
+            // update item that was changed
+            delete $scope.itemsHash[$scope.todo.objectId];
+            // replace localstorage copy
+            $localstorage.saveItems($scope.itemsHash);            
             $state.go('todos');
         });
     }
@@ -234,7 +192,11 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         $ionicSideMenuDelegate.toggleLeft();
     }
 
-}]);
+}]).value('DEFAULTS',{
+    DURATION: '0.25',
+    SOFT_DEADLINE: 'today',
+    GOAL: false
+});
 
 
 

@@ -76,35 +76,97 @@ angular.module('sileras.utils',[]).factory('dateTool', ['things',function('thing
 });
 */
 
-angular.module('ionic.utils', []).factory('$localstorage', ['$window', function($window) {
-  return {
-    set: function(key, value) {
-        $window.localStorage[key] = value;
-    },
-    get: function(key, defaultValue) {
-        return $window.localStorage[key] || defaultValue;
-    },
-    setObject: function(key, value) {
-        $window.localStorage[key] = JSON.stringify(value);
-    },
-    getObject: function(key) {
-        return JSON.parse($window.localStorage[key] || '{}');
-    },
-    saveItems: function(things) {
-        // db write to localstorage
-        this.setObject("items",things);
-        //console.log("localstorage.items.size:"+Object.keys(things).length);
-    },
-    // Currently not used
-    addItem: function(item) {
-        var $items = this.getObject("items");
-        this.saveItems($items.push(item));
-    },
-    // pulls a single item from the array by id
-    getItem: function(item) {
-        var $things = this.getObject("items");
-        return($things[$things.indexOf(item)]);
-    }
+var services = angular.module('ionic.utils', []);
 
-  }
+services.factory('$localstorage', ['$window', function($window) {
+    return {
+        set: function(key, value) {
+            $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+            return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+            return JSON.parse($window.localStorage[key] || '{}');
+        },
+        saveItems: function(things) {
+            // db write to localstorage
+            this.setObject("items",things);
+            //console.log("localstorage.items.size:"+Object.keys(things).length);
+        }
+    }
 }]);
+
+services.factory('DateUtil', function() {
+    return {
+        test: function() {
+            return(true);
+        },
+        /*
+          calculates all the soft deadlines and 
+          ensures consistent date formats.
+        */
+        setDeadlines: function(todo) {
+            if(todo.deadlinedate != null) {
+                todo.deadline = todo.deadlinedate;
+                if(todo.deadlinetime != undefined &&
+                    todo.deadlinetime != '' &&
+                    todo.deadlinetime != null) {
+                    todo.deadline += " @ " + todo.deadlinetime;
+                }
+            } else {
+                // today calculated once
+                var deadline = new Date();
+                var y = deadline.getFullYear(),
+                    m = deadline.getMonth() + 1, // january is month 0 in javascript
+                    d = deadline.getDate();
+
+                switch(todo.softdeadline) {
+                    case 'today':
+                        // format is m/d/yyyy
+                        todo.deadline = deadline.toLocaleDateString();
+                        break;
+                    case 'tomorrow':
+                        //deadline.setDate(deadline.getDate() + 1);
+                        d+=1;
+                        todo.deadline = [m, d, y].join("/");
+                        break;
+                    case 'this week':
+                        // what day of the week is today?
+                        // how many days until Sunday?
+                        //deadline.setDate(deadline.getDate() + 7);
+                        d+=7;
+                        todo.deadline = [m, d, y].join("/");
+                        break;
+                    case 'this weekend':
+                        // when does weekend start?
+                    case 'next week':
+                        // when does next week start
+                    case 'next weekend':
+                        // when does the weekend begin?
+                    case 'this month':
+                        // when does this month end?
+                    case 'next month':
+                        // when does next month end?
+                    case 'this quarter':
+                        // what quarter is it?
+                        // when does this quarter end?
+                    case 'this year':
+                        // when does this year end?
+                    case 'someday':
+                        $scope.todo.deadline = deadline.setDate(deadline.getDate() + 365);
+                        break;
+                    default:
+                        todo.deadline = 'no case matched';
+                }
+            }
+            return(todo);
+        }
+    }
+});
+
+
+

@@ -1,37 +1,65 @@
 
-
-- create UI for new app 
-	- items
-		- input item deadlines
-		- input item duration
-		- item reordering always on
-		- only display items that arent done
-		- defer triggers snooze options modal
-	- typeahead search
-	- text filters => move to slide boxes or gesture events
-	- gesture to take a break menu (pinch in, swipe right, or hold)
-	- pinchout to add item inline 
-	
-- setup data model for parse
-	- items
-	- dates
-	- groups
-	- lists
-	- schedule defaults
-
-- build out input driven application logic
-	- add a new item to today and update counters
-	- defer an item
-	- complete an item
-
-- build out state driven application logic
-	- reminder due
-	- 
-	- too many items per time
-	- time has ticked down and we’re not over time
-	- deferred item pushes day over time
-
-- add authenication
+Goals:
+1) Get todos fully functional
+	- all fields get/set
+		- priority (must, prefer, reminder)
+		- active/inactive
+	- required field enforcement
+	- "completed" filtering w/ toggle
+	- date filtering
+	- type ahead search
+	- snoozing modal
+	- reminder date/time
+	- recurring reminders
+	- sorting by: alphabetical, due date, creation date, priority
+	- default order by deadline, priority:
+		1. must deadline (important/urgent)
+		2. reminders (urgent)
+		3. must (important/not urgent)
+		4. prefer deadline (not important/urgent)
+		5. prefer (not important/not urgent)
+		6. completed items by completion date
+	- priority visualisation
+	- time calculations footer (!done tasks only)
+2) Create lists
+	- add/view lists to todo
+	- view lists w/ full contents
+	- set done/not done w/ checkbox
+	- make goal
+	- set deadlines
+	- set active/inactive for filtering
+	- take a break menu
+	- tags (todos and lists)
+	- types: checklist, tasks, bucketlist
+	- reordering items in current view 
+3) Projects
+	- add/view lists to project
+	- view project for todos
+	- filter todos based on project
+	- filter lists based on project
+	- color coding by project
+	- set active/inactive for filtering
+	- task and list dependency?
+4) Smarts
+	- soft deadline calculations
+	- natural language todo creation ("get milk today @ 4pm 30min")
+	- reminder alerts
+	- self extinguishing tasks
+	- basic schedule input (i.e. 14hrs per day)
+	- tracking schedule capacity limits
+		- update footer to compare time needed vs availabe
+	- schedule push (recursive rescheduling based on capacity)
+	- smart push:  priority, blocking tasks, day usage maximization
+	- alert: today's schedule isn't possible, show changes
+	- vacation mode (recurring reminder location setting?)
+	- enforcing deadlines & capacity limits on list contents
+	- project % schedule buckets
+	- auto-scheduling based on schedule + buckets
+5) Collaboration
+	- authentication
+	- sharing
+	- assigning owners
+==============================================
 
 - optimizations
 	- use local storage except for edits (maintain "updated" toggle variable).  only read from parse when changes have been made or on initial app load
@@ -39,14 +67,17 @@
 	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.
 
 - bugs
-	P2 mix between params and db reads without localcache seems bug prone
 	P2 after editing or updating the side menu functionality breaks
 
 - polish
-	- better cross-platform date and time selector
+	- move to slide boxes or gesture events
+	- pinchout to add item inline 
+	- gesture to take a break menu (pinch in, swipe right, or hold)
+	- better cross-platform date and time selector ("clear at top"), "cancel"
 	- don't let filters get hidden by search
 	- add duration and deadline natural language reader/setter to title
 	- convert partial hours into minutes (i.e. .25 = 15min)
+	- allow for setting start of week day
 
 ========================
 - setup angularjs, phonegap templates for sublime

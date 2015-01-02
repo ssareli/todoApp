@@ -81,7 +81,6 @@
                   Soft Deadline
                 </div>
                 <select ng-model="todo.softdeadline" required>
-                    <option>choose a date</option>
                     <option>today</option>
                     <option>tomorrow</option>
                     <option>this week</option>
@@ -95,11 +94,13 @@
                     <option>someday</option>
                 </select>
             </label>            
-            <ion-item>
+              
+             <ion-item>
                 Hard Deadline (optional)<br>
-                <input type="date" ng-model="todo.deadlinedate">
-                <input type="time" ng-model="todo.deadlinetime">    
-            </ion-item>  
+                <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="Select Date" ng-model="todo.deadlinedate" /> 
+                <input type="text" pick-a-time="time" placeholder="Select Time" ng-model="todo.deadlinetime" /> 
+            </ion-item>
+
             <ion-item>
                 Computed Deadline:  {{todo.deadline}}
             </ion-item>

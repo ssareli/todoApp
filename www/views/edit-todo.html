@@ -80,7 +80,6 @@
                   Soft Deadline
                 </div>
                 <select ng-model="todo.softdeadline" required>
-                    <option>choose a date</option>
                     <option>today</option>
                     <option>tomorrow</option>
                     <option>this week</option>
@@ -94,11 +93,14 @@
                     <option>someday</option>
                 </select>
             </label>  
+
             <ion-item>
-                Hard Deadline (optional)<br>
-                <input type="date" ng-model="todo.deadlinedate" value="2015-01-29">
-                <input type="time" ng-model="todo.deadlinetime">    
-            </ion-item>      
+            Hard Deadline (optional)<br>
+            <!-- https://github.com/alongubkin/angular-datepicker -->
+            <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="Select Date"  ng-model="todo.deadlinedate" ng-click="todo.deadlinetime=''" /> 
+            <input type="text" pick-a-time="time" placeholder="Select Time" ng-model="todo.deadlinetime" ng-click="todo.deadlinetime=''" /> 
+            </ion-item>
+
             <ion-item>
                 Computed Deadline:  {{todo.deadline}}
             </ion-item>
