@@ -1,6 +1,6 @@
 
 
-- create UI for new app
+- create UI for new app 
 	- items
 		- input item deadlines
 		- input item duration
