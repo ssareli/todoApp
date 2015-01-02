@@ -2,6 +2,7 @@
     <div class="buttons">
         <button class="button" ui-sref="todos">Back</button>
         <h1 class="title">Edit Todo</h1>
+        <button class="button button-balanced" ng-click="edit()">Update</button>
     </div>
 </ion-header-bar>
 
@@ -10,14 +11,11 @@
         <ion-list>
             <li class="item item-input item-stacked-label">
                 <input type="text" ng-model="todo.content" class="text-input" required>
-            </li>
+            </li>  
 
-            <!-- Removing this for simplicity
-            <ion-checkbox ng-model="todo.done">Complete</ion-checkbox>
-            -->
             <label class="item item-input item-select">
                 <div class="input-label">
-                  Duration (in hours)
+                  Will Take Me (in hours)
                 </div>
                 <select ng-model="todo.duration">
                     <option>0.25</option>
@@ -77,6 +75,17 @@
 
             <label class="item item-input item-select">
                 <div class="input-label">
+                  Priority
+                </div>
+                <select ng-model="todo.priority" required>
+                    <option>must complete by</option>
+                    <option>prefer to complete by</option>
+                    <option>just remind me by</option>
+                </select>
+            </label>    
+
+            <label class="item item-input item-select">
+                <div class="input-label">
                   Soft Deadline
                 </div>
                 <select ng-model="todo.softdeadline" required>
@@ -104,17 +113,8 @@
             <ion-item>
                 Computed Deadline:  {{todo.deadline}}
             </ion-item>
-            <!--
-            <ion-item>
-                <ion-button class="button button-block button-stable" ng-click="pickDate()">
-                    select hard deadline
-                </ion-button>
-            </ion-item>
-            -->
-
             <ion-toggle ng-model="todo.goal" toggle-class="toggle-calm">Set As Goal</ion-toggle>
-
-            <br>
+            
             <ion-button class="button button-block button-balanced" ng-click="edit()">
                 Update
             </ion-button>
@@ -125,6 +125,9 @@
 <ion-footer-bar align-title="left" class="bar-stable">
   <div class="buttons">
     <button class="button button-assertive" ng-click="onItemDelete()">delete</button>
+    <!-- Removing this for simplicity
+    <ion-checkbox ng-model="todo.done">Complete</ion-checkbox>
+    -->
   </div>
   <h1 class="title"></h1>
 </ion-footer-bar>

@@ -40,3 +40,11 @@
 .text-input{
 	background-color: gray;
 }
+
+.italics {
+	font-style: italic;
+}
+
+.normal {
+	font-style: normal
+}

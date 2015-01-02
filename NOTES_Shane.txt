@@ -1,15 +1,13 @@
 
 Goals:
 1) Get todos fully functional
-	- all fields get/set
-		- priority (must, prefer, reminder)
-		- active/inactive
 	- required field enforcement
 	- "completed" filtering w/ toggle
 	- date filtering
 	- type ahead search
 	- snoozing modal
 	- reminder date/time
+		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
 	- recurring reminders
 	- sorting by: alphabetical, due date, creation date, priority
 	- default order by deadline, priority:
@@ -48,6 +46,9 @@ Goals:
 	- basic schedule input (i.e. 14hrs per day)
 	- tracking schedule capacity limits
 		- update footer to compare time needed vs availabe
+	- generate computed start times for soft deadlines (visible)
+		- 15min buffer between each
+		- 30min after a task should be complete, auto-slip schedule
 	- schedule push (recursive rescheduling based on capacity)
 	- smart push:  priority, blocking tasks, day usage maximization
 	- alert: today's schedule isn't possible, show changes
@@ -55,6 +56,13 @@ Goals:
 	- enforcing deadlines & capacity limits on list contents
 	- project % schedule buckets
 	- auto-scheduling based on schedule + buckets
+5) Calendaring
+	- organize events by time into a time schedule. put non-time deadlined tasks back to back with 15min buffers in between
+	- by default, prevent tasks from overlapping specific time slots (unless manually overridden)
+	- show day planner view of tasks
+	- generate iCal feed for Google Calendar integration
+	- import phone calendars
+	- prevent collisions with 3rd party calendar elements (possible?)
 5) Collaboration
 	- authentication
 	- sharing
@@ -82,3 +90,6 @@ Goals:
 ========================
 - setup angularjs, phonegap templates for sublime
 - firebase backend for real-time data sync across devices (online/offline support)?
+
+- questions
+	- did calendar widget branch me off beta v14?

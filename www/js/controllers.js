@@ -82,6 +82,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         $scope.$broadcast('scroll.refreshComplete');
     };
 
+/*
     $scope.getDeadline = function(item) {
         var deadline = "";
         console.log(item);
@@ -92,23 +93,29 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         }
         return(deadline);
     }
+    */
 
 }]).controller('TodoCreationController',['$scope','Todo','$state','DateUtil','DEFAULTS',function($scope,Todo,$state,DateUtil,DEFAULTS){
 
     $scope.todo={};
 
     // establish default options
-    //if($scope.todo.goal != true) $scope.todo.goal = false;
+    $scope.todo.priority = DEFAULTS.PRIORITY;
     $scope.todo.goal = DEFAULTS.GOAL;
     $scope.todo.softdeadline = DEFAULTS.SOFT_DEADLINE;//"today";
     $scope.todo.duration = DEFAULTS.DURATION;//"0.25";
+    $scope.todo.active = DEFAULTS.ACTIVE;
+    $scope.todo.startTime = DEFAULTS.START_TIME;
+    $scope.todo.deadline = DEFAULTS.DEADLINE;
+    $scope.todo.deadlinetime = DEFAULTS.DEADLINE_TIME;
+    $scope.todo.deadlinedate = DEFAULTS.DEADLINE_DATE;
 
     $scope.create=function(){
         /*
           DateUtil Service calculates all the soft deadlines and 
           ensures consistent date formats.
         */
-        $scope.todo = DateUtil.setDeadlines($scope.todo);  
+        $scope.todo = DateUtil.setDeadline($scope.todo);  
 
         Todo.create({
             content:$scope.todo.content,
@@ -118,7 +125,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             deadline:$scope.todo.deadline,
             softdeadline:$scope.todo.softdeadline,
             deadlinetime:$scope.todo.deadlinetime,
-            deadlinedate:$scope.todo.deadlinedate
+            deadlinedate:$scope.todo.deadlinedate,
+            priority:$scope.todo.priority,
+            active:$scope.todo.active,
+            startTime:$scope.todo.startTime
         }).success(function(data){
             $state.go('todos');
         });
@@ -135,26 +145,9 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     //console.log($scope.itemsHash[$scope.todo.objectId]);
     $scope.todo = $scope.itemsHash[$scope.todo.objectId];
 
-    // Param to boolean converter
-    if(String($scope.todo.done).toLowerCase() === 'true') {
-        $scope.todo.done = true;
-    } else {
-        $scope.todo.done = false;
-    }
-
-    // Param to boolean converter
-    if(String($scope.todo.goal).toLowerCase() === 'true') {
-        $scope.todo.goal = true;
-    } else {
-        $scope.todo.goal = false;
-    }
-
     $scope.edit=function(){
-        /*
-          DateUtil Service calculates all the soft deadlines and 
-          ensures consistent date formats.
-        */
-        $scope.todo = DateUtil.setDeadlines($scope.todo);        
+
+        $scope.todo = DateUtil.setDeadline($scope.todo);        
 
         Todo.edit($scope.todo.objectId,{
             content:$scope.todo.content,
@@ -164,7 +157,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             deadline:$scope.todo.deadline,
             softdeadline:$scope.todo.softdeadline,
             deadlinetime:$scope.todo.deadlinetime,
-            deadlinedate:$scope.todo.deadlinedate
+            deadlinedate:$scope.todo.deadlinedate,
+            priority:$scope.todo.priority,
+            active:$scope.todo.active,
+            startTime:$scope.todo.startTime  
         })
         .success(function(data){
             $state.go('todos');
@@ -193,9 +189,15 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     }
 
 }]).value('DEFAULTS',{
+    PRIORITY: 'prefer to complete by',
     DURATION: '0.25',
     SOFT_DEADLINE: 'today',
-    GOAL: false
+    GOAL: false,
+    ACTIVE: true,
+    START_TIME: null,
+    DEADLINE: null,
+    DEADLINE_TIME: null,
+    DEADLINE_DATE: null
 });
 
 

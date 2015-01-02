@@ -102,70 +102,183 @@ services.factory('$localstorage', ['$window', function($window) {
 
 services.factory('DateUtil', function() {
     return {
-        test: function() {
-            return(true);
+        // Checked to see if a deadline string has anything in it
+        stringHasContents: function(str) {
+            return(
+                str != null &&
+                str != undefined &&
+                str != '');
         },
         /*
-          calculates all the soft deadlines and 
-          ensures consistent date formats.
+          calculates all the soft deadlines, picks the earliest date
+          as a deadline and ensures consistent date formats.
         */
-        setDeadlines: function(todo) {
-            if(todo.deadlinedate != null) {
-                todo.deadline = todo.deadlinedate;
-                if(todo.deadlinetime != undefined &&
-                    todo.deadlinetime != '' &&
-                    todo.deadlinetime != null) {
-                    todo.deadline += " @ " + todo.deadlinetime;
-                }
-            } else {
-                // today calculated once
-                var deadline = new Date();
-                var y = deadline.getFullYear(),
-                    m = deadline.getMonth() + 1, // january is month 0 in javascript
-                    d = deadline.getDate();
+        setDeadline: function(todo) {
 
-                switch(todo.softdeadline) {
-                    case 'today':
-                        // format is m/d/yyyy
-                        todo.deadline = deadline.toLocaleDateString();
-                        break;
-                    case 'tomorrow':
-                        //deadline.setDate(deadline.getDate() + 1);
-                        d+=1;
-                        todo.deadline = [m, d, y].join("/");
-                        break;
-                    case 'this week':
-                        // what day of the week is today?
-                        // how many days until Sunday?
-                        //deadline.setDate(deadline.getDate() + 7);
-                        d+=7;
-                        todo.deadline = [m, d, y].join("/");
-                        break;
-                    case 'this weekend':
-                        // when does weekend start?
-                    case 'next week':
-                        // when does next week start
-                    case 'next weekend':
-                        // when does the weekend begin?
-                    case 'this month':
-                        // when does this month end?
-                    case 'next month':
-                        // when does next month end?
-                    case 'this quarter':
-                        // what quarter is it?
-                        // when does this quarter end?
-                    case 'this year':
-                        // when does this year end?
-                    case 'someday':
-                        $scope.todo.deadline = deadline.setDate(deadline.getDate() + 365);
-                        break;
-                    default:
-                        todo.deadline = 'no case matched';
+            // Rule:  computed deadline is earliest date in item
+            // Date data set:  deadlinedate, softdeadline
+            var deadline = ""
+
+            // calculate softDeadline, deadline = soft
+            todo = this.setSoftdeadline(todo);
+            deadline = todo.softdeadline;
+
+            // if deadline > hardDeadline, deadline = hard
+            if(this.stringHasContents(todo.deadlinedate)) {
+                if(deadline > todo.deadlinedate) {
+                    todo.deadline = todo.deadlinedate;
+                    // add on time
+                    if(this.stringHasContents(todo.deadlinetime)) {
+                        // make deadline string friendly for viewing in list
+                        todo.deadline = "@"+todo.deadlinetime + ", " + todo.deadline;
+                    }
                 }
+            } else { // deadline is soft, so mark deadline in italics
+                todo.deadline = "~"+todo.deadline;
+            }
+
+
+        /*
+            // look for hard deadline
+            if(this.checkEmptyString(todo.deadlinedate)) {
+                //console.log("setDeadlines:"+todo.deadlinedate);
+                
+                todo = this.computeDeadline(todo);
+
+            // use soft deadlines
+            } else {
+                todo = this.setSoftdeadline(todo);
+            }
+        */
+
+            return(todo);
+        },
+
+        // set computed deadline based on ruleset
+        computeDeadline: function(todo) {
+            // computed deadline should be based on earliest date
+            //console.log("computeDeadline:"+todo.deadlinedate);
+            todo.deadline = todo.deadlinedate;
+
+            //todo.deadline = todo.deadlinedate;
+            if(this.checkEmptyString(todo.deadlinetime)) {
+                // make deadline string friendly for viewing in list
+                todo.deadline = "@"+todo.deadlinetime + ", " + todo.deadline;
             }
             return(todo);
+        },
+
+        setSoftdeadline: function(todo) {
+            // today calculated once
+            var deadline = new Date();
+            var y = deadline.getFullYear(),
+                m = deadline.getMonth() + 1, // january is month 0 in javascript
+                d = deadline.getDate();
+
+            switch(todo.softdeadline) {
+                case 'today':
+                    // format is m/d/yyyy
+                    todo.deadline = deadline.toLocaleDateString();
+                    //break;
+                    return(todo);
+                case 'tomorrow':
+                    //deadline.setDate(deadline.getDate() + 1);
+                    d+=1;
+                    todo.deadline = [m, d, y].join("/");
+                    //break;
+                    return(todo);
+                case 'this week':
+                    // what day of the week is today?
+                    // how many days until Sunday?
+                    //deadline.setDate(deadline.getDate() + 7);
+                    d+=7;
+                    todo.deadline = [m, d, y].join("/");
+                    //break;
+                    return(todo);
+                case 'this weekend':
+                    // when does weekend start?
+                case 'next week':
+                    // when does next week start
+                case 'next weekend':
+                    // when does the weekend begin?
+                case 'this month':
+                    // when does this month end?
+                case 'next month':
+                    // when does next month end?
+                case 'this quarter':
+                    // what quarter is it?
+                    // when does this quarter end?
+                case 'this year':
+                    // when does this year end?
+                case 'someday':
+                    $scope.todo.deadline = deadline.setDate(deadline.getDate() + 365);
+                    //break;
+                    return(todo);
+                default:
+                    todo.deadline = 'no case matched';
+                    return(todo);
+            }
         }
     }
+}).value('',{
+
+    // hour numbers <=> easy reading text map
+/*
+                    <option>0.00</option>
+                    <option>0.25</option>
+                    <option>0.50</option>
+                    <option>0.75</option>
+                    <option>1.00</option>
+                    <option>1.25</option>
+                    <option>1.50</option>
+                    <option>1.75</option>
+                    <option>2.00</option>
+                    <option>2.50</option>
+                    <option>3.00</option>
+                    <option>3.50</option>
+                    <option>4.00</option>
+                    <option>4.50</option>
+                    <option>5.00</option>
+                    <option>5.50</option>
+                    <option>6.00</option>
+                    <option>6.50</option>
+                    <option>7.00</option>
+                    <option>7.50</option>
+                    <option>8.00</option>
+                    <option>8.50</option>
+                    <option>9.00</option>
+                    <option>9.50</option>
+                    <option>10.00</option>
+                    <option>10.50</option>
+                    <option>11.00</option>
+                    <option>11.50</option>
+                    <option>12.00</option>
+                    <option>12.50</option>
+                    <option>13.00</option>
+                    <option>13.50</option>
+                    <option>14.00</option>
+                    <option>14.50</option>
+                    <option>15.00</option>
+                    <option>15.50</option>
+                    <option>16.00</option>
+                    <option>16.50</option>
+                    <option>17.00</option>
+                    <option>17.50</option>
+                    <option>18.00</option>
+                    <option>18.50</option>
+                    <option>19.00</option>
+                    <option>19.50</option>
+                    <option>20.00</option>
+                    <option>20.50</option>
+                    <option>21.00</option>
+                    <option>21.50</option>
+                    <option>22.00</option>
+                    <option>22.50</option>
+                    <option>23.00</option>
+                    <option>23.50</option>
+                    <option>24.00</option>
+                    */
+
 });
 
 

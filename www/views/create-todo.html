@@ -4,6 +4,7 @@
     <div class="buttons">
         <button class="button" ui-sref="todos">Back</button>
         <h1 class="title">Create Todo</h1>
+        <button class="button button-balanced" ng-click="create()">Add</button>
     </div>
 </ion-header-bar>
 
@@ -14,10 +15,9 @@
             <li class="item item-input item-stacked-label">
                 <input type="text" ng-model="todo.content" placeholder="Title your new todo..." required>
             </li>
-            <br>
             <label class="item item-input item-select">
                 <div class="input-label">
-                  Duration (in hours)
+                  Will Take Me (in hours)
                 </div>
                 <select ng-model="todo.duration" required>
                     <option>0.00</option>
@@ -75,6 +75,17 @@
                     <option>24.00</option>
                 </select>
             </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Priority
+                </div>
+                <select ng-model="todo.priority" required>
+                    <option>must complete by</option>
+                    <option>prefer to complete by</option>
+                    <option>just remind me by</option>
+                </select>
+            </label>    
 
             <label class="item item-input item-select">
                 <div class="input-label">
