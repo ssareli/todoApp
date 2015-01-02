@@ -1,8 +1,42 @@
 /* Empty. Add your own CSS if you like */
+
+/*
 .newItem{
     position:absolute;
     right:10px;
 }
 .navbar{
     position:relative;
+}
+*/
+
+.done-true {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.item-header {
+  font-size: x-small;
+  color: grey;
+}
+
+.item-footer {
+  font-size: small;
+  color: grey;
+}
+
+.align-right {
+	float: right;
+}
+
+.align-center{
+	text-align: center;
+}
+
+.smaller{
+	font-size: smaller;
+}
+
+.text-input{
+	background-color: gray;
 }

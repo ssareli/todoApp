@@ -1,0 +1,53 @@
+
+
+- create UI for new app
+	- items
+		- input item deadlines
+		- input item duration
+		- item reordering always on
+		- only display items that arent done
+		- defer triggers snooze options modal
+	- typeahead search
+	- text filters => move to slide boxes or gesture events
+	- gesture to take a break menu (pinch in, swipe right, or hold)
+	- pinchout to add item inline 
+	
+- setup data model for parse
+	- items
+	- dates
+	- groups
+	- lists
+	- schedule defaults
+
+- build out input driven application logic
+	- add a new item to today and update counters
+	- defer an item
+	- complete an item
+
+- build out state driven application logic
+	- reminder due
+	- 
+	- too many items per time
+	- time has ticked down and we’re not over time
+	- deferred item pushes day over time
+
+- add authenication
+
+- optimizations
+	- use local storage except for edits (maintain "updated" toggle variable).  only read from parse when changes have been made or on initial app load
+	- collection-repeat (for search and “all” views)
+	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.
+
+- bugs
+	P2 mix between params and db reads without localcache seems bug prone
+	P2 after editing or updating the side menu functionality breaks
+
+- polish
+	- better cross-platform date and time selector
+	- don't let filters get hidden by search
+	- add duration and deadline natural language reader/setter to title
+	- convert partial hours into minutes (i.e. .25 = 15min)
+
+========================
+- setup angularjs, phonegap templates for sublime
+- firebase backend for real-time data sync across devices (online/offline support)?

@@ -1,4 +1,4 @@
-<ion-header-bar class="bar-positive">
+<ion-header-bar class="bar-stable">
     <div class="buttons">
         <button class="button" ui-sref="todos">Back</button>
         <h1 class="title">Edit Todo</h1>
@@ -9,11 +9,120 @@
     <div>
         <ion-list>
             <li class="item item-input item-stacked-label">
-                <textarea type="text" name="content" rows="10" ng-model="todo.content" required></textarea>
+                <input type="text" ng-model="todo.content" class="text-input" required>
             </li>
-            <ion-button class="button button-block button-positive" ng-click="edit()">
+
+            <!-- Removing this for simplicity
+            <ion-checkbox ng-model="todo.done">Complete</ion-checkbox>
+            -->
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Duration (in hours)
+                </div>
+                <select ng-model="todo.duration">
+                    <option>0.25</option>
+                    <option>0.50</option>
+                    <option>0.75</option>
+                    <option>1.00</option>
+                    <option>1.25</option>
+                    <option>1.50</option>
+                    <option>1.75</option>
+                    <option>2.00</option>
+                    <option>2.50</option>
+                    <option>3.00</option>
+                    <option>3.50</option>
+                    <option>4.00</option>
+                    <option>4.50</option>
+                    <option>5.00</option>
+                    <option>5.50</option>
+                    <option>6.00</option>
+                    <option>6.50</option>
+                    <option>7.00</option>
+                    <option>7.50</option>
+                    <option>8.00</option>
+                    <option>8.50</option>
+                    <option>9.00</option>
+                    <option>9.50</option>
+                    <option>10.00</option>
+                    <option>10.50</option>
+                    <option>11.00</option>
+                    <option>11.50</option>
+                    <option>12.00</option>
+                    <option>12.50</option>
+                    <option>13.00</option>
+                    <option>13.50</option>
+                    <option>14.00</option>
+                    <option>14.50</option>
+                    <option>15.00</option>
+                    <option>15.50</option>
+                    <option>16.00</option>
+                    <option>16.50</option>
+                    <option>17.00</option>
+                    <option>17.50</option>
+                    <option>18.00</option>
+                    <option>18.50</option>
+                    <option>19.00</option>
+                    <option>19.50</option>
+                    <option>20.00</option>
+                    <option>20.50</option>
+                    <option>21.00</option>
+                    <option>21.50</option>
+                    <option>22.00</option>
+                    <option>22.50</option>
+                    <option>23.00</option>
+                    <option>23.50</option>
+                    <option>24.00</option>
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Soft Deadline
+                </div>
+                <select ng-model="todo.softdeadline" required>
+                    <option>choose a date</option>
+                    <option>today</option>
+                    <option>tomorrow</option>
+                    <option>this week</option>
+                    <option>this weekend</option>
+                    <option>next week</option>
+                    <option>next weekend</option>
+                    <option>this month</option>
+                    <option>next month</option>
+                    <option>within three months</option>
+                    <option>this year</option>
+                    <option>someday</option>
+                </select>
+            </label>  
+            <ion-item>
+                Hard Deadline (optional)<br>
+                <input type="date" ng-model="todo.deadlinedate" value="2015-01-29">
+                <input type="time" ng-model="todo.deadlinetime">    
+            </ion-item>      
+            <ion-item>
+                Computed Deadline:  {{todo.deadline}}
+            </ion-item>
+            <!--
+            <ion-item>
+                <ion-button class="button button-block button-stable" ng-click="pickDate()">
+                    select hard deadline
+                </ion-button>
+            </ion-item>
+            -->
+
+            <ion-toggle ng-model="todo.goal" toggle-class="toggle-calm">Set As Goal</ion-toggle>
+
+            <br>
+            <ion-button class="button button-block button-balanced" ng-click="edit()">
                 Update
             </ion-button>
         </ion-list>
     </div>
 </ion-content>
+
+<ion-footer-bar align-title="left" class="bar-stable">
+  <div class="buttons">
+    <button class="button button-assertive" ng-click="onItemDelete()">delete</button>
+  </div>
+  <h1 class="title"></h1>
+</ion-footer-bar>

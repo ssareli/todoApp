@@ -27,7 +27,7 @@ angular.module('todoApp.services',[]).factory('Todo',['$http','PARSE_CREDENTIALS
                     'Content-Type':'application/json'
                 }
             });
-        },
+        }, 
         edit:function(id,data){
             return $http.put('https://api.parse.com/1/classes/Todo/'+id,data,{
                 headers:{
@@ -53,3 +53,58 @@ angular.module('todoApp.services',[]).factory('Todo',['$http','PARSE_CREDENTIALS
     APP_ID: 'plvDtGUcGUmNqNuaIHxmEdOPlVpuPzEfOrf0kL9A',
     REST_API_KEY:'Wnav5R5ku3HQQfniFCoE1OREOaO3SGVL3M7BH960'
 });
+
+
+/*
+
+angular.module('sileras.utils',[]).factory('dateTool', ['things',function('things') {
+    return {
+
+    }
+
+.factory('dateTool', function() {
+    this.parseDate = function(input) {
+        var parts = input.split('-');
+        // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
+        return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+    }
+
+    this.today = function() {
+        return new Date().toUTCString;
+    }
+
+});
+*/
+
+angular.module('ionic.utils', []).factory('$localstorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+        $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+        return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+        $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+        return JSON.parse($window.localStorage[key] || '{}');
+    },
+    saveItems: function(things) {
+        // db write to localstorage
+        this.setObject("items",things);
+        //console.log("localstorage.items.size:"+Object.keys(things).length);
+    },
+    // Currently not used
+    addItem: function(item) {
+        var $items = this.getObject("items");
+        this.saveItems($items.push(item));
+    },
+    // pulls a single item from the array by id
+    getItem: function(item) {
+        var $things = this.getObject("items");
+        return($things[$things.indexOf(item)]);
+    }
+
+  }
+}]);

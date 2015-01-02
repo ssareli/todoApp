@@ -1,19 +1,158 @@
 
-<ion-header-bar class="bar-positive">
-    <div class="buttons">
-        <button class="button button-icon icon ion-ios7-minus-outline" ng-click="data.showDelete = !data.showDelete;"></button>
-        <h1 class="title">All Todo Items</h1>
-        <button class="button" ui-sref="createTodo">New</button>
-    </div>
-</ion-header-bar>
+<ion-side-menus>
 
-<ion-content>
-    <ion-list show-delete="data.showDelete">
-        <ion-item ng-repeat="item in items | orderBy: '-createdAt'"
-                  item="item"
-                  href="#/todo/edit/{{item.objectId}}/{{item.content}}">
-            {{item.content}}
-            <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)"></ion-delete-button>
-        </ion-item>
-    </ion-list>
-</ion-content>
+    <!-- Center content -->
+    <ion-side-menu-content ng-controller="ContentController">
+
+        <ion-header-bar class="bar-stable">
+            <!--
+            <div class="buttons">
+                <button class="button button-icon icon ion-ios7-minus-outline" ng-click="data.showDelete = !data.showDelete;"></button>
+                <h1 class="title">All Todo Items</h1>
+                <button class="button" ui-sref="createTodo">New</button>
+            </div>
+            -->
+
+            <!--
+            <div class="bar bar-header">
+                <button menu-toggle="left" class="button icon ion-navicon"></button>
+                <h1 class="title">All Todo Items</h1>
+                <button class="button bar-dark" ui-sref="createTodo">New</button>
+            </div>
+            -->
+                      
+                <button menu-toggle="left" class="button icon ion-navicon"></button>
+                <h1 class="title">All Todo Items</h1>
+                <button class="button bar-dark" ui-sref="createTodo">New</button>
+
+
+          <!--
+                <ion-nav-bar class="bar-header"> 
+                    <ion-nav-buttons side="left">
+                        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+                        <h1 class="title">All Todo Items</h1>
+                    </ion-nav-buttons>
+                    <ion-nav-buttons side="right">
+                        <button class="button button-clear button-balanced" ui-sref="createTodo">[ + ]</button>
+                    </ion-nav-buttons>
+                </ion-nav-bar>
+
+            -->
+            
+        </ion-header-bar>
+
+        <ion-content>
+            <ion-refresher
+                pulling-text="Pull to add item..."
+                on-refresh="doRefresh2()">
+            </ion-refresher>
+
+            <div class="list">
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Date Range:
+                </div>
+                <select>
+                    <option selected>Today</option>
+                    <option>Tomorrow</option>
+                    <option>This Week</option>
+                    <option>This Month</option>
+                    <option>This Quarter</option>
+                    <option>This Year</option>
+                    <option>Anytime</option>
+                </select>
+              </label>
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Project:
+                </div>
+                <select>
+                    <option selected>Personal</option>
+                    <option>Business</option>
+                    <option>Work</option> 
+
+                </select>
+              </label>
+            </div>
+
+            <!-- NEEDS FUNCTIONALITY -->
+            <div class="list list-inset">
+              <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="Search">
+              </label>
+            </div>
+
+            <ion-list> 
+                <ion-item ng-repeat="item in items | orderBy: '-createdAt'"
+                          item="item"
+                          href="#/todo/edit/{{item.objectId}}">
+                    
+                    <span class="done-{{item.done}}">
+                       <span class="item-header">[Project] [List]</span> </br>     
+                   
+                   <!--
+                        <ion-checkbox class="item item-checkbox" ng-model="item.done" ng-checked="item.done" ng-click="edit()">{{item.content}}</ion-checkbox>
+                    
+                   
+                    -->
+                 
+                        <input type="checkbox" class="item-checkbox-left" ng-model="item.done" ng-click="doneToggle(item)" />
+                        {{item.content}} <br>
+                        <span class="item-footer">
+                            {{item.duration}}
+                            <ng-pluralize count="item.duration" 
+                                when="{'0': '',
+                                    '1': 'hr',
+                                    'other': 'hrs'}">
+                            </ng-pluralize>
+                        <span class="align-right">
+                                <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
+                                due:{{item.deadline}} 
+                            </span>   
+                        </span>    
+
+                     </span>
+
+                    <ion-option-button class="button-stable"
+                                     ng-click="goal(item)">
+                        Goal
+                    </ion-option-button>
+
+                    <ion-option-button class="button-calm"
+                                     ng-click="snooze(item)">
+                        Snooze
+                    </ion-option-button>
+
+                    <ion-option-button class="button-assertive"
+                                     ng-click="onItemDelete(item)">
+                        Delete
+                    </ion-option-button>
+
+                    <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+
+                </ion-item>
+            </ion-list>
+        </ion-content>
+
+
+    </ion-side-menu-content>
+
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+        <ion-header-bar class="bar-dark">
+          <h1 class="title">Projects</h1>
+          <button class="button button-icon ion-plus" ng-click="newProject()">
+          </button>
+        </ion-header-bar>
+        <ion-content scroll="false">
+          <ion-list>
+            <ion-item ng-repeat="project in projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
+              {{project.title}}
+            </ion-item>
+          </ion-list>
+        </ion-content>
+  </ion-side-menu>
+
+</ion-side-menus>
