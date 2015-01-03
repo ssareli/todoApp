@@ -1,13 +1,11 @@
 
 Goals:
 1) Get todos fully functional
-	- required field enforcement
-	- "completed" filtering w/ toggle
 	- date filtering
-	- type ahead search
 	- snoozing modal
 	- reminder date/time
 		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
+		- set duration default to "0.00"
 	- recurring reminders
 	- sorting by: alphabetical, due date, creation date, priority
 	- default order by deadline, priority:
@@ -81,6 +79,7 @@ Goals:
 	- move to slide boxes or gesture events
 	- pinchout to add item inline 
 	- gesture to take a break menu (pinch in, swipe right, or hold)
+	- required field enforcement
 	- better cross-platform date and time selector ("clear at top"), "cancel"
 	- don't let filters get hidden by search
 	- add duration and deadline natural language reader/setter to title

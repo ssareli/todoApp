@@ -79,12 +79,12 @@
             <div class="list list-inset">
               <label class="item item-input">
                 <i class="icon ion-search placeholder-icon"></i>
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" ng-model="filterTxt">
               </label>
             </div>
 
             <ion-list> 
-                <ion-item ng-repeat="item in items | orderBy: '-createdAt'"
+                <ion-item ng-repeat="item in items | orderBy: '-createdAt' | filter:{done:false} | filter : filterTxt"
                           item="item"
                           href="#/todo/edit/{{item.objectId}}">
                     
@@ -95,7 +95,7 @@
                     
                    
                     -->
-                        <input type="checkbox" class="item-checkbox-left" ng-model="item.done" ng-click="doneToggle(item)" />
+                        <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)" />
                         {{item.content}} <br>
                         <span class="item-footer">
                             {{item.duration}}
@@ -132,8 +132,75 @@
 
                 </ion-item>
             </ion-list>
+
+            <br>
+            <button class="bar button bar-stable" ng-click="show = !show">Show completed items.</button>
+            <br>
+            <br>
+
+            <div ng-show="show">
+            <ion-list> 
+                <ion-item ng-repeat="item in items | filter:{done:true} | orderBy: '-completedAt' | filter : filterTxt"
+                          item="item"
+                          href="#/todo/edit/{{item.objectId}}">
+                    
+                    <span class="done-{{item.done}}">
+                       <span class="item-header">[Project] [List]</span> </br>     
+                   <!--
+                        <ion-checkbox class="item item-checkbox" ng-model="item.done" ng-checked="item.done" ng-click="edit()">{{item.content}}</ion-checkbox>
+                    
+                   
+                    -->
+                        <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)" />
+                        {{item.content}} <br>
+                        <span class="item-footer">
+                            {{item.duration}}
+                            <ng-pluralize count="item.duration" 
+                                when="{'0': '',
+                                    '1': 'hr',
+                                    'other': 'hrs'}">
+                            </ng-pluralize>
+                        <span class="align-right">
+                            <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
+                            due: 
+                            {{item.deadline}}
+                         
+                        </span>    
+
+                     </span>
+
+                    <ion-option-button class="button-stable"
+                                     ng-click="goal(item)">
+                        Goal
+                    </ion-option-button>
+
+                    <ion-option-button class="button-calm"
+                                     ng-click="snooze(item)">
+                        Snooze
+                    </ion-option-button>
+
+                    <ion-option-button class="button-assertive"
+                                     ng-click="onItemDelete(item)">
+                        Delete
+                    </ion-option-button>
+
+                    <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+
+                </ion-item>
+            </ion-list>
+            </div>
+
         </ion-content>
 
+        <ion-footer-bar align-title="left" class="bar-dark">
+          <div class="buttons">
+            <button class="button">Sort</button>
+          </div>
+          <h1 class="title"></h1>
+          <div class="buttons" ng-click="doSomething()">
+            <button class="button">More...</button>
+          </div>
+        </ion-footer-bar>
 
     </ion-side-menu-content>
 

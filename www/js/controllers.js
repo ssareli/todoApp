@@ -51,7 +51,20 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     }
 
     $scope.doneToggle=function(item){
-        Todo.edit(item.objectId,{done:item.done}).success(function(data){  
+        item.done = !item.done;
+
+        console.log("item.done:"+item.done);
+
+        // mark item completed using epoch seconds
+        if(item.done) {
+            item.completedDate = new Date().getTime();
+        } else {
+            item.completedDate = null;
+        }
+        console.log("item.completeDate:"+item.completedDate);
+
+        Todo.edit(item.objectId,{done:item.done,completedAt:item.completedDate}).success(function(data){  
+
             // pull existing hash from localstorage
             $scope.itemsHash = $localstorage.getObject("items");
             // update item that was changed
@@ -109,6 +122,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.todo.deadline = DEFAULTS.DEADLINE;
     $scope.todo.deadlinetime = DEFAULTS.DEADLINE_TIME;
     $scope.todo.deadlinedate = DEFAULTS.DEADLINE_DATE;
+    $scope.todo.completedDate = DEFAULTS.COMPLETED_DATE;
 
     $scope.create=function(){
         /*
@@ -128,7 +142,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             deadlinedate:$scope.todo.deadlinedate,
             priority:$scope.todo.priority,
             active:$scope.todo.active,
-            startTime:$scope.todo.startTime
+            startTime:$scope.todo.startTime,
+            completedAt:$scope.todo.completedDate
         }).success(function(data){
             $state.go('todos');
         });
@@ -160,7 +175,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             deadlinedate:$scope.todo.deadlinedate,
             priority:$scope.todo.priority,
             active:$scope.todo.active,
-            startTime:$scope.todo.startTime  
+            startTime:$scope.todo.startTime,
+            completedAt:$scope.todo.completedDate
         })
         .success(function(data){
             $state.go('todos');
@@ -197,7 +213,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     START_TIME: null,
     DEADLINE: null,
     DEADLINE_TIME: null,
-    DEADLINE_DATE: null
+    DEADLINE_DATE: null,
+    COMPLETED_DATE: 0
 });
 
 
