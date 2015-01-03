@@ -1,4 +1,4 @@
-angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage',function($scope,Todo,$state,$stateParams,$localstorage){
+angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil){
 
     Todo.getAll().success(function(data){
         // copy db read to scope memory
@@ -14,6 +14,34 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         //console.log($scope.itemsHash);
         $localstorage.saveItems($scope.itemsHash);
     });
+
+    // date hash
+    $scope.dateFilterHash = DateUtil.getTimeBuckets();
+
+    // reset storage to defaults   DOESN'T WORK
+    $scope.reset=function(){
+        $localstorage.reset();
+    }
+
+    // save last user date range selection
+    $scope.dateFilterUpdate=function(selection){
+        
+        $localstorage.set("dateFilterOption",selection);
+
+        //console.log("dateFilterOption"+selection);
+        //console.log("new filter saved!");
+    }
+
+    // return a timestamp for filtering results
+    $scope.dateFilter=function(item,dateFilterOption) {
+        // get saved dateFilter option or use defaults
+        $scope.dateFilterOption = $localstorage.get("dateFilterOption","Today");
+
+        var d = $scope.dateFilterHash[$scope.dateFilterOption];
+        console.log("dateFilterOption:"+$scope.dateFilterOption);
+        
+        return(item.deadlineEpoch<d);
+    }
 
     $scope.onItemDelete=function(item){
         Todo.delete(item.objectId).success(function(){
@@ -143,7 +171,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             priority:$scope.todo.priority,
             active:$scope.todo.active,
             startTime:$scope.todo.startTime,
-            completedAt:$scope.todo.completedDate
+            completedAt:$scope.todo.completedDate,
+            deadlineEpoch:$scope.todo.deadlineEpoch          
         }).success(function(data){
             $state.go('todos');
         });
@@ -176,7 +205,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             priority:$scope.todo.priority,
             active:$scope.todo.active,
             startTime:$scope.todo.startTime,
-            completedAt:$scope.todo.completedDate
+            completedAt:$scope.todo.completedDate,
+            deadlineEpoch:$scope.todo.deadlineEpoch          
         })
         .success(function(data){
             $state.go('todos');

@@ -52,8 +52,8 @@
                 <div class="input-label">
                   Date Range:
                 </div>
-                <select>
-                    <option selected>Today</option>
+                <select ng-model="dateFilterOption" ng-change="dateFilterUpdate(dateFilterOption)">
+                    <option>Today</option>
                     <option>Tomorrow</option>
                     <option>This Week</option>
                     <option>This Month</option>
@@ -75,7 +75,6 @@
               </label>
             </div>
 
-            <!-- NEEDS FUNCTIONALITY -->
             <div class="list list-inset">
               <label class="item item-input">
                 <i class="icon ion-search placeholder-icon"></i>
@@ -84,7 +83,10 @@
             </div>
 
             <ion-list> 
-                <ion-item ng-repeat="item in items | orderBy: '-createdAt' | filter:{done:false} | filter : filterTxt"
+                <ion-item ng-repeat="item in items |
+                            orderBy: '-createdAt' |   filter:{done:false} |
+                            filter:filterTxt |
+                            filter:dateFilter"
                           item="item"
                           href="#/todo/edit/{{item.objectId}}">
                     
@@ -197,8 +199,8 @@
             <button class="button">Sort</button>
           </div>
           <h1 class="title"></h1>
-          <div class="buttons" ng-click="doSomething()">
-            <button class="button">More...</button>
+          <div class="buttons" ng-click="reset()">
+            <button class="button">reset</button>
           </div>
         </ion-footer-bar>
 

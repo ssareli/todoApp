@@ -15,6 +15,18 @@ angular.module('todoApp', ['ionic','todoApp.controllers','todoApp.services','ion
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+/*
+    // Load default settings and variables
+    $localStorage.$default({
+      'dateFilterOption': "Today",
+      'settings': {
+        sparkApiUrl: "https://api.spark.io/v1/"
+      }
+    });
+*/
+
+
     $state.go('todos');
   });
 }).config(function($stateProvider){

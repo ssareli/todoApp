@@ -96,11 +96,15 @@ services.factory('$localstorage', ['$window', function($window) {
             // db write to localstorage
             this.setObject("items",things);
             //console.log("localstorage.items.size:"+Object.keys(things).length);
+        },
+        // DOESN"T WORK ???
+        reset: function() {
+            $window.localStorage.clear();
         }
     }
 }]);
 
-services.factory('DateUtil', function() {
+services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
     return {
         // Checked to see if a deadline string has anything in it
         stringHasContents: function(str) {
@@ -109,6 +113,17 @@ services.factory('DateUtil', function() {
                 str != undefined &&
                 str != '');
         },
+        convertTo24Hour: function(time) {
+            var hours = parseInt(time.substr(0, 2));
+            if(time.indexOf('am') != -1 && hours == 12) {
+                time = time.replace('12', '0');
+            }
+            if(time.indexOf('pm')  != -1 && hours < 12) {
+                time = time.replace(hours, (hours + 12));
+            }
+            return time.replace(/(am|pm)/, '');
+        },
+
         /*
           calculates all the soft deadlines, picks the earliest date
           as a deadline and ensures consistent date formats.
@@ -121,17 +136,49 @@ services.factory('DateUtil', function() {
 
             // calculate softDeadline, deadline = soft
             todo = this.setSoftdeadline(todo);
-            deadline = todo.softdeadline;
+            console.log("softdeadline:"+todo.deadline);
+            
+            // set deadlineEpoch as softdeadline
+            var parts = todo.deadline.split('/');
+            // UTC yyyy/mm/dd  m=0-11, d=1-31
+            console.log(parts);
+            todo.deadlineEpoch = Date.UTC(parts[2],parts[0]-1,parts[1]);
+            console.log(todo.deadlineEpoch);
 
             // if deadline > hardDeadline, deadline = hard
             if(this.stringHasContents(todo.deadlinedate)) {
-                if(deadline > todo.deadlinedate) {
+                console.log("harddeadline:"+todo.deadlinedate);
+                var hardEpoch = null;
+
+                // 1/15/2015  m/d/yyyy
+                parts = todo.deadlinedate.split('/');
+                // UTC yyyy/mm/dd  m=0-11, d=1-31
+                console.log(parts);
+                hardEpoch = Date.UTC(parts[2],parts[0]-1,parts[1]);
+                console.log(hardEpoch);
+
+                // compare Epoch timestamps between soft and hard deadlines
+                if(todo.deadlineEpoch > hardEpoch) {
+                    // set human friendly deadline
                     todo.deadline = todo.deadlinedate;
+                    // set epoch deadline
+                    todo.deadlineEpoch = hardEpoch;
+
                     // add on time
                     if(this.stringHasContents(todo.deadlinetime)) {
                         // make deadline string friendly for viewing in list
                         todo.deadline = "@"+todo.deadlinetime + ", " + todo.deadline;
+
+                        // "2:30 PM", convert to 24hr time
+                        var time = convertTo24Hour($(todo.deadlinetime).val().toLowerCase());
+                        var timeParts = time.split(':');
+
+                        // update epochTime for time
+                        // hr 0-23, min 0-59
+                        todo.deadlineEpoch = Date.UTC(parts[2],parts[0]-1,parts[1],timeParts[0],timeParts[1]);
                     }
+                } else { // deadline is soft, so mark deadline in italics
+                    todo.deadline = "~"+todo.deadline;
                 }
             } else { // deadline is soft, so mark deadline in italics
                 todo.deadline = "~"+todo.deadline;
@@ -154,6 +201,7 @@ services.factory('DateUtil', function() {
             return(todo);
         },
 
+        /*
         // set computed deadline based on ruleset
         computeDeadline: function(todo) {
             // computed deadline should be based on earliest date
@@ -167,6 +215,7 @@ services.factory('DateUtil', function() {
             }
             return(todo);
         },
+        */
 
         setSoftdeadline: function(todo) {
             // today calculated once
@@ -175,17 +224,16 @@ services.factory('DateUtil', function() {
                 m = deadline.getMonth() + 1, // january is month 0 in javascript
                 d = deadline.getDate();
 
+
             switch(todo.softdeadline) {
                 case 'today':
                     // format is m/d/yyyy
                     todo.deadline = deadline.toLocaleDateString();
-                    //break;
                     return(todo);
                 case 'tomorrow':
                     //deadline.setDate(deadline.getDate() + 1);
                     d+=1;
                     todo.deadline = [m, d, y].join("/");
-                    //break;
                     return(todo);
                 case 'this week':
                     // what day of the week is today?
@@ -193,34 +241,112 @@ services.factory('DateUtil', function() {
                     //deadline.setDate(deadline.getDate() + 7);
                     d+=7;
                     todo.deadline = [m, d, y].join("/");
-                    //break;
                     return(todo);
                 case 'this weekend':
                     // when does weekend start?
                 case 'next week':
                     // when does next week start
+                    d+=14;
+                    todo.deadline = [m, d, y].join("/");
+                    return(todo);
                 case 'next weekend':
                     // when does the weekend begin?
                 case 'this month':
                     // when does this month end?
+                    m+=1;
+                    todo.deadline = [m, d, y].join("/");
+                    return(todo);
                 case 'next month':
                     // when does next month end?
-                case 'this quarter':
+                    m+=2;
+                    todo.deadline = [m, d, y].join("/");
+                    return(todo);
+                case 'within three months':
                     // what quarter is it?
                     // when does this quarter end?
+                    m+=3;
+                    todo.deadline = [m, d, y].join("/");
+                    return(todo);
                 case 'this year':
                     // when does this year end?
+                    y+=1;
+                    todo.deadline = [m, d, y].join("/");
+                    return(todo);
                 case 'someday':
-                    $scope.todo.deadline = deadline.setDate(deadline.getDate() + 365);
-                    //break;
+                    y+=80;
+                    todo.deadline = [m, d, y].join("/");
                     return(todo);
                 default:
                     todo.deadline = 'no case matched';
                     return(todo);
             }
+        },
+        // calculate the end dates for all ranges based on today's date.
+        computeTimeBuckets: function() {
+
+        },
+
+        getTimeBuckets: function() {
+                // check for staleness on time bucket calculations
+                // if stale, run time bucket calculations
+                    this.computeTimeBuckets();
+                    // update select menu hash
+                    // save menu has to localstorage
+                // else, read select menu hash from localstorage
+
+                // return date hash
+                return(this.createMenuHash());
+        },
+        /* create a hash for the time select dropdown menu
+        */
+        createMenuHash: function() {
+            var menuHash = null;
+            menuHash = {
+                "Today": DATE_BUCKET.TODAY,
+                "Tomorrow": DATE_BUCKET.TOMORROW,
+                "This Week": DATE_BUCKET.THIS_WEEK,
+                "This Month": DATE_BUCKET.THIS_MONTH,
+                "This Quarter": DATE_BUCKET.THIS_QUARTER,
+                "This Year": DATE_BUCKET.THIS_YEAR,
+                "Anytime": DATE_BUCKET.ANYTIME
+            }
+            return(menuHash);
         }
     }
-}).value('',{
+
+/* 
+    Current calculations assume the date is the first day of the year starting
+ on a monday.  More sophisticated calculations may or may not be required.
+ */
+}]).value('DATE_BUCKET',{
+    TODAY: new Date().getTime(),
+    TOMORROW: new Date().getTime() + 86400000,
+    THIS_WEEK: new Date().getTime() + 604800000,
+    THIS_MONTH: new Date().getTime() + 2629743000,
+    THIS_QUARTER: new Date().getTime() + 7889229000,
+    THIS_YEAR: new Date().getTime() + 31556926000,
+    ANYTIME: new Date().getTime() + 2624554080000 
+/*
+    Alternative option simply uses concentric ranges of time.
+
+}).value('DATE_BUCKET',{
+    TODAY: new Date().getTime(),
+    TOMORROW: new Date().getTime() + 86400000,
+    NEXT_7: new Date().getTime() + 604800000,
+    NEXT_30: new Date().getTime() + 2629743000,
+    NEXT_90: new Date().getTime() + 7889229000,
+    NEXT_365: new Date().getTime() + 31556926000,
+    ANYTIME: new Date().getTime() + 2524554080000 
+});
+*/
+}).value('DATE_HASH',{
+    TODAY: null, 
+    TOMORROW: null,
+    THIS_WEEK: null,
+    THIS_MONTH: null,
+    THIS_QUARTER: null,
+    THIS_YEAR: null,
+    ANYTIME: null
 
     // hour numbers <=> easy reading text map
 /*

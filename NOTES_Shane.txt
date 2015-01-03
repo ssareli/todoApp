@@ -69,11 +69,14 @@ Goals:
 
 - optimizations
 	- use local storage except for edits (maintain "updated" toggle variable).  only read from parse when changes have been made or on initial app load
+	- only read/write single records to DB instead of pulling down entire DB every list load
 	- collection-repeat (for search and “all” views)
 	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.
 
+
 - bugs
 	P2 after editing or updating the side menu functionality breaks
+	?? Timestamp comparisons are done in GMT, not local, could create issues on filtering?
 
 - polish
 	- move to slide boxes or gesture events
@@ -92,3 +95,17 @@ Goals:
 
 - questions
 	- did calendar widget branch me off beta v14?
+
+
+ng-click
+ng-dbl-click
+ng-mousedown
+ng-mouseup
+ng-mouseenter
+ng-mouseleave
+ng-mousemove
+ng-mouseover
+ng-keydown
+ng-keyup
+ng-keypress
+ng-change
