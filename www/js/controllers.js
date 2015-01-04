@@ -1,4 +1,4 @@
-angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil){
+angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS){
 
     Todo.getAll().success(function(data){
         // copy db read to scope memory
@@ -16,7 +16,14 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     });
 
     // date hash
-    $scope.dateFilterHash = DateUtil.getTimeBuckets();
+    $scope.dateFilterHash = DateUtil.getDateHash();
+
+/*
+    if($scope.dateFilterOption==null) {
+        $scope.dateFilterOption = 
+        $localstorage.get("dateFilterOption","Today");
+    }
+*/
 
     // reset storage to defaults   DOESN'T WORK
     $scope.reset=function(){
@@ -26,7 +33,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // save last user date range selection
     $scope.dateFilterUpdate=function(selection){
         
+        // save option
         $localstorage.set("dateFilterOption",selection);
+        // set option
+        $scope.dateFilterOption = selection;
 
         //console.log("dateFilterOption"+selection);
         //console.log("new filter saved!");
@@ -34,13 +44,20 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
     // return a timestamp for filtering results
     $scope.dateFilter=function(item,dateFilterOption) {
+     //   $scope.dateFilter=function(item) {
         // get saved dateFilter option or use defaults
-        $scope.dateFilterOption = $localstorage.get("dateFilterOption","Today");
+        if($scope.dateFilterOption==null) {
+            $scope.dateFilterOption = 
+                $localstorage.get("dateFilterOption",DEFAULTS.DATE_FILTER);
+        }
 
         var d = $scope.dateFilterHash[$scope.dateFilterOption];
-        console.log("dateFilterOption:"+$scope.dateFilterOption);
         
-        return(item.deadlineEpoch<d);
+        console.log("item.content:"+item.content);
+        console.log("item.timestamp:"+item.deadlineEpoch);
+        console.log("filter.timestamp:"+d);
+
+        return(item.deadlineEpoch<=d);
     }
 
     $scope.onItemDelete=function(item){
@@ -244,7 +261,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     DEADLINE: null,
     DEADLINE_TIME: null,
     DEADLINE_DATE: null,
-    COMPLETED_DATE: 0
+    COMPLETED_DATE: 0,
+    DATE_FILTER: "Today"
 });
 
 

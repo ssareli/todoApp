@@ -89,15 +89,25 @@
                             filter:dateFilter"
                           item="item"
                           href="#/todo/edit/{{item.objectId}}">
-                    
+
                     <span class="done-{{item.done}}">
                        <span class="item-header">[Project] [List]</span> </br>     
-                   <!--
-                        <ion-checkbox class="item item-checkbox" ng-model="item.done" ng-checked="item.done" ng-click="edit()">{{item.content}}</ion-checkbox>
-                    
                    
-                    -->
+       <!--
+
+                    <input type="checkbox" class="item checkbox checkbox-assertive item-checkbox" ng-checked="item.done" ng-click="doneToggle(item)">
+                    
+                -->
+                   
+                    
+                    <!--
+<ion-checkbox class="item item-checkbox-left" ng-checked="item.done" ng-click="doneToggle(item)"/></ion-checkbox>
+-->
+
+
                         <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)" />
+
+
                         {{item.content}} <br>
                         <span class="item-footer">
                             {{item.duration}}
@@ -142,7 +152,8 @@
 
             <div ng-show="show">
             <ion-list> 
-                <ion-item ng-repeat="item in items | filter:{done:true} | orderBy: '-completedAt' | filter : filterTxt"
+                <ion-item ng-repeat="item in items | filter:{done:true} | orderBy: '-completedAt' | filter : filterTxt |
+                 filter:dateFilter | limitTo:100 "
                           item="item"
                           href="#/todo/edit/{{item.objectId}}">
                     

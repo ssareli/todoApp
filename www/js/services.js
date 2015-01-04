@@ -104,7 +104,7 @@ services.factory('$localstorage', ['$window', function($window) {
     }
 }]);
 
-services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
+services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function(DATE_BUCKET,DATE_NAME,$localstorage) {
     return {
         // Checked to see if a deadline string has anything in it
         stringHasContents: function(str) {
@@ -224,11 +224,11 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
                 m = deadline.getMonth() + 1, // january is month 0 in javascript
                 d = deadline.getDate();
 
-
             switch(todo.softdeadline) {
                 case 'today':
                     // format is m/d/yyyy
-                    todo.deadline = deadline.toLocaleDateString();
+                    //todo.deadline = deadline.toLocaleDateString();
+                    todo.deadline = [m, d, y].join("/");
                     return(todo);
                 case 'tomorrow':
                     //deadline.setDate(deadline.getDate() + 1);
@@ -261,7 +261,7 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
                     m+=2;
                     todo.deadline = [m, d, y].join("/");
                     return(todo);
-                case 'within three months':
+                case 'this quarter':
                     // what quarter is it?
                     // when does this quarter end?
                     m+=3;
@@ -284,23 +284,89 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
         // calculate the end dates for all ranges based on today's date.
         computeTimeBuckets: function() {
 
+            // calculate all time buckets...
+            console.log("calculate all time buckets...");
+
+            // for now we'll use stupid versions that are hard coded
+            DATE_BUCKET.TODAY = Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
+            //this.getTodayFullDate();
+            DATE_BUCKET.TOMORROW = DATE_BUCKET.TODAY + 86400000,
+            DATE_BUCKET.THIS_WEEK = DATE_BUCKET.TODAY + 604800000,
+            DATE_BUCKET.THIS_MONTH = DATE_BUCKET.TODAY + 2629743000,
+            DATE_BUCKET.THIS_QUARTER = DATE_BUCKET.TODAY + 7889229000,
+            DATE_BUCKET.THIS_YEAR = DATE_BUCKET.TODAY + 31556926000,
+            DATE_BUCKET.ANYTIME = DATE_BUCKET.TODAY + 2624554080000
+
         },
 
-        getTimeBuckets: function() {
-                // check for staleness on time bucket calculations
-                // if stale, run time bucket calculations
-                    this.computeTimeBuckets();
-                    // update select menu hash
-                    // save menu has to localstorage
-                // else, read select menu hash from localstorage
+        getDateHash: function() {
+            /* 
+                Check to see if we can reuse our menu buckets
+                or need to generate new one's for today's date 
+             */
+            var fullDate = null;
+            var date = new Date().getDate(); // today's number date
 
-                // return date hash
-                return(this.createMenuHash());
+            console.log("today:"+date);
+            console.log("localstorage.today:"+$localstorage.get(DATE_NAME.TODAY_DATE, null));
+
+            // if today's day number matches last time we update date
+            if($localstorage.get(DATE_NAME.TODAY_DATE,null) == date) {
+                // generate today's full timestamp
+                fullDate = this.getTodayFullDate();
+
+                console.log("fullDate:"+fullDate);
+                console.log("localstorage.timestamp:"+$localstorage.get(DATE_NAME.TODAY_TIMESTAMP,null));
+
+                // if today's full timestamp matches
+                if($localstorage.get(DATE_NAME.TODAY_TIMESTAMP,null) == fullDate) {
+                    // reuse existing menu hash
+                } else {
+                    // save today's date to localstorage for next use
+                    $localstorage.set(DATE_NAME.TODAY_DATE, date);
+                    // store today's full timestamp to local storage
+                    $localstorage.set(DATE_NAME.TODAY_TIMESTAMP, fullDate);
+                    // create new hash
+                    this.createMenuHash();
+                }
+            } else {
+                // save today's date to localstorage for next use
+                $localstorage.set(DATE_NAME.TODAY_DATE,date);
+                // store today's full timestamp to local storage
+                $localstorage.set(DATE_NAME.TODAY_TIMESTAMP, this.getTodayFullDate());
+
+                console.log("localstorage.today:"+$localstorage.get(DATE_NAME.TODAY_DATE));
+                console.log("localstorage.timestamp:"+$localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
+
+                // create new hash
+                this.createMenuHash();
+            }
+
+            // return date hash from localstorage
+            return($localstorage.getObject(DATE_NAME.MENU_HASH));
         },
+
+        // generate today's full timestamp
+        getTodayFullDate: function() {
+                var timestamp = null;
+                var parts = new Date();
+                d = parts.getDate();
+                y = parts.getFullYear();
+                m = parts.getMonth(); // january is month 0 in javascript
+                // UTC yyyy/mm/dd  m=0-11, d=1-31
+                timestamp = Date.UTC(y,m,d);
+
+                return(timestamp);
+        },
+
         /* create a hash for the time select dropdown menu
         */
         createMenuHash: function() {
+            // generate new time buckets
+            this.computeTimeBuckets();
+
             var menuHash = null;
+        
             menuHash = {
                 "Today": DATE_BUCKET.TODAY,
                 "Tomorrow": DATE_BUCKET.TOMORROW,
@@ -309,8 +375,23 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
                 "This Quarter": DATE_BUCKET.THIS_QUARTER,
                 "This Year": DATE_BUCKET.THIS_YEAR,
                 "Anytime": DATE_BUCKET.ANYTIME
-            }
-            return(menuHash);
+
+                /*  why won't this work?
+                DATE_NAME.TODAY: DATE_BUCKET.TODAY,
+                DATE_NAME.TOMORROW: DATE_BUCKET.TOMORROW,
+                DATE_NAME.THIS_WEEK: DATE_BUCKET.THIS_WEEK,
+                DATE_NAME.THIS_MONTH: DATE_BUCKET.THIS_MONTH,
+                DATE_NAME.THIS_QUARTER: DATE_BUCKET.THIS_QUARTER,
+                DATE_NAME.THIS_YEAR: DATE_BUCKET.THIS_YEAR,
+                DATE_NAME.ANYTIME: DATE_BUCKET.ANYTIME
+                */
+            };
+
+            // save hash to localstorage
+            $localstorage.setObject(DATE_NAME.MENU_HASH,menuHash);
+
+            console.log("localstorage.menuhash =>");
+            console.log($localstorage.getObject(DATE_NAME.MENU_HASH));
         }
     }
 
@@ -325,7 +406,7 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
     THIS_MONTH: new Date().getTime() + 2629743000,
     THIS_QUARTER: new Date().getTime() + 7889229000,
     THIS_YEAR: new Date().getTime() + 31556926000,
-    ANYTIME: new Date().getTime() + 2624554080000 
+    ANYTIME: new Date().getTime() + 2624554080000
 /*
     Alternative option simply uses concentric ranges of time.
 
@@ -339,14 +420,17 @@ services.factory('DateUtil', ['DATE_BUCKET',function(DATE_BUCKET) {
     ANYTIME: new Date().getTime() + 2524554080000 
 });
 */
-}).value('DATE_HASH',{
-    TODAY: null, 
-    TOMORROW: null,
-    THIS_WEEK: null,
-    THIS_MONTH: null,
-    THIS_QUARTER: null,
-    THIS_YEAR: null,
-    ANYTIME: null
+}).constant('DATE_NAME',{
+    TODAY: "Today", 
+    TOMORROW: "Tomorrow",
+    THIS_WEEK: "This Week",
+    THIS_MONTH: "This Month",
+    THIS_QUARTER: "This Quarter",
+    THIS_YEAR: "This Year",
+    ANYTIME: "Anytime",
+    MENU_HASH: "menuHash",
+    TODAY_TIMESTAMP: "today_timestamp",
+    TODAY_DATE: "today_date"
 
     // hour numbers <=> easy reading text map
 /*

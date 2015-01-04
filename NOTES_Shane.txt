@@ -2,11 +2,6 @@
 Goals:
 1) Get todos fully functional
 	- date filtering
-	- snoozing modal
-	- reminder date/time
-		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
-		- set duration default to "0.00"
-	- recurring reminders
 	- sorting by: alphabetical, due date, creation date, priority
 	- default order by deadline, priority:
 		1. must deadline (important/urgent)
@@ -17,6 +12,11 @@ Goals:
 		6. completed items by completion date
 	- priority visualisation
 	- time calculations footer (!done tasks only)
+	- snoozing modal
+	- reminder date/time
+		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
+		- set duration default to "0.00"
+	- recurring reminders
 2) Create lists
 	- add/view lists to todo
 	- view lists w/ full contents
@@ -24,7 +24,7 @@ Goals:
 	- make goal
 	- set deadlines
 	- set active/inactive for filtering
-	- take a break menu
+	- take a break menu <button on-hold="onHold()" class="button">Test</button>
 	- tags (todos and lists)
 	- types: checklist, tasks, bucketlist
 	- reordering items in current view 
@@ -37,6 +37,7 @@ Goals:
 	- set active/inactive for filtering
 	- task and list dependency?
 4) Smarts
+	- auto-delete completed tasks when time or size limit reached
 	- soft deadline calculations
 	- natural language todo creation ("get milk today @ 4pm 30min")
 	- reminder alerts
@@ -70,15 +71,19 @@ Goals:
 - optimizations
 	- use local storage except for edits (maintain "updated" toggle variable).  only read from parse when changes have been made or on initial app load
 	- only read/write single records to DB instead of pulling down entire DB every list load
+	- ng-options simpler solution for collecting data for selects?
 	- collection-repeat (for search and “all” views)
 	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.
 
 
 - bugs
+	P1 make checkbox bigger or shrink edit zone
 	P2 after editing or updating the side menu functionality breaks
 	?? Timestamp comparisons are done in GMT, not local, could create issues on filtering?
 
 - polish
+	- add cancel button to update screen
+	- make checkboxes larger icons that toggle states
 	- move to slide boxes or gesture events
 	- pinchout to add item inline 
 	- gesture to take a break menu (pinch in, swipe right, or hold)

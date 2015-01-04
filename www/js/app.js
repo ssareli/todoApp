@@ -20,12 +20,9 @@ angular.module('todoApp', ['ionic','todoApp.controllers','todoApp.services','ion
     // Load default settings and variables
     $localStorage.$default({
       'dateFilterOption': "Today",
-      'settings': {
-        sparkApiUrl: "https://api.spark.io/v1/"
-      }
+
     });
 */
-
 
     $state.go('todos');
   });
