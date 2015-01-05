@@ -1,17 +1,6 @@
 
 Goals:
 1) Get todos fully functional
-	- date filtering
-	- sorting by: alphabetical, due date, creation date, priority
-	- default order by deadline, priority:
-		1. must deadline (important/urgent)
-		2. reminders (urgent)
-		3. must (important/not urgent)
-		4. prefer deadline (not important/urgent)
-		5. prefer (not important/not urgent)
-		6. completed items by completion date
-	- priority visualisation
-	- time calculations footer (!done tasks only)
 	- snoozing modal
 	- reminder date/time
 		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
@@ -83,6 +72,7 @@ Goals:
 
 - polish
 	- add cancel button to update screen
+	- make todo items aligned using Grid
 	- make checkboxes larger icons that toggle states
 	- move to slide boxes or gesture events
 	- pinchout to add item inline 
@@ -93,6 +83,7 @@ Goals:
 	- add duration and deadline natural language reader/setter to title
 	- convert partial hours into minutes (i.e. .25 = 15min)
 	- allow for setting start of week day
+	- new task, set hard deadline move soft to “none”
 
 ========================
 - setup angularjs, phonegap templates for sublime

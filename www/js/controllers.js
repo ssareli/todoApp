@@ -1,4 +1,4 @@
-angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS){
+angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','CONFIG','$ionicActionSheet','$timeout','SORT_TYPE','DATE_NAME','SNOOZE_TYPE',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,CONFIG,$ionicActionSheet,$timeout,SORT_TYPE,DATE_NAME,SNOOZE_TYPE){
 
     Todo.getAll().success(function(data){
         // copy db read to scope memory
@@ -18,17 +18,162 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // date hash
     $scope.dateFilterHash = DateUtil.getDateHash();
 
-/*
-    if($scope.dateFilterOption==null) {
-        $scope.dateFilterOption = 
-        $localstorage.get("dateFilterOption","Today");
+    // set "show completed" to default value
+    $scope.show = CONFIG.SHOW_COMPLETED;
+
+   // Popup dialog to snooze current task
+    $scope.showSnooze = function(item) {
+    //alphabetical, due date, creation date, priority
+     
+       // Show the action sheet
+       var hideSheet = $ionicActionSheet.show({
+         buttons: [
+           { text: 'Tomorrow' },
+           { text: 'in 2 Days' },
+           { text: 'This Weekend' },
+           { text: 'Next Week' },
+           { text: 'Next Month' },
+           { text: 'Anytime' },
+           { text: 'Select a Hard Deadline'}
+
+         ],
+         //destructiveText: 'Delete',
+         titleText: 'Snoozing Options:',
+         cancelText: 'Cancel',
+         
+         cancel: function() {
+              // add cancel code..
+            },
+
+         buttonClicked: function(index) {
+//            console.log("BUTTON CLICKED",index);    
+            switch(index) {
+                case SNOOZE_TYPE.TOMORROW:
+                    console.log("snooze:item.deadline:"+item.deadline);
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.TOMORROW]; 
+                    item.deadline = 
+                        $scope.dateFilterHash[DATE_NAME.TOMORROW];
+                    return(true);
+                case SNOOZE_TYPE.TWO_DAYS:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.TWO_DAYS];
+                    return(true);
+                case SNOOZE_TYPE.THIS_WEEKEND:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.THIS_WEEKEND];
+                    return(true);
+                 case SNOOZE_TYPE.NEXT_WEEK:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.NEXT_WEEK];
+                    return(true); 
+                 case SNOOZE_TYPE.NEXT_MONTH:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.NEXT_MONTH];
+                    return(true);  
+                 case SNOOZE_TYPE.ANYTIME:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.ANYTIME];
+                    return(true);
+                 case SNOOZE_TYPE.DEADLINE:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.DEADLINE];
+                    return(true);                            
+                default:
+                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.ANYTIME];
+                    return(true);
+            }
+            return true;
+        }
+       });
+
+       // For example's sake, hide the sheet after two seconds
+       $timeout(function() {
+         //hideSheet();
+       }, 2000);
+
+    };
+
+
+    // Triggered on a button click, or some other target
+    $scope.showSort = function() {
+    //alphabetical, due date, creation date, priority
+     
+       // Show the action sheet
+       var hideSheet = $ionicActionSheet.show({
+         buttons: [
+           { text: 'Sort Alphabetically' },
+           { text: 'Sort by Due Date' },
+           { text: 'Sort by Creation Date' },
+           { text: 'Sort by Deadline, Priority (default)' },
+           { text: 'Sort by Priority'}
+
+         ],
+         //destructiveText: 'Delete',
+         titleText: 'Sorting Options:',
+         cancelText: 'Cancel',
+         
+         cancel: function() {
+              // add cancel code..
+            },
+
+         buttonClicked: function(index) {
+//            console.log("BUTTON CLICKED",index);    
+            // save sort index type
+            CONFIG.SORT_ORDER = index;
+            //console.log("buttonClick.sort_order:"+CONFIG.SORT_ORDER);
+            return true;
+        }
+       });
+
+       // For example's sake, hide the sheet after two seconds
+       $timeout(function() {
+         //hideSheet();
+       }, 2000);
+
+    };
+
+    // This method is called by ng-repeat to order the todo list.
+    // the orderBy method needs an object property to order by
+    $scope.predicateVal=function(item) {
+
+        switch(CONFIG.SORT_ORDER) {
+            case SORT_TYPE.ALPHABETICAL:
+                //console.log("sort_type: '+content'");
+                $scope.reverse = false;
+                return([item.content,'']);
+            case SORT_TYPE.DUE_DATE:
+                //console.log("sort_type: '+deadlineEpoch'");
+                $scope.reverse = false;
+                return([item.deadlineEpoch,'']);
+            case SORT_TYPE.CREATION_DATE:
+                //console.log("sort_type: '-createdAt'");
+                $scope.reverse = true;
+                return([item.createdAt,'']);
+             case SORT_TYPE.DEADLINE_PRIORITY:
+                //console.log("sort_type: '+deadlineEpoch,+priority");  
+                $scope.reverse = false;
+                 return([item.deadlineEpoch,item.priority]);  
+             case SORT_TYPE.PRIORITY:
+                //console.log("sort_type: '+priority'");  
+                $scope.reverse = false;
+                 return([item.priority,'']);          
+            default:
+                //console.log("(default)sort_type: '+priority'");
+                $scope.reverse = false;
+                return([item.priority,'']);
+        }
     }
-*/
+
+    $scope.updateFiltersAnytime=function() {
+        $scope.dateFilterOption = "Anytime";
+        //$scope.listFilterOption = projectFilter;
+        console.log($scope.dateFilterOption);
+    };
+
+    // toggle whether to show completed or not and save it to singleton
+    $scope.showCompleted=function(){
+        $scope.show = CONFIG.SHOW_COMPLETED = !CONFIG.SHOW_COMPLETED;
+        //console.log("showCompleted.state:"+CONFIG.SHOW_COMPLETED);
+    };
 
     // reset storage to defaults   DOESN'T WORK
     $scope.reset=function(){
         $localstorage.reset();
-    }
+    };
 
     // save last user date range selection
     $scope.dateFilterUpdate=function(selection){
@@ -40,12 +185,15 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
         //console.log("dateFilterOption"+selection);
         //console.log("new filter saved!");
-    }
+    };
 
     // return a timestamp for filtering results
-    $scope.dateFilter=function(item,dateFilterOption) {
+    $scope.dateFilter=function(item) {
      //   $scope.dateFilter=function(item) {
         // get saved dateFilter option or use defaults
+ /*
+        CAN I REMOVE THIS DISK WRITE????
+ */
         if($scope.dateFilterOption==null) {
             $scope.dateFilterOption = 
                 $localstorage.get("dateFilterOption",DEFAULTS.DATE_FILTER);
@@ -53,12 +201,12 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
         var d = $scope.dateFilterHash[$scope.dateFilterOption];
         
-        console.log("item.content:"+item.content);
-        console.log("item.timestamp:"+item.deadlineEpoch);
-        console.log("filter.timestamp:"+d);
+ //       console.log("item.content:"+item.content);
+ //       console.log("item.timestamp:"+item.deadlineEpoch);
+ //       console.log("filter.timestamp:"+d);
 
         return(item.deadlineEpoch<=d);
-    }
+    };
 
     $scope.onItemDelete=function(item){
         Todo.delete(item.objectId).success(function(){
@@ -72,7 +220,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             $localstorage.saveItems($scope.itemsHash);
             $scope.items.splice($scope.items.indexOf(item),1);            
         });
-    }
+    };
 
 /*   Depricated 8:28pm 1.1.2015
     $scope.done=function(item){
@@ -93,22 +241,19 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             $localstorage.saveItems($scope.itemsHash);
             //$state.go('todos');
         });    
-    }
+    };
 
     $scope.doneToggle=function(item){
         item.done = !item.done;
 
-        console.log("item.done:"+item.done);
-
-        // mark item completed using epoch seconds
+        // mark item completed using epoch millisecond time
         if(item.done) {
-            item.completedDate = new Date().getTime();
+            item.completedAt = new Date().getTime();
         } else {
-            item.completedDate = null;
+            item.completedAt = 0;
         }
-        console.log("item.completeDate:"+item.completedDate);
 
-        Todo.edit(item.objectId,{done:item.done,completedAt:item.completedDate}).success(function(data){  
+        Todo.edit(item.objectId,{done:item.done,completedAt:item.completedAt}).success(function(data){  
 
             // pull existing hash from localstorage
             $scope.itemsHash = $localstorage.getObject("items");
@@ -119,7 +264,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             //$state.go('todos');
         });    
         //$scope.items.splice($scope.items.indexOf(item),1);
-    }
+    };
 
     /*
     $scope.doRefresh = function() {
@@ -167,7 +312,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.todo.deadline = DEFAULTS.DEADLINE;
     $scope.todo.deadlinetime = DEFAULTS.DEADLINE_TIME;
     $scope.todo.deadlinedate = DEFAULTS.DEADLINE_DATE;
-    $scope.todo.completedDate = DEFAULTS.COMPLETED_DATE;
+    $scope.todo.completedAt = DEFAULTS.COMPLETED_DATE;
 
     $scope.create=function(){
         /*
@@ -175,6 +320,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
           ensures consistent date formats.
         */
         $scope.todo = DateUtil.setDeadline($scope.todo);  
+
+        if($scope.todo.priority == 'reminder only') {
+            $scope.todo.duration = '0.00';            
+        }
 
         Todo.create({
             content:$scope.todo.content,
@@ -188,12 +337,12 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             priority:$scope.todo.priority,
             active:$scope.todo.active,
             startTime:$scope.todo.startTime,
-            completedAt:$scope.todo.completedDate,
+            completedAt:$scope.todo.completedAt,
             deadlineEpoch:$scope.todo.deadlineEpoch          
         }).success(function(data){
             $state.go('todos');
         });
-    }
+    };
 
 }]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil){
 
@@ -207,6 +356,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.todo = $scope.itemsHash[$scope.todo.objectId];
 
     $scope.edit=function(){
+
+        if($scope.todo.priority == 'reminder only') {
+            $scope.todo.duration = '0.00';            
+        }
 
         $scope.todo = DateUtil.setDeadline($scope.todo);        
 
@@ -222,13 +375,13 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             priority:$scope.todo.priority,
             active:$scope.todo.active,
             startTime:$scope.todo.startTime,
-            completedAt:$scope.todo.completedDate,
+            completedAt:$scope.todo.completedAt,
             deadlineEpoch:$scope.todo.deadlineEpoch          
         })
         .success(function(data){
             $state.go('todos');
         });
-    }
+    };
 
     $scope.onItemDelete=function(){
         Todo.delete($scope.todo.objectId).success(function(data){
@@ -242,14 +395,15 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             $localstorage.saveItems($scope.itemsHash);            
             $state.go('todos');
         });
-    }
+    };
 
 
 }]).controller('ContentController',['$scope','$ionicSideMenuDelegate',function($scope,$ionicSideMenuDelegate){
     
     $scope.toggleLeft = function(){
         $ionicSideMenuDelegate.toggleLeft();
-    }
+    };
+
 
 }]).value('DEFAULTS',{
     PRIORITY: 'prefer to complete by',
@@ -263,6 +417,23 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     DEADLINE_DATE: null,
     COMPLETED_DATE: 0,
     DATE_FILTER: "Today"
+
+}).constant('SORT_TYPE',{
+    ALPHABETICAL: 0,
+    DUE_DATE: 1,
+    CREATION_DATE: 2,
+    DEADLINE_PRIORITY: 3,
+    PRIORITY: 4
+ 
+ }).constant('SNOOZE_TYPE',{
+    TOMORROW: 0,
+    TWO_DAYS: 1,
+    THIS_WEEKEND: 2,
+    NEXT_WEEK: 3,
+    NEXT_MONTH: 4,
+    ANYTIME: 5,
+    DEADLINE: 6
+
 });
 
 

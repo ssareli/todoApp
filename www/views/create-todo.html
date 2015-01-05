@@ -78,10 +78,10 @@
                 <div class="input-label">
                   Priority
                 </div>
-                <select ng-model="todo.priority" required>
-                    <option>must complete by</option>
-                    <option>prefer to complete by</option>
-                    <option>just remind me by</option>
+                <select ng-model="todo.priority" ng-click="zeroDuration()" required>
+                    <option>must complete</option>
+                    <option>prefer to complete</option>
+                    <option>reminder only</option>
                 </select>
             </label>    
 

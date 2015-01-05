@@ -10,23 +10,47 @@
 }
 */
 
+.hidden22 {
+    visibility: hidden;
+}
+
+.must {
+  /*
+  outline-color: red;
+  */
+  background-color: #F6CED8;
+}
+
+.prefer {
+  /*
+  outline-color: red;
+  */
+  background-color: #D8CEF6;
+}
+
 .done-true {
   text-decoration: line-through;
   color: grey;
 }
 
-.item-header {
-  font-size: x-small;
+.item-headder {
+  font-size: small;
+  color: grey;
+}
+
+.item-footter {
+  font-size: small;
   color: grey;
 }
 
 .item-footer {
-  font-size: small;
+  font-size: x-small;
   color: grey;
 }
 
 .align-right {
 	float: right;
+  text-align: right;
 }
 
 .align-center{
@@ -47,4 +71,8 @@
 
 .normal {
 	font-style: normal
+}
+
+.a {
+    text-decoration: none;
 }

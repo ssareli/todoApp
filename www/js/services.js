@@ -170,7 +170,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         todo.deadline = "@"+todo.deadlinetime + ", " + todo.deadline;
 
                         // "2:30 PM", convert to 24hr time
-                        var time = convertTo24Hour($(todo.deadlinetime).val().toLowerCase());
+                        var time = this.convertTo24Hour(todo.deadlinetime.toLowerCase());
                         var timeParts = time.split(':');
 
                         // update epochTime for time
@@ -370,8 +370,12 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             menuHash = {
                 "Today": DATE_BUCKET.TODAY,
                 "Tomorrow": DATE_BUCKET.TOMORROW,
+                "In Two Days": DATE_BUCKET.TWO_DAYS,
                 "This Week": DATE_BUCKET.THIS_WEEK,
+                "This Weekend": DATE_BUCKET.THIS_WEEKEND,
+                "Next Week": DATE_BUCKET.NEXT_WEEK,
                 "This Month": DATE_BUCKET.THIS_MONTH,
+                "Next Month": DATE_BUCKET.NEXT_MONTH,
                 "This Quarter": DATE_BUCKET.THIS_QUARTER,
                 "This Year": DATE_BUCKET.THIS_YEAR,
                 "Anytime": DATE_BUCKET.ANYTIME
@@ -402,8 +406,12 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
 }]).value('DATE_BUCKET',{
     TODAY: new Date().getTime(),
     TOMORROW: new Date().getTime() + 86400000,
+    TWO_DAYS: new Date().getTime() + 86400000 + 86400000,
     THIS_WEEK: new Date().getTime() + 604800000,
+    THIS_WEEKEND: new Date().getTime() + 604800000,
+    NEXT_WEEK: new Date().getTime() + 604800000 + 604800000,
     THIS_MONTH: new Date().getTime() + 2629743000,
+    NEXT_MONTH: new Date().getTime() + 2629743000 + 2629743000,
     THIS_QUARTER: new Date().getTime() + 7889229000,
     THIS_YEAR: new Date().getTime() + 31556926000,
     ANYTIME: new Date().getTime() + 2624554080000
@@ -423,14 +431,22 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
 }).constant('DATE_NAME',{
     TODAY: "Today", 
     TOMORROW: "Tomorrow",
+    TWO_DAYS: "In Two Days",
     THIS_WEEK: "This Week",
+    THIS_WEEKEND: "This Weekend",
     THIS_MONTH: "This Month",
+    NEXT_MONTH: "Next Month",
     THIS_QUARTER: "This Quarter",
+    NEXT_QUARTER: "Next Quarter",
     THIS_YEAR: "This Year",
     ANYTIME: "Anytime",
     MENU_HASH: "menuHash",
     TODAY_TIMESTAMP: "today_timestamp",
     TODAY_DATE: "today_date"
+
+}).value('CONFIG',{
+    SHOW_COMPLETED: false,
+    SORT_ORDER: 3
 
     // hour numbers <=> easy reading text map
 /*

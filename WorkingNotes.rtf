@@ -5,13 +5,20 @@
 \margl1440\margr1440\vieww8220\viewh13440\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\f0\fs24 \cf0 \
-1) date filtering\
-- UI Fix: new task, set hard deadline move soft to \'93none\'94\
-- cleanup: limitTo should be variable default\
-- bug: completed sorting doesn\'92t seem to work right\
+\f0\fs24 \cf0 build notes:\
+- f\'92d up the buttons and href links (need fix)\
+- fixed completed items sorting\
+- created sorting footer menu\
+- added default multisort\
+- priority visualization\
+==================================\
 \
-2) epic time = getShiftedDate(today, shift)\
+0) snooze\
+- remove \'93~\'94 if it exists\
+- convert back to friendly date for deadline\
+- update all cases to save both epoch and human friendly dates\
+\
+1) epic time = getShiftedDate(today, shift)\
 - create time bucket service (singleton)\
 - determine today at 11:59:59\
 - calculate each time bucket\
