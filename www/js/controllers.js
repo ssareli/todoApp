@@ -1,4 +1,4 @@
-angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','CONFIG','$ionicActionSheet','$timeout','SORT_TYPE','DATE_NAME','SNOOZE_TYPE',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,CONFIG,$ionicActionSheet,$timeout,SORT_TYPE,DATE_NAME,SNOOZE_TYPE){
+angular.module('todoApp.controllers',[]).controller('TodoListController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','CONFIG','$ionicActionSheet','$timeout','SORT_TYPE','DATE_NAME','SNOOZE_TYPE','$ionicListDelegate',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,CONFIG,$ionicActionSheet,$timeout,SORT_TYPE,DATE_NAME,SNOOZE_TYPE,$ionicListDelegate){
 
     Todo.getAll().success(function(data){
         // copy db read to scope memory
@@ -21,10 +21,28 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // set "show completed" to default value
     $scope.show = CONFIG.SHOW_COMPLETED;
 
+    $scope.saveSnoozedItem=function(item){
+        Todo.edit(item.objectId,{
+                deadline:item.deadline,
+                deadlineEpoch:item.deadlineEpoch
+            }).success(function(data){  
+            // pull existing hash from localstorage
+            $scope.itemsHash = $localstorage.getObject("items");
+            // update item that was changed
+            $scope.itemsHash[item.objectId] = item;
+            // replace localstorage copy
+            $localstorage.saveItems($scope.itemsHash);
+
+        });    
+    };
+
    // Popup dialog to snooze current task
     $scope.showSnooze = function(item) {
     //alphabetical, due date, creation date, priority
      
+        //close open option slider
+        $ionicListDelegate.closeOptionButtons();
+
        // Show the action sheet
        var hideSheet = $ionicActionSheet.show({
          buttons: [
@@ -33,12 +51,11 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
            { text: 'This Weekend' },
            { text: 'Next Week' },
            { text: 'Next Month' },
-           { text: 'Anytime' },
-           { text: 'Select a Hard Deadline'}
+           { text: 'Someday' }
 
          ],
          //destructiveText: 'Delete',
-         titleText: 'Snoozing Options:',
+         titleText: 'Soft Deadline Snoozing Options:',
          cancelText: 'Cancel',
          
          cancel: function() {
@@ -46,34 +63,69 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             },
 
          buttonClicked: function(index) {
-//            console.log("BUTTON CLICKED",index);    
+//            console.log("BUTTON CLICKED",index);  
+            var pushObj = {
+                text: null,
+                date: null,
+                epoch: null
+            };
+
             switch(index) {
                 case SNOOZE_TYPE.TOMORROW:
+                    pushObj.text = DATE_NAME.TOMORROW;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_TOMORROW];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TOMORROW];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     console.log("snooze:item.deadline:"+item.deadline);
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.TOMORROW]; 
-                    item.deadline = 
-                        $scope.dateFilterHash[DATE_NAME.TOMORROW];
+                    $scope.saveSnoozedItem(item);
                     return(true);
+
                 case SNOOZE_TYPE.TWO_DAYS:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.TWO_DAYS];
+                    pushObj.text = DATE_NAME.TWO_DAYS;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_TWO_DAYS];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TWO_DAYS];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
                     return(true);
+
                 case SNOOZE_TYPE.THIS_WEEKEND:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.THIS_WEEKEND];
+                    pushObj.text = DATE_NAME.THIS_WEEKEND;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_THIS_WEEKEND];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.THIS_WEEKEND];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
                     return(true);
-                 case SNOOZE_TYPE.NEXT_WEEK:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.NEXT_WEEK];
+
+                case SNOOZE_TYPE.NEXT_WEEK:
+                    pushObj.text = DATE_NAME.NEXT_WEEK;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_NEXT_WEEK];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.NEXT_WEEK];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
                     return(true); 
-                 case SNOOZE_TYPE.NEXT_MONTH:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.NEXT_MONTH];
+
+                case SNOOZE_TYPE.NEXT_MONTH:
+                    pushObj.text = DATE_NAME.NEXT_WEEK;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_NEXT_MONTH];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.NEXT_MONTH];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
                     return(true);  
-                 case SNOOZE_TYPE.ANYTIME:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.ANYTIME];
-                    return(true);
-                 case SNOOZE_TYPE.DEADLINE:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.DEADLINE];
-                    return(true);                            
+
+                case SNOOZE_TYPE.SOMEDAY:
+                    pushObj.text = DATE_NAME.NEXT_WEEK;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_SOMEDAY];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.SOMEDAY];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
+                    return(true);              
+
                 default:
-                    item.deadlineEpoch = $scope.dateFilterHash[DATE_NAME.ANYTIME];
+                    pushObj.text = DATE_NAME.NEXT_WEEK;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_SOMEDAY];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.SOMEDAY];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
                     return(true);
             }
             return true;
@@ -158,8 +210,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         }
     }
 
-    $scope.updateFiltersAnytime=function() {
-        $scope.dateFilterOption = "Anytime";
+    $scope.updateFiltersSomeday=function() {
+        $scope.dateFilterOption = "Someday";
         //$scope.listFilterOption = projectFilter;
         console.log($scope.dateFilterOption);
     };
@@ -170,7 +222,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         //console.log("showCompleted.state:"+CONFIG.SHOW_COMPLETED);
     };
 
-    // reset storage to defaults   DOESN'T WORK
+    // reset storage to defaults  
     $scope.reset=function(){
         $localstorage.reset();
     };
@@ -218,8 +270,11 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             delete $scope.itemsHash[item.objectId];
             // replace localstorage copy
             $localstorage.saveItems($scope.itemsHash);
-            $scope.items.splice($scope.items.indexOf(item),1);            
+            $scope.items.splice($scope.items.indexOf(item),1);          
         });
+
+        //close open option slider
+        $ionicListDelegate.closeOptionButtons();  
     };
 
 /*   Depricated 8:28pm 1.1.2015
@@ -240,7 +295,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             // replace localstorage copy
             $localstorage.saveItems($scope.itemsHash);
             //$state.go('todos');
+
         });    
+        //close open option slider
+        $ionicListDelegate.closeOptionButtons();  
     };
 
     $scope.doneToggle=function(item){
@@ -406,9 +464,9 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
 
 }]).value('DEFAULTS',{
-    PRIORITY: 'prefer to complete by',
+    PRIORITY: 'prefer to complete',
     DURATION: '0.25',
-    SOFT_DEADLINE: 'today',
+    SOFT_DEADLINE: 'Today',
     GOAL: false,
     ACTIVE: true,
     START_TIME: null,
@@ -431,7 +489,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     THIS_WEEKEND: 2,
     NEXT_WEEK: 3,
     NEXT_MONTH: 4,
-    ANYTIME: 5,
+    SOMEDAY: 5,
     DEADLINE: 6
 
 });

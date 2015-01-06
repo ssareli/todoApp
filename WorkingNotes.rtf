@@ -6,17 +6,8 @@
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 build notes:\
-- f\'92d up the buttons and href links (need fix)\
-- fixed completed items sorting\
-- created sorting footer menu\
-- added default multisort\
-- priority visualization\
+- added soft deadline snoozing\
 ==================================\
-\
-0) snooze\
-- remove \'93~\'94 if it exists\
-- convert back to friendly date for deadline\
-- update all cases to save both epoch and human friendly dates\
 \
 1) epic time = getShiftedDate(today, shift)\
 - create time bucket service (singleton)\
@@ -27,13 +18,6 @@
 \
 \
 **********************\
-Code Conventions:\
-- business logic should live in services\
-- data should life in local storage and cloud\
-- constants should live in value\
-- select data fields should live in constant arrays (near service that processes them)\
-\
-\
 default:  dateRange = dates < \'93today @ 11:59:59\'94\
 example:  wednesday\
 this week = 7 days in range\
