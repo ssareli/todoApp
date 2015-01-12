@@ -1,0 +1,179 @@
+<ion-content>
+
+<!--
+<ion-header-bar>
+-->
+<br>
+    <div class="row">
+        <div class="col col-75">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input class="item-input" id="searchInput" type="text" placeholder="Search" ng-model="filterTxt" ng-click="updateFilters('Someday')">
+            </label>
+        </div>
+        <div class="col">
+            <i class="button button-stable-clear" ui-sref="todos">Cancel</i>
+        </div>
+    </div>
+
+<!--
+</ion-header-bar>
+-->
+
+
+            <ion-list>
+                <ion-item ng-repeat="item in items | filter:{done:false} | filter:filterTxt | filter:dateFilter |
+                 orderBy:[predicateVal]:reverse "
+                          > 
+
+                    <table ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'fake':item.priority==7}">
+                        <tr>
+                            <!--
+                            <td class="checkbox">
+                            -->
+                            <td>
+                                <br>
+                                <button class="button button-clear icon-left ion-ios7-circle-outline" ng-click="doneToggle(item)"></button>
+                                <!--
+                                <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)">
+                                -->
+                            </td>
+                            <td>&nbsp;</td>
+                            <td width="100%" href="#/todo/edit/{{item.objectId}}">
+                                <a style="text-decoration: none;" class="a" ng-href="#/todo/edit/{{item.objectId}}">
+                                <span class="done-{{item.done}}" width="100%">
+                                    <span class="overflow">
+                                        <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
+                                    {{item.content}}
+                                    </span>
+                                    <span class="item-headder align-right">   
+                                        <span class="align-right">
+                                        {{priorityText(item.priority)}} 
+                                        <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}">in {{item.duration}}
+                                        </i>
+                                        <ng-pluralize count="item.duration" 
+                                            when="{
+                                                '0': '',
+                                                '1': 'hr',
+                                                'other': 'hrs'}">
+                                        </ng-pluralize>
+
+                                        </span>    
+                                    </span> 
+                                    <br>
+
+                                    <br>
+                                    <span class="item-footter">
+                                        <span class="align-right">
+                                            due {{item.deadline}}        
+                                        </span>
+                                    </span>
+                                    <span class="item-footer">
+                                        <span></span>
+                                        <br>
+                                        <span>
+                                            [Project] [List] 
+                                        </span>
+
+                                    </span>
+                                 </span>
+
+                                </a>
+                                <ion-option-button side="left" class="button-stable"
+                                                 ng-click="goal(item)">
+                                    Goal
+                                </ion-option-button>
+
+                                <ion-option-button class="button-calm" ng-click="showSnooze(item)">
+                                    Push
+                                </ion-option-button>
+
+                                <ion-option-button class="button-assertive"
+                                                 ng-click="onItemDelete(item)">
+                                    Delete
+                                </ion-option-button>
+                            </td>
+                        </tr>
+                    </table>
+                 </ion-item>       
+              
+                 <ion-item ng-repeat="item in items | filter:{done:true} | filter:filterTxt | filter:dateFilter |
+                 orderBy:[predicateVal]:reverse "
+                          > 
+
+                    <table ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'fake':item.priority==7}">
+                        <tr>
+                            <!--
+                            <td class="checkbox">
+                            -->
+                            <td>
+                                <br>
+                                <button class="button button-clear icon-left ion-ios7-circle-outline" ng-click="doneToggle(item)"></button>
+                                <!--
+                                <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)">
+                                -->
+                            </td>
+                            <td>&nbsp;</td>
+                            <td width="100%" href="#/todo/edit/{{item.objectId}}">
+                                <a style="text-decoration: none;" class="a" ng-href="#/todo/edit/{{item.objectId}}">
+                                <span class="done-{{item.done}}" width="100%">
+                                    <span class="overflow">
+                                        <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
+                                    {{item.content}}
+                                    </span>
+                                    <span class="item-headder align-right">   
+                                        <span class="align-right">
+                                        {{priorityText(item.priority)}} 
+                                        <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}">in {{item.duration}}
+                                        </i>
+                                        <ng-pluralize count="item.duration" 
+                                            when="{
+                                                '0': '',
+                                                '1': 'hr',
+                                                'other': 'hrs'}">
+                                        </ng-pluralize>
+
+                                        </span>    
+                                    </span> 
+                                    <br>
+
+                                    <br>
+                                    <span class="item-footter">
+                                        <span class="align-right">
+                                            due {{item.deadline}}        
+                                        </span>
+                                    </span>
+                                    <span class="item-footer">
+                                        <span></span>
+                                        <br>
+                                        <span>
+                                            [Project] [List] 
+                                        </span>
+
+                                    </span>
+                                 </span>
+
+                                </a>
+                                <ion-option-button side="left" class="button-stable"
+                                                 ng-click="goal(item)">
+                                    Goal
+                                </ion-option-button>
+
+                                <ion-option-button class="button-calm" ng-click="showSnooze(item)">
+                                    Push
+                                </ion-option-button>
+
+                                <ion-option-button class="button-assertive"
+                                                 ng-click="onItemDelete(item)">
+                                    Delete
+                                </ion-option-button>
+                            </td>
+                        </tr>
+                    </table>
+                 </ion-item>       
+
+            </ion-list>
+
+            <br>
+            <div>
+</ion-content>

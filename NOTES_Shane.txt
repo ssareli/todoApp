@@ -1,10 +1,15 @@
 
 Goals:
+========================= v1.0
 1) Get todos fully functional
-	- reminder date/time
-		- computed deadline:  use earliest date from set of soft deadline, or hard deadline
+	- reminder date/time alerts
+		- separate deadline from task
 		- set duration default to "0.00"
-	- recurring reminders
+		- triggers push notif
+		- listed in special section with different visuals
+	- natural language todo creation ("get milk today @ 4pm 30min")
+	- self extinguishing tasks (simple reminders)
+	- recurring tasks
 		- daily/weekly
 		- Create hourly per day schedule (I.e. take 15min breaks during Biz hours)
 2) Create lists
@@ -23,17 +28,25 @@ Goals:
 	- view project for todos
 	- filter todos based on project
 	- filter lists based on 
-	- creat Inbox as project[0]
 	- color coding by project
 	- set active/inactive for filtering
 	- task and list dependency?
 	- Projects, lists and goals get stack ranked in priority order
-4) Smarts
-	- auto-delete completed tasks when time or size limit reached
-	- soft deadline calculations
-	- natural language todo creation ("get milk today @ 4pm 30min")
-	- reminder alerts
-	- self extinguishing tasks
+5) Collaboration
+	- authentication
+	- sharing
+	- assigning owners
+=========================== v1.5
+6) Calendaring
+	- create day dividers in "this week" view
+	- organize events by time into a time schedule. put non-time deadlined tasks back to back with 15min buffers in between
+	- by default, prevent tasks from overlapping specific time slots (unless manually overridden)
+	- show day planner view of tasks
+	- generate iCal feed for Google Calendar integration
+	- import phone calendars
+	- prevent collisions with 3rd party calendar elements (possible?)
+
+7) Scheduler
 	- basic schedule input (i.e. 14hrs per day)
 	- tracking schedule capacity limits
 		- update footer to compare time needed vs availabe
@@ -49,17 +62,7 @@ Goals:
 	- auto-scheduling based on schedule + buckets
 	- Tasks can't go overdue, just get rescheduled (keep scheduling history)Unassigned 
 
-5) Calendaring
-	- organize events by time into a time schedule. put non-time deadlined tasks back to back with 15min buffers in between
-	- by default, prevent tasks from overlapping specific time slots (unless manually overridden)
-	- show day planner view of tasks
-	- generate iCal feed for Google Calendar integration
-	- import phone calendars
-	- prevent collisions with 3rd party calendar elements (possible?)
-5) Collaboration
-	- authentication
-	- sharing
-	- assigning owners
+
 ==============================================
 
 - optimizations
@@ -69,16 +72,17 @@ Goals:
 	- ng-options simpler solution for collecting data for selects?
 	- collection-repeat (for search and “all” views)
 	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.
-
+	- archive completed items > 30 days old
+		- set inactive, filter by active
 
 - bugs
+	P1 quick add items don't show up without a refresh
 	P1 make checkbox bigger or shrink edit zone
 	P1 fix href fuckups
 	P2 after editing or updating the side menu functionality breaks
 	?? Timestamp comparisons are done in GMT, not local, could create issues on filtering?
 
 - polish
-	- add cancel button to update screen
 	- make todo items aligned using Grid
 	- make checkboxes larger icons that toggle states
 	- move to slide boxes or gesture events
@@ -88,7 +92,6 @@ Goals:
 	- UX: adjust to local timezone
 	- Ux: hold and move items 
 		- create hour dividers in "today" view
-		- create day dividers in "this week" view
 	- required field enforcement
 	- better cross-platform date and time selector ("clear at top"), "cancel"
 	- don't let filters get hidden by search
@@ -96,6 +99,17 @@ Goals:
 	- convert partial hours into minutes (i.e. .25 = 15min)
 	- allow for setting start of week day
 	- new task, set hard deadline move soft to “none”
+	- offline mode
+		- detect when offline and use local storage data
+		- add/edit new items to local storage
+		- parse items are uneditable (grey color?)
+		- back online, all items are synched
+	- live sync
+	- comments should open a modal to read/write
+	- start count-down timer (adjustable)
+		- and track time spent
+		- offer pause, play
+	- clicking search icon opens search and opens keyboard
 
 ========================
 - setup angularjs, phonegap templates for sublime

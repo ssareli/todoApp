@@ -23,8 +23,13 @@
                       
                 <button menu-toggle="left" class="button icon ion-navicon"></button>
                 <h1 class="title">todoApp</h1>
-                <button class="button bar-dark" ui-sref="createTodo">New</button>
+                <button class="button icon ion-search placeholder-icon" ui-sref="search"></button>
+                
+                <!--
+                <button class="button icon ion-search placeholder-icon" ng-model="searchOn" ng-click="searchFocus()"></button>
 
+                <button class="button bar-dark" ui-sref="createTodo">New</button>
+                -->
 
           <!--
                 <ion-nav-bar class="bar-header"> 
@@ -47,19 +52,23 @@
                 on-refresh="doRefresh2()">
             </ion-refresher>
 
-            <div class="list">
+            <ion-list>
               <label class="item item-input item-select">
                 <div class="input-label">
                   Date Range:
                 </div>
                 <select ng-model="dateFilterOption" ng-change="dateFilterUpdate(dateFilterOption)">
+                    <option>Inbox</option>
+                    <option>In Progress</option>
                     <option>Today</option>
                     <option>Tomorrow</option>
                     <option>This Week</option>
+                    <option>Next Week</option>
                     <option>This Month</option>
                     <option>This Quarter</option>
                     <option>This Year</option>
                     <option>Someday</option>
+
                 </select>
               </label>
               <label class="item item-input item-select">
@@ -70,31 +79,39 @@
                     <option selected>Personal</option>
                     <option>Business</option>
                     <option>Work</option> 
-
                 </select>
               </label>
-            </div>
-
-            <div class="list list-inset">
-              <label class="item item-input">
-                <i class="icon ion-search placeholder-icon"></i>
-                <input type="text" placeholder="Search" ng-model="filterTxt" ng-click="updateFiltersAnytime()">
-              </label>
-            </div>
-
-            <ion-list> 
-
+        
             <!--
-                <ion-item ng-repeat="item in items | filter:{done:false} | filter:filterTxt | filter:dateFilter |
-                 orderBy:['deadlineEpoch','priority']:reverse "
-                          item="item"> 
-            -->
-
+            <ion-list> 
                 <ion-item ng-repeat="item in items | filter:{done:false} | filter:filterTxt | filter:dateFilter |
                  orderBy:[predicateVal]:reverse "
-                          item="item">            
+                          item="item">   
 
-                    <table ng-class="{'must':item.priority=='must complete','prefer':item.priority=='prefer to complete','fake':item.priority=='remind me'}">
+            <ul ng-repeat="(key, value) in items | filter:{done:false} |
+                 filter:filterTxt |
+                  filter:dateFilter |
+                 groupBy: 'deadline' |
+                 orderBy:[predicateVal]:reverse" item="item"> 
+            -->
+
+                <div ng-controller="TodoQuickAddController" class="list list-inset">
+                  <label class="item item-input">
+                    <form ng-submit="addNewItem()">
+                    <input id="quickAdd" type="text" placeholder="{{addNewPlaceholder}}" ng-model="newItem" ng-click="updateFilters('Inbox')">
+                     <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                    </form>
+                  </label>
+                </div>
+
+            <!-- toggle search on/off -->
+
+                <ion-item ng-repeat="item in items |
+                                filter:{done:false} |
+                                filter:dateFilter |
+                                orderBy:[predicateVal]:reverse "> 
+
+                    <table ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'fake':item.priority==7}">
                         <tr>
                             <!--
                             <td class="checkbox">
@@ -110,13 +127,13 @@
                             <td width="100%" href="#/todo/edit/{{item.objectId}}">
                                 <a style="text-decoration: none;" class="a" ng-href="#/todo/edit/{{item.objectId}}">
                                 <span class="done-{{item.done}}" width="100%">
-                                    <span>
+                                    <span class="overflow">
                                         <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
                                     {{item.content}}
                                     </span>
                                     <span class="item-headder align-right">   
                                         <span class="align-right">
-                                        {{item.priority}} 
+                                        {{priorityText(item.priority)}} 
                                         <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}">in {{item.duration}}
                                         </i>
                                         <ng-pluralize count="item.duration" 
@@ -153,7 +170,7 @@
                                 </ion-option-button>
 
                                 <ion-option-button class="button-calm" ng-click="showSnooze(item)">
-                                    Snooze
+                                    Push
                                 </ion-option-button>
 
                                 <ion-option-button class="button-assertive"
@@ -163,7 +180,8 @@
                             </td>
                         </tr>
                     </table>
-                </ion-item>
+                 </ion-item>       
+              
             </ion-list>
 
             <br>
@@ -181,7 +199,6 @@
             <ion-list> 
                 <ion-item ng-repeat="item in items |
                     filter:{done:true} |
-                    filter:filterTxt |
                     filter:dateFilter | 
                     orderBy:'-completedAt' "
                           item="item">
@@ -248,7 +265,7 @@
     <!-- Left menu -->
     <ion-side-menu side="left">
         <ion-header-bar class="bar-dark">
-          <h1 class="title">Projects</h1>
+          <h1 class="title">Projects2</h1>
           <button class="button button-icon ion-plus" ng-click="newProject()">
           </button>
         </ion-header-bar>
@@ -256,6 +273,9 @@
           <ion-list>
             <ion-item ng-repeat="project in projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
               {{project.title}}
+            </ion-item>
+            <ion-item>
+                Settings
             </ion-item>
           </ion-list>
         </ion-content>

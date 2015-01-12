@@ -78,10 +78,10 @@
                 <div class="input-label">
                   Priority
                 </div>
-                <select ng-model="todo.priority" ng-click="zeroDuration()" required>
-                    <option>must complete</option>
-                    <option>prefer to complete</option>
-                    <option>reminder only</option>
+                <select ng-model="todo.priority" required>
+                    <option value='3'>must complete</option>
+                    <option value='5'>prefer to complete</option>
+                    <option value='7'>reminder only</option>
                 </select>
             </label>    
 
@@ -90,6 +90,7 @@
                   Soft Deadline
                 </div>
                 <select ng-model="todo.softdeadline" required>
+                    <option>In Progress</option>
                     <option>Today</option>
                     <option>Tomorrow</option>
                     <option>This Week</option>
@@ -111,7 +112,12 @@
             </ion-item>
 
             <ion-item>
-                Computed Deadline:  {{todo.deadline}}
+            Comments:<br>
+                <textarea ng-model="todo.comments" placeholder="Add commments here..."></textarea>
+            </ion-item>
+
+            <ion-item>
+                Computed Deadline  {{todo.deadline}}
             </ion-item>
 
             <ion-toggle ng-model="todo.goal" toggle-class="toggle-calm" >Set As Goal</ion-toggle>

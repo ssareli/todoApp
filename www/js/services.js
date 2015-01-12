@@ -95,7 +95,7 @@ services.factory('$localstorage', ['$window', function($window) {
         saveItems: function(things) {
             // db write to localstorage
             this.setObject("items",things);
-            //console.log("localstorage.items.size:"+Object.keys(things).length);
+            console.log("localstorage.items.size:"+Object.keys(things).length);
         },
         // DOESN"T WORK ???
         reset: function() {
@@ -104,8 +104,56 @@ services.factory('$localstorage', ['$window', function($window) {
     }
 }]);
 
+services.factory('FilterUtil', [function() {
+    return {
+        getSize: function(obj) {
+            var size = 0, key;
+            for (key in obj) {
+                console.log("key...");
+                if (obj.hasOwnProperty(key)) size++;
+            }
+            return size;
+        }
+    }
+}]);
+
 services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function(DATE_BUCKET,DATE_NAME,$localstorage) {
     return {
+        adjustPriority: function(item) { 
+            // convert priority to number if not already
+            if (typeof item.priority == 'string' || item.priority instanceof String) {
+                //console.log("[adjustpriority]converting priority...");
+                item.priority = Number(item.priority);
+                //console.log("[adjustpriority]priority is now:"+item.priority);
+            } else {
+                //console.log("[adjustpriority]priority remains:"+item.priority);
+            }
+
+            // non-related cleanup for reminder level priority   
+            if(item.priority == DATE_NAME.REMINDER) {
+                item.duration = '0.00';            
+            }
+
+            // if goal is set then priority should be even
+            if(item.goal) {
+                // if priority isn't even
+                if((item.priority % 2)!=0) {
+                    // decrement
+                    item.priority--;
+                }
+                // if not a goal
+            } else {
+                // if priority isn't odd
+                if((item.priority % 2)!=1) {
+                    // increment
+                    item.priority++;
+                }
+            }
+
+            //console.log("[adjustpriority]priority returned as:"+item.priority);
+            return(item);
+        },
+
         // Checked to see if a deadline string has anything in it
         stringHasContents: function(str) {
             return(
@@ -224,6 +272,10 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             console.log("[setSoftdeadline]"+todo.softdeadline);
 
             switch(todo.softdeadline) {
+                case 'In Progress':
+                    // format is m/d/yyyy
+                    todo.deadline = DATE_BUCKET.H_IN_PROGRESS;
+                    return(todo);
                 case 'Today':
                     // format is m/d/yyyy
                     todo.deadline = DATE_BUCKET.H_TODAY;
@@ -277,6 +329,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             dates = $localstorage.getObject(DATE_NAME.MENU_HASH);
 
             // set singleton
+            DATE_BUCKET.IN_PROGRESS = dates[DATE_NAME.IN_PROGRESS];
+            DATE_BUCKET.H_IN_PROGRESS = dates[DATE_NAME.H_IN_PROGRESS];
 
             DATE_BUCKET.TODAY = dates[DATE_NAME.TODAY];
             DATE_BUCKET.H_TODAY = dates[DATE_NAME.H_TODAY];
@@ -334,6 +388,31 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             // SOMEDAY
             DATE_BUCKET.SOMEDAY = dates[DATE_NAME.SOMEDAY];
             DATE_BUCKET.H_SOMEDAY = dates[DATE_NAME.H_SOMEDAY];
+
+            // INBOX
+            DATE_BUCKET.INBOX = dates[DATE_NAME.INBOX];
+            DATE_BUCKET.H_INBOX = dates[DATE_NAME.H_INBOX];
+        },
+
+        createDate: function(epoch) {
+            var tempDate = new Date(epoch);
+            var yy = tempDate.getFullYear();
+            var mm = tempDate.getMonth() + 1; // january is month 0 in javascript
+            var dd = tempDate.getDate();
+
+            //console.log("yy"+yy);
+            //console.log("mm"+mm);
+            //console.log("dd"+dd);
+            return([mm, dd, yy].join("/"));
+        },
+
+        getDaysMonths: function(year) {
+            var days_in_months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            // for leap years, February has 29 days. Check whether
+            // February, the 29th exists for the given year
+            if( (new Date(year, 1, 29)).getDate() == 29 ) days_in_month[1] = 29;
+
+            return(days_in_months);
         },
 
         // calculate the end dates for all ranges based on today's date.
@@ -347,67 +426,211 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             var y = deadline.getFullYear(),
                 m = deadline.getMonth() + 1, // january is month 0 in javascript
                 d = deadline.getDate();
+                o = deadline.getTimezoneOffset();
+                dayofWeek = deadline.getDay();
+            var offset = o * 60000; // minutes offset * 60 * 1000 = milliseconds
+            var dayofWeekTemp = null;
+            var delta = 0;
+            var timeIncrease = 0;
+            var oneDay = 86400000; // 24hrs worth of milliseconds
+            var oneWeek = oneDay * 7;
+            var tempDate = null;
+            var yy = null;
+            var mm = null;
+            var dd = null;
+    
+            var days_in_months = this.getDaysMonths(y);
+
+            // In Progress - format is m/d/yyyy
+            // set timestamp
+            DATE_BUCKET.IN_PROGRESS = 1420092000000; // 1/1/2015 @ 12:00am
+            // set human friendly time
+            DATE_BUCKET.H_IN_PROGRESS = "in progress";
 
             // Today - format is m/d/yyyy
             // set timestamp
-            DATE_BUCKET.TODAY = Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
+            // add in timezone offsite 
+            DATE_BUCKET.TODAY = offset + Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
             // set human friendly time
             DATE_BUCKET.H_TODAY = [m, d, y].join("/");
 
+            // #####################################################
             // Tomorrow
-            DATE_BUCKET.TOMORROW = DATE_BUCKET.TODAY + 86400000;
+            DATE_BUCKET.TOMORROW = DATE_BUCKET.TODAY + oneDay;
             DATE_BUCKET.H_TOMORROW = [m, d+1, y].join("/");
 
+            // #####################################################
             // In Two Days
-            DATE_BUCKET.TWO_DAYS = DATE_BUCKET.TODAY + 86400000 + 86400000;
+            DATE_BUCKET.TWO_DAYS = DATE_BUCKET.TODAY + (oneDay * 2);
             DATE_BUCKET.H_TWO_DAYS = [m, d+2, y].join("/");
 
+            // #####################################################
             // THIS WEEK
-            DATE_BUCKET.THIS_WEEK = DATE_BUCKET.TODAY + 604800000;
-            DATE_BUCKET.H_THIS_WEEK = [m, d+7, y].join("/");
             // random day between today and friday
+            // 6 - (day of week + 1) = days delta
+            delta = 6 - (dayofWeek+1); // days until friday after today
+            //console.log("days until friday"+delta);
+            // random(1,delta)
+            delta = Math.floor(Math.random() * delta) + 1;
+            //console.log("days until friday (random)"+delta);
+            DATE_BUCKET.THIS_WEEK = DATE_BUCKET.TODAY + (delta * oneDay);
+            //console.log("this week epoch:"+DATE_BUCKET.THIS_WEEK);
+            DATE_BUCKET.H_THIS_WEEK = this.createDate(DATE_BUCKET.THIS_WEEK);
 
-            // THIS WEEKEND
-            DATE_BUCKET.THIS_WEEKEND = DATE_BUCKET.TODAY + 604800000;
-            DATE_BUCKET.H_THIS_WEEKEND = [m, d+7, y].join("/");
-            // this saturday
+            // #####################################################
+            // THIS WEEKEND            
+            // day of week is 0-6 (sunday is 0), +1 all dates
+            // determine this saturday (7)
+            // caculate differ between saturday and today
+            delta = 0;
+            delta = 7 - (dayofWeek+1);
+            // if 0, then this weekend (saturday) is today
+            // if 7, then today is sunday
+            // assume days start at 12am localtime
+            timeIncrease = delta * oneDay; 
+            DATE_BUCKET.THIS_WEEKEND = DATE_BUCKET.TODAY + timeIncrease;
+            // recreate calendar date
+            DATE_BUCKET.H_THIS_WEEKEND = this.createDate(DATE_BUCKET.THIS_WEEKEND);
+            //console.log("[timecalc]"+DATE_BUCKET.THIS_WEEKEND);
 
+            // #####################################################
             // NEXT WEEK
-            DATE_BUCKET.NEXT_WEEK = DATE_BUCKET.TODAY + 604800000 + 604800000;
-            DATE_BUCKET.H_NEXT_WEEK = [m, d+14, y].join("/");
             // next monday 
+            // day of week is 0-6 (sunday is 0), +1 all dates
+            // determine this saturday(7) + 2 
+            // caculate differ between saturday and today
+            delta = 0;
+            delta = 7 + 2 - (dayofWeek+1);
+            // if 0, then this weekend (saturday) is today
+            // if 7, then today is sunday
+            // assume days start at 12am localtime
+            timeIncrease = delta * oneDay; 
+            DATE_BUCKET.NEXT_WEEK = DATE_BUCKET.TODAY + timeIncrease;
+            // recreate calendar date
+            DATE_BUCKET.H_NEXT_WEEK = this.createDate(DATE_BUCKET.NEXT_WEEK);
 
-            // NEXT WEEK
-            DATE_BUCKET.NEXT_WEEKEND = DATE_BUCKET.TODAY + 604800000 + 604800000;
-            DATE_BUCKET.H_NEXT_WEEKEND = [m, d+14, y].join("/");
-            // next saturday
+            // #####################################################
+            // NEXT WEEKEND
+            // this saturday + 7
+            DATE_BUCKET.NEXT_WEEKEND = DATE_BUCKET.THIS_WEEKEND + (7*oneDay);
+            DATE_BUCKET.H_NEXT_WEEKEND = this.createDate(DATE_BUCKET.NEXT_WEEKEND);
 
+            // #####################################################
             // THIS MONTH
-            DATE_BUCKET.THIS_MONTH = DATE_BUCKET.TODAY + 2629743000;
-            DATE_BUCKET.H_THIS_MONTH = [m+1, d, y].join("/");
-            // monday after next
+            // random date between now and last day of month
+            // 31 - (day of month + 1) = days delta
+            delta = days_in_months[m-1] - (d+1); // days until end of month after today
+            // random(1,delta)
+            delta = Math.floor((Math.random() * delta) + 1);
+            DATE_BUCKET.THIS_MONTH = DATE_BUCKET.TODAY + (delta * oneDay);
+            DATE_BUCKET.H_THIS_MONTH = this.createDate(DATE_BUCKET.THIS_MONTH);
 
+            // #####################################################
             // NEXT MONTH
-            DATE_BUCKET.NEXT_MONTH = DATE_BUCKET.TODAY + 2629743000 + 2629743000;
-            DATE_BUCKET.H_NEXT_MONTH = [m+2, d, y].join("/");
+            //DATE_BUCKET.NEXT_MONTH = DATE_BUCKET.TODAY + 2629743000 + 2629743000;
+            //DATE_BUCKET.H_NEXT_MONTH = [m+2, d, y].join("/");
             // first weekday of next month
+                // last day of this month + 1
+            delta = days_in_months[m-1] - d + 1; // days in this month + 1
+            timeIncrease = delta * oneDay;
+            DATE_BUCKET.NEXT_MONTH = DATE_BUCKET.TODAY + timeIncrease;
+            //console.log("next month first day:"+DATE_BUCKET.NEXT_MONTH);
+                // check day of week, if 0 +1, if 7 + 2
+            tempDate = new Date(DATE_BUCKET.NEXT_MONTH)
+            dayofWeekTemp = tempDate.getDay();
+            yy = tempDate.getFullYear();
+            mm = tempDate.getMonth()+1;
+            dd = tempDate.getDate();
+            //console.log("day of week for next month="+dayofWeekTemp);
+            if(dayofWeekTemp==0) {
+                // if sunday, add a day to the date
+                dd =+ 1; 
+            } else if(dayofWeekTemp==7) {
+                // if saturday, add 2 days to the date
+                dd =+ 2;
+            }
+            DATE_BUCKET.H_NEXT_MONTH = [mm, dd, yy].join("/");
 
+            // #####################################################
             // THIS QUARTER
-            DATE_BUCKET.THIS_QUARTER = DATE_BUCKET.TODAY + 7889229000;
-            DATE_BUCKET.H_THIS_QUARTER = [m+3, d, y].join("/");
+            //DATE_BUCKET.THIS_QUARTER = DATE_BUCKET.TODAY + 7889229000;
+            //DATE_BUCKET.H_THIS_QUARTER = [m+3, d, y].join("/");
 
-            // NEXT QUARTER
-            DATE_BUCKET.NEXT_QUARTER = DATE_BUCKET.TODAY + 7889229000+ 7889229000;
-            DATE_BUCKET.H_NEXT_QUARTER = [m+6, d, y].join("/");
+            // days left this quarter
+            var daysLeftInQuarter = delta = this.getDaysLeftThisQuarter(m,d,y);
+            // random date between next month and last day of the quarter
+            delta = Math.floor((Math.random() * delta) + (days_in_months[m-1]-d));
+            DATE_BUCKET.THIS_QUARTER = DATE_BUCKET.TODAY + (delta * oneDay);
+            DATE_BUCKET.H_THIS_QUARTER = this.createDate(DATE_BUCKET.THIS_QUARTER);
 
+            // #####################################################
             // THIS YEAR
             DATE_BUCKET.THIS_YEAR = DATE_BUCKET.TODAY + 31556926000;
             DATE_BUCKET.H_THIS_YEAR = [m, d, y+1].join("/");
+
+            // get the day of the year
+            var start = new Date(y, 0, 0);
+            var diff =  DATE_BUCKET.TODAY - start;
+            var dayNumber = Math.ceil(diff / oneDay);
+            // days left this year
+            delta = 365 - dayNumber;
+            // random date between next month and last day of the quarter
+            delta = Math.floor((Math.random() * delta) + (dayNumber + daysLeftInQuarter));
+            DATE_BUCKET.THIS_YEAR = DATE_BUCKET.TODAY + (delta * oneDay);
+            DATE_BUCKET.H_THIS_YEAR = this.createDate(DATE_BUCKET.THIS_YEAR);
 
             // SOMEDAY
             DATE_BUCKET.SOMEDAY = DATE_BUCKET.TODAY + 2624554080000;
             DATE_BUCKET.H_SOMEDAY = [m, d, y+80].join("/");
 
+            // INBOX
+            DATE_BUCKET.INBOX = 1; 
+            DATE_BUCKET.H_INBOX = "unscheduled";
+        },
+
+        getDaysLeftThisQuarter: function(m,d,y) {
+            var monthLocation = null;
+            var daysSoFar = d;
+            //console.log("[getDaysLeftThisQuarter]days_in_month:"+daysSoFar);
+            var days_in_months = this.getDaysMonths(y);
+            var totalDays = 0;
+
+            //console.log("[getDaysLeftThisQuarter]current_month:"+m);
+
+            // mod to figure out month in quarter
+            monthLocation = 3 % m;
+
+            //console.log("[getDaysLeftThisQuarter]monthinquarter"+monthLocation);
+
+            // remove added +1 from computeTimeBuckets
+            m--;
+
+            //console.log("[getDaysLeftThisQuarter]days_in_months[m+1]:"+days_in_months[m+1]);
+            //console.log("[getDaysLeftThisQuarter]days_in_months[m+2]:"+days_in_months[m+2]);
+            //console.log("[getDaysLeftThisQuarter]days_in_months[m]:"+days_in_months[m]);
+
+            // third month
+            if(monthLocation==0) {
+                // just use days in this month
+                totalDays =+ days_in_months[m+1] + days_in_months[m+2] + days_in_months[m];
+            // second month
+            } else if(monthLocation==1) {
+                // one month before
+                daysSoFar =+ days_in_months[m-1];
+                totalDays =+ days_in_months[m-1] + days_in_months[m+1] + days_in_months[m];
+
+            // 1st month
+            } else {
+                // two months before this month
+                daysSoFar =+ days_in_months[m-1] + days_in_months[m-2];
+                totalDays =+ days_in_months[m] + days_in_months[m-1] + days_in_months[m-2];
+            }
+
+            //console.log("[getDaysLeftThisQuarter]daysinquartersofar"+daysSoFar);
+            //console.log("[getDaysLeftThisQuarter]totaldaysinquarter"+totalDays);
+
+            // days left in this quarter
+            return(totalDays - daysSoFar);
         },
 
         getDateHash: function() {
@@ -420,8 +643,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             var fullDate = null;
             var date = new Date().getDate(); // today's number date
 
-            console.log("today:"+date);
-            console.log("localstorage.today:"+$localstorage.get(DATE_NAME.TODAY_DATE, null));
+            console.log("today date:"+date);
+            console.log("localstorage.today date:"+$localstorage.get(DATE_NAME.TODAY_DATE, null));
 
             /* OPTIMIZATION: CHECK MEMORY FOR CALCS BEFORE LOCALSTORAGE */
 
@@ -488,6 +711,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             var menuHash = null;
         
             menuHash = {
+                "In Progress": DATE_BUCKET.IN_PROGRESS,
                 "Today": DATE_BUCKET.TODAY,
                 "Tomorrow": DATE_BUCKET.TOMORROW,
                 "In Two Days": DATE_BUCKET.TWO_DAYS,
@@ -500,6 +724,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 "This Quarter": DATE_BUCKET.THIS_QUARTER,
                 "This Year": DATE_BUCKET.THIS_YEAR,
                 "Someday": DATE_BUCKET.SOMEDAY,
+                "Inbox": DATE_BUCKET.INBOX,
+                "H_In Progress": DATE_BUCKET.H_IN_PROGRESS,
                 "H_Today": DATE_BUCKET.H_TODAY,
                 "H_Tomorrow": DATE_BUCKET.H_TOMORROW,
                 "H_In Two Days": DATE_BUCKET.H_TWO_DAYS,
@@ -511,7 +737,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 "H_Next Month": DATE_BUCKET.H_NEXT_MONTH,
                 "H_This Quarter": DATE_BUCKET.H_THIS_QUARTER,
                 "H_This Year": DATE_BUCKET.H_THIS_YEAR,
-                "H_Someday": DATE_BUCKET.H_SOMEDAY
+                "H_Someday": DATE_BUCKET.H_SOMEDAY,
+                "H_INBOX": DATE_BUCKET.H_INBOX
 
                 /*  why won't this work?
                 DATE_NAME.TODAY: DATE_BUCKET.TODAY,
@@ -553,6 +780,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     SOMEDAY: new Date().getTime() + 2624554080000,
     */
     MENU_HASH: null,
+    IN_PROGRESS: -1,
     TODAY: -1,
     TOMORROW: -1,
     TWO_DAYS: -1,
@@ -565,6 +793,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     THIS_QUARTER: -1,
     THIS_YEAR: -1,
     SOMEDAY: -1,
+    INBOX: -1,
+    H_IN_PROGRESS: "",
     H_TODAY: "",
     H_TOMORROW: "",
     H_TWO_DAYS: "",
@@ -576,10 +806,12 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     H_NEXT_MONTH: "",
     H_THIS_QUARTER: "",
     H_THIS_YEAR: "",
-    H_SOMEDAY: ""
+    H_SOMEDAY: "",
+    H_INBOX: ""
 
 }).constant('DATE_NAME',{
     MENU_HASH: "menuHash",
+    IN_PROGRESS: "In Progress",
     TODAY: "Today", 
     TOMORROW: "Tomorrow",
     TWO_DAYS: "In Two Days",
@@ -593,6 +825,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     NEXT_QUARTER: "Next Quarter",
     THIS_YEAR: "This Year",
     SOMEDAY: "Someday",
+    INBOX: "Inbox",
+    H_IN_PROGRESS: "H_In Progress",
     H_TODAY: "H_Today", 
     H_TOMORROW: "H_Tomorrow",
     H_TWO_DAYS: "H_In Two Days",
@@ -606,8 +840,12 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     H_NEXT_QUARTER: "H_Next Quarter",
     H_THIS_YEAR: "H_This Year",
     H_SOMEDAY: "H_Someday",
+    H_INBOX: "H_INBOX",
     TODAY_TIMESTAMP: "today_timestamp",
-    TODAY_DATE: "today_date"
+    TODAY_DATE: "today_date",
+    MUST: 3,
+    PREFER: 5, 
+    REMINDER: 7
 
 }).value('CONFIG',{
     SHOW_COMPLETED: false,
