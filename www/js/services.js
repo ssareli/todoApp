@@ -183,6 +183,9 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 var time = this.convertTo24Hour(todo.deadlinetime.toLowerCase());
                 var timeParts = time.split(':');
 
+                // adjust time for local time zone??
+                //var offset = deadline.getTimezoneOffset() * 60000;
+
                 // update epochTime for time
                 // hr 0-23, min 0-59
                 todo.deadlineEpoch = Date.UTC(parts[2],parts[0]-1,parts[1],timeParts[0],timeParts[1]);
@@ -213,6 +216,11 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
         // picks the earliest epoch time between soft and hard for todo.deadline
         setEarliestDeadline: function(todo) {
             // if deadline > hardDeadline, deadline = hard
+
+            // assume deadline is soft
+            todo.hard = false;
+
+            // test to see if deadline is hard
             if(this.stringHasContents(todo.deadlinedate)) {
                 console.log("harddeadline:"+todo.deadlinedate);
                 var hardEpoch = null;
@@ -230,14 +238,12 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                     todo.deadline = todo.deadlinedate;
                     // set epoch deadline
                     todo.deadlineEpoch = hardEpoch;
+                    todo.hard = true;
 
                     todo = this.appendTime(todo, parts);
-                } else { // deadline is soft, so mark deadline in italics
-                    todo.deadline = "~"+todo.deadline;
-                }
-            } else { // deadline is soft, so mark deadline in italics
-                todo.deadline = "~"+todo.deadline;
-            }
+                } 
+            } 
+
             return(todo);
         },
 

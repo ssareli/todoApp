@@ -10,6 +10,17 @@
 }
 */
 
+.transparent {
+  opacity: 0.0;
+}
+
+.item {
+    min-height: 56px;
+}
+.item-complex .item-content {
+     padding: 10px 20px 10px 15px;
+}
+
 .hidden22 {
     visibility: hidden;
 }
@@ -18,18 +29,33 @@
   text-overflow: ellipsis;
 }
 
-.must {
+/* hard deadlines are highlighted */
+.hard {
   /*
   outline-color: red;
   */
-  background-color: #F6CED8;
+  font-color: red !important;
+  font-weight: bold
+}
+
+table {
+  width: 100%;
+}
+
+td {
+    vertical-align: center;
+}
+
+.must {
+  color: red;
 }
 
 .prefer {
-  /*
-  outline-color: red;
-  */
-  background-color: #D8CEF6;
+  /*color: blue;*/
+}
+
+.reminder {
+  color: grey;
 }
 
 .done-true {

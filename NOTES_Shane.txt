@@ -2,11 +2,6 @@
 Goals:
 ========================= v1.0
 1) Get todos fully functional
-	- reminder date/time alerts
-		- separate deadline from task
-		- set duration default to "0.00"
-		- triggers push notif
-		- listed in special section with different visuals
 	- natural language todo creation ("get milk today @ 4pm 30min")
 	- self extinguishing tasks (simple reminders)
 	- recurring tasks
@@ -38,6 +33,19 @@ Goals:
 	- assigning owners
 =========================== v1.5
 6) Calendaring
+	- reminder date/time alerts
+		- figure out how to trigger a local notif
+		- add new reminder timestamp field (date & time)
+		- automatically generate reminders for all tasks with deadline times
+			- use todo.deadline as reminder deadline
+			- 10min reminder default
+				- adjust quantity 
+				- minutes/hours/days/weeks
+		- deadlines pushes should push reminders
+			- add swipes hourly time slot pushes
+		- show bell on item in list
+		- reminders view in menu
+		- Notifications area (read, clear, unread)
 	- create day dividers in "this week" view
 	- organize events by time into a time schedule. put non-time deadlined tasks back to back with 15min buffers in between
 	- by default, prevent tasks from overlapping specific time slots (unless manually overridden)
@@ -47,6 +55,8 @@ Goals:
 	- prevent collisions with 3rd party calendar elements (possible?)
 
 7) Scheduler
+	- UX: start day with "moment" review of everything planned or auto-scheduled for today and let's confirm, complete, defer, or delete them (any.do) 
+	- Soft deadline needs time option
 	- basic schedule input (i.e. 14hrs per day)
 	- tracking schedule capacity limits
 		- update footer to compare time needed vs availabe
@@ -109,7 +119,8 @@ Goals:
 	- start count-down timer (adjustable)
 		- and track time spent
 		- offer pause, play
-	- clicking search icon opens search and opens keyboard
+	- clicking search icon auto-opens keyboard
+	- UX: send emails to task@tinytask.com from registered email to create items 
 
 ========================
 - setup angularjs, phonegap templates for sublime

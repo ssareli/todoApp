@@ -4,7 +4,10 @@
     <!-- Center content -->
     <ion-side-menu-content ng-controller="ContentController">
 
+        <!--
         <ion-header-bar class="bar-stable">
+        -->
+
             <!--
             <div class="buttons">
                 <button class="button button-icon icon ion-ios7-minus-outline" ng-click="data.showDelete = !data.showDelete;"></button>
@@ -21,9 +24,6 @@
             </div>
             -->
                       
-                <button menu-toggle="left" class="button icon ion-navicon"></button>
-                <h1 class="title">todoApp</h1>
-                <button class="button icon ion-search placeholder-icon" ui-sref="search"></button>
                 
                 <!--
                 <button class="button icon ion-search placeholder-icon" ng-model="searchOn" ng-click="searchFocus()"></button>
@@ -44,9 +44,13 @@
 
             -->
             
+        <!--
         </ion-header-bar>
+    -->
 
         <ion-content>
+                <br class="transparent">
+
             <ion-refresher
                 pulling-text="Pull to add item..."
                 on-refresh="doRefresh2()">
@@ -104,35 +108,72 @@
                   </label>
                 </div>
 
-            <!-- toggle search on/off -->
 
-                <ion-item ng-repeat="item in items |
+                <ion-item class="item" ng-repeat="item in items |
                                 filter:{done:false} |
                                 filter:dateFilter |
-                                orderBy:[predicateVal]:reverse "> 
+                                orderBy:[predicateVal]:reverse "
+                                href="#/todo/edit/{{item.objectId}}"
+                                item="item"> 
 
-                    <table ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'fake':item.priority==7}">
+                    <table class="table">
                         <tr>
                             <!--
                             <td class="checkbox">
                             -->
+                            <!--
                             <td>
                                 <br>
                                 <button class="button button-clear icon-left ion-ios7-circle-outline" ng-click="doneToggle(item)"></button>
+                            -->
                                 <!--
                                 <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)">
                                 -->
+                            <!--
                             </td>
                             <td>&nbsp;</td>
-                            <td width="100%" href="#/todo/edit/{{item.objectId}}">
-                                <a style="text-decoration: none;" class="a" ng-href="#/todo/edit/{{item.objectId}}">
-                                <span class="done-{{item.done}}" width="100%">
-                                    <span class="overflow">
-                                        <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
-                                    {{item.content}}
+                            -->
+                            <td>
+                                <span class="overflow" ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'reminder':item.priority==7}">
+                                   
+                                {{item.content}}<br>
+                                </span>
+
+                                <table class="table item-headder"><tr>
+                                    <td> 
+                                        <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal, 'fake':item.priority==7}"></i>
+                                    </td>
+                                    <td> 
+                                    <!--
+                                    <span class="align-left">
+                                        {{priorityText(item.priority)}} 
+                                        
+                                        <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}">in {{item.duration}}
+                                        </i>
+                                        <ng-pluralize count="item.duration" 
+                                            when="{
+                                                '0': '',
+                                                '1': 'hr',
+                                                'other': 'hrs'}">
+                                        </ng-pluralize>
+                                        
+                                    </span>    
+                                    -->        
+                                    <span class="align-right" ng-class="{'hard':item.hard,'fake':!item.hard}">
+                                    <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}"> {{item.duration}}
+                                    </i>
+                                    <ng-pluralize count="item.duration" 
+                                        when="{
+                                            '0': '',
+                                            '1': 'hr',
+                                            'other': 'hrs'}">
+                                    </ng-pluralize>
+                                        due {{item.deadline}}        
                                     </span>
-                                    <span class="item-headder align-right">   
-                                        <span class="align-right">
+                                </td></tr></table>
+                                <!--
+                                <span class="item-headder align-left">   
+                                    <span class="align-left">
                                         {{priorityText(item.priority)}} 
                                         <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}">in {{item.duration}}
                                         </i>
@@ -142,28 +183,20 @@
                                                 '1': 'hr',
                                                 'other': 'hrs'}">
                                         </ng-pluralize>
-
-                                        </span>    
-                                    </span> 
-                                    <br>
-
-                                    <br>
-                                    <span class="item-footter">
-                                        <span class="align-right">
-                                            due {{item.deadline}}        
-                                        </span>
+                                        
+                                    </span>            
+                                    <span class="align-right" ng-class="{'hard':item.hard,'fake':!item.hard}">
+                                    {{item.deadline}}        
                                     </span>
-                                    <span class="item-footer">
-                                        <span></span>
-                                        <br>
-                                        <span>
-                                            [Project] [List] 
-                                        </span>
+                                </span> 
 
+                            -->
+                                <span class="item-footer">
+                                    <span>
+                                        <!--[List] -->
                                     </span>
-                                 </span>
+                                </span>
 
-                                </a>
                                 <ion-option-button side="left" class="button-stable"
                                                  ng-click="goal(item)">
                                     Goal
@@ -173,9 +206,9 @@
                                     Push
                                 </ion-option-button>
 
-                                <ion-option-button class="button-assertive"
-                                                 ng-click="onItemDelete(item)">
-                                    Delete
+                                <ion-option-button class="button-balanced"
+                                                 ng-click="doneToggle(item)">
+                                    Done
                                 </ion-option-button>
                             </td>
                         </tr>
@@ -197,45 +230,25 @@
 
             <div ng-show="show">
             <ion-list> 
-                <ion-item ng-repeat="item in items |
+                <ion-item class="item" ng-repeat="item in items |
                     filter:{done:true} |
                     filter:dateFilter | 
                     orderBy:'-completedAt' "
-                          item="item">
+                          item="item"
+                          href="#/todo/edit/{{item.objectId}}">
                     
-                    <table>
-                        <tr>
-                            <td>
-                                <button class="button button-clear icon-left ion-ios7-checkmark-outline" ng-click="doneToggle(item)"></button>
-                                <!--
-                                <input type="checkbox" class="item-checkbox-left" ng-click="doneToggle(item)">
-                                -->
-                            </td>
-                            <td>&nbsp;</td>
-                            <td>
-                                <a class="a" href="#/todo/edit/{{item.objectId}}">
-                                <span class="done-{{item.done}}">
-                                    <span class="item-header">[Project] [List]
-                                    </span> </br>    
-                                    {{item.content}}<br>
-                                    <span class="item-footer">
-                                        {{item.duration}}
-                                        <ng-pluralize count="item.duration" 
-                                            when="{'0': '',
-                                                '1': 'hr',
-                                                'other': 'hrs'}">
-                                        </ng-pluralize>
-                                        <span class="align-right">
-                                            <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal}"></i>
-                                            due: 
-                                            {{item.deadline}}
-                                        </span>  
-                                    </span>  
-                                </span>
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
+
+
+                    <a class="a">
+                    <span class="done-{{item.done}}"> 
+                        {{item.content}}
+                    </span>
+                    </a>
+
+                    <ion-option-button class="item button-assertive"
+                                                 ng-click="onItemDelete(item)">Delete</ion-option-button>
+                    <ion-option-button class="item button-balanced"
+                                             ng-click="doneToggle(item)">Not Done</ion-option-button>
 
                 </ion-item>
         </ion-list>
@@ -251,11 +264,16 @@
 
         <ion-footer-bar align-title="left" class="bar-dark">
           <div class="buttons">
+            <button menu-toggle="left" class="button icon ion-navicon"></button>
+
             <button class="button" ng-click="showSort()">Sort</button>
           </div>
-          <h1 class="title">Time Required: ~3.5hrs</h1>
+          <h1 class="title"></h1>
           <div class="buttons" ng-click="reset()">
             <button class="button">reset</button>
+
+            <button class="button icon ion-search placeholder-icon" ui-sref="search"></button>
+
           </div>
         </ion-footer-bar>
 
