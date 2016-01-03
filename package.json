@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "description": "todoApp: An Ionic project",
   "engines": {
-    "node": "4.2.4"
+    "node": "4.2.4",
+    "npm": "2.14.12"
   },
   "dependencies": {
     "gulp": "^3.5.6",
