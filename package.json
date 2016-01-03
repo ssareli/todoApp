@@ -2,6 +2,10 @@
   "name": "todoapp",
   "version": "1.0.1",
   "description": "todoApp: An Ionic project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "engines": {
     "node": "4.2.4"
   },
