@@ -21,7 +21,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.dateFilterHash = DateUtil.getDateHash();
 
     // set "show completed" to default value
-    $scope.show = CONFIG.SHOW_COMPLETED;
+    $scope.show = CONFIG.SHOW_COMPLETED;  
 
     $scope.addDividers=function(items) {
         
@@ -30,11 +30,25 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         }
     };
 
+    $scope.makeItShort = function(message) {
+        // set max char length using constant
+        length = DEFAULTS.TITLE_LENGTH;
+        return (message.substring(0,length));//+"...");
+    };
+
+    $scope.shortMessage=function(message) {
+        return((message.length>DEFAULTS.TITLE_LENGTH) ? 
+            $scope.makeItShort(message) : message);
+    };
+
+    $scope.shortMessageNeeded=function(message) {
+        return(message.length>DEFAULTS.TITLE_LENGTH);
+    };
+
     $scope.searchFocus=function(){
         $scope.searchOn=!$scope.searchOn;
         //document.getElementById('searchInput').focus();
     };
-
 
     $scope.saveSnoozedItem=function(item){
         Todo.edit(item.objectId,{
@@ -501,7 +515,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
     };
 
-}]).controller('TodoCreationController',['$scope','Todo','$state','DateUtil','DEFAULTS',function($scope,Todo,$state,DateUtil,DEFAULTS){
+}]).controller('TodoCreationController',['$scope','Todo','$state','DateUtil','DEFAULTS','$ionicModal','DATE_BUCKET','RepeatUtil','CommentModal',function($scope,Todo,$state,DateUtil,DEFAULTS,$ionicModal,DATE_BUCKET,RepeatUtil,CommentModal){
 
     $scope.todo={};
 
@@ -516,6 +530,50 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.todo.deadlinetime = DEFAULTS.DEADLINE_TIME;
     $scope.todo.deadlinedate = DEFAULTS.DEADLINE_DATE;
     $scope.todo.completedAt = DEFAULTS.COMPLETED_DATE;
+    $scope.todo.repeat = {};//DEFAULTS.REPEAT;
+
+    //populate duration selection
+    $scope.durations = [];  
+
+    // manually insert minutes
+    $scope.durations.push({name:'15min',value:0.25});
+    $scope.durations.push({name:'30min',value:0.50});
+    $scope.durations.push({name:'45min',value:0.75});
+    $scope.durations.push({name:'60min',value:1.00});
+
+    for(i=1.5; i<=24; i=i+.5) {
+        if(i%1==0) {
+        $scope.durations.push({name:i+'.0hrs',value:0.00+i});
+        } else {
+        $scope.durations.push({name:i+'hrs',value:0.00+i});            
+        }
+    }
+
+    //$scope.duration = DEFAULTS.DURATION;
+    $scope.dueDate = DEFAULTS.DUE_DATE;
+    if($scope.deadline=="unscheduled") { $scope.deadline=""; }
+
+/*
+    // set all repeat defaults
+    $scope.todo.repeat.type = "";//DEFAULTS.WEEKLY;
+    $scope.todo.repeat.monthType = DEFAULTS.REPEAT_MONTH_TYPE;
+    $scope.todo.repeat.frequency = DEFAULTS.REPEAT_FREQUENCY;
+    $scope.todo.repeat.occurences = DEFAULTS.REPEAT_OCCURENCES;
+    $scope.todo.repeat.endType = DEFAULTS.REPEAT_ENDS_TYPE;
+    $scope.todo.repeat.repeatOn = DEFAULTS.REPEAT_ON;
+    $scope.todo.repeat.endsOn = DEFAULTS.REPEAT_ENDS_ON;
+    $scope.todo.repeat.startsOn = "";//DATE_BUCKET.H_TODAY;
+    $scope.startDate = $scope.todo.repeat.startsOn;
+*/
+
+    $scope.setDueDate=function(todo) {
+        if(todo.deadlinedate!='') {
+            $scope.dueDate=todo.deadlinedate; 
+        } else {
+            $scope.dueDate=DEFAULTS.DUE_DATE;
+        }
+    };
+
 
     $scope.create=function(){
         // increment/decrment if a goal
@@ -537,13 +595,125 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             startTime:$scope.todo.startTime,
             completedAt:$scope.todo.completedAt,
             deadlineEpoch:$scope.todo.deadlineEpoch,
-            comments:$scope.todo.comments          
+            comments:$scope.todo.comments,
+            repeat:$scope.todo.repeat          
         }).success(function(data){
             $state.go('todos');
         });
     };
 
-}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil){
+    // Modal methods
+
+    // ############  comment modal  ########################
+    $ionicModal.fromTemplateUrl('views/comment.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.commentModal = modal;
+    });
+      
+    $scope.openCommentModal = function() {
+        $scope.commentModal.show();
+
+        //this.showSelected($scope.todo.repeat.type);
+    };
+
+   $scope.closeCommentModal = function() {
+        $scope.commentModal.hide();
+    };
+
+    $scope.getComment = function() {
+        CommentModal.getComment();
+    }
+    
+    $scope.setComment = function(message) {
+        CommentModal.setComment(message);
+    }
+
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.commentModal.remove();
+    });
+   
+
+    // ############  repeat modal  ########################
+    $ionicModal.fromTemplateUrl('repeat.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+      
+    $scope.openRepeatModal = function() {
+        $scope.modal.show();
+
+        // generate menus
+        $scope.nums = [];  
+        for(i=1; i<=30; i++) {
+            $scope.nums.push(i);
+        }    
+
+        //this.showSelected($scope.todo.repeat.type);
+    };
+    
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+    
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+      // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
+
+    // if dynamic summary updates are required
+    $scope.updateSummary=function() {
+        var str = "";
+
+        switch($scope.todo.repeat.type) {
+            case DEFAULTS.TIMER:
+                str = DEFAULTS.TIMER;
+            case DEFAULTS.DAILY:
+            case DEFAULTS.WEEKLY:
+            case DEFAULTS.MONTHLY:
+            case DEFAULTS.YEARLY:
+        }
+
+        $scope.summary = str;
+    };
+
+    $scope.showSelected=function(str) {
+        var repeatObj = RepeatUtil.showSelected(str);
+
+        $scope.timer = repeatObj.timer;
+        $scope.daily = repeatObj.daily;
+        $scope.weekly = repeatObj.weekly;
+        $scope.monthly = repeatObj.monthly;
+        $scope.yearly = repeatObj.yearly;
+        $scope.frequencyText = repeatObj.frequencyText;
+        if($scope.todo.repeat.startsOn == "") {
+            $scope.todo.repeat.startsOn = DATE_BUCKET.H_TODAY;
+            $scope.startDate = $scope.todo.repeat.startsOn;
+        }
+
+        // Trust the view template uses the same text as the DEFAULTS
+        $scope.todo.repeat.type = str;
+    };
+
+    $scope.clearRepeat=function() {
+        this.showSelected("");
+        this.todo.repeat = {};
+    }
+
+}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','RepeatUtil','$ionicModal',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,RepeatUtil,$ionicModal){
 
     // get todo id from params
     $scope.todo={ objectId:$stateParams.id };
@@ -553,6 +723,36 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.itemsHash = $localstorage.getObject("items");
     //console.log($scope.itemsHash[$scope.todo.objectId]);
     $scope.todo = $scope.itemsHash[$scope.todo.objectId];
+
+    //populate duration selection
+    $scope.durations = [];  
+
+    // manually insert minutes
+    $scope.durations.push({name:'15min',value:0.25});
+    $scope.durations.push({name:'30min',value:0.50});
+    $scope.durations.push({name:'45min',value:0.75});
+    $scope.durations.push({name:'60min',value:1.00});
+
+    for(i=1.5; i<=24; i=i+.5) {
+        if(i%1==0) {
+        $scope.durations.push({name:i+'.0hrs',value:0.00+i});
+        } else {
+        $scope.durations.push({name:i+'hrs',value:0.00+i});            
+        }
+    }
+    $scope.durations.push({name:'reminder',value:0.00});
+
+    //console.log("durations:");
+    //console.log($scope.durations);
+
+    //console.log("index: ");
+    //console.log($scope.todo.duration.value*4);
+    //console.log($scope.durations[($scope.todo.duration.value*4)].name);
+
+    $scope.duration = 
+        $scope.durations[($scope.todo.duration.value*4)].name;
+
+    $scope.dueDate = DEFAULTS.DUE_DATE;
 
     $scope.edit=function(){
 
@@ -577,7 +777,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             startTime:$scope.todo.startTime,
             completedAt:$scope.todo.completedAt,
             deadlineEpoch:$scope.todo.deadlineEpoch,
-            comments:$scope.todo.comments            
+            comments:$scope.todo.comments,
+            repeat:$scope.todo.repeat             
         })
         .success(function(data){
             $state.go('todos');
@@ -599,6 +800,64 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     };
 
 
+   $ionicModal.fromTemplateUrl('repeat.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+      
+    $scope.openModal = function() {
+        $scope.modal.show();
+
+        // generate menus
+        $scope.nums = [];  
+        for(i=1; i<=30; i++) {
+            $scope.nums.push(i);
+        }    
+
+        //this.showSelected($scope.todo.repeat.type);
+    };
+    
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+    
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+      // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
+
+    $scope.showSelected=function(str) {
+        var repeatObj = RepeatUtil.showSelected(str);
+
+        $scope.timer = repeatObj.timer;
+        $scope.daily = repeatObj.daily;
+        $scope.weekly = repeatObj.weekly;
+        $scope.monthly = repeatObj.monthly;
+        $scope.yearly = repeatObj.yearly;
+        $scope.frequencyText = repeatObj.frequencyText;
+        // Trust the view template uses the same text as the DEFAULTS
+        $scope.todo.repeat.type = str;
+    };
+
+    $scope.setDueDate=function(todo) {
+        if(todo.deadlinedate!='') {
+            $scope.dueDate=todo.deadlinedate; 
+        } else {
+            $scope.dueDate=DEFAULTS.DUE_DATE;
+        }
+    };
+
 }]).controller('ContentController',['$scope','$ionicSideMenuDelegate',function($scope,$ionicSideMenuDelegate){
     
     $scope.toggleLeft = function(){
@@ -608,7 +867,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
 }]).value('DEFAULTS',{
     PRIORITY: 5, // prefer to complete (even #s are goals)
-    DURATION: '0.25',
+    DURATION: {name:'15min', value:'0.25'},
     SOFT_DEADLINE: 'Today',
     QUICKADD_DEADLINE: 'Inbox',
     HARD: false,
@@ -622,7 +881,21 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     DATE_FILTER: 'In Progress',
     DEADLINE_EPOCH: 1,
     COMMENTS: '',
-    ADD_NEW_PLACEHOLDER: 'Add an item...'
+    ADD_NEW_PLACEHOLDER: 'Add an item...',
+    DUE_DATE: 'Due Date',
+    REPEAT: {frequency: 1, type: 'weekly', monthType: 0, occurences: null, endType: 0, repeatOn: {}, endsOn: '', startsOn: ''},
+    REPEAT_FREQUENCY: 1,
+    REPEAT_ON: {m:0,t:0,w:0,th:0,f:0,s:0,su:0},
+    REPEAT_ENDS_ON: '',
+    REPEAT_OCCURENCES: null,
+    REPEAT_MONTH_TYPE: 0,
+    REPEAT_ENDS_TYPE: 0,
+    TIMER: "Timer",
+    WEEKLY: "Weekly",
+    DAILY: "Daily",
+    MONTHLY: "Monthly",
+    YEARLY: "Yearly",
+    TITLE_LENGTH: 53
 
 }).constant('SORT_TYPE',{
     ALPHABETICAL: 0,

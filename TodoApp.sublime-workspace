@@ -1,0 +1,1101 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"CO",
+				"COMMENT"
+			],
+			[
+				"COM",
+				"COMMENT_TEXT"
+			],
+			[
+				"DATE",
+				"DATE_BUCKET"
+			],
+			[
+				"fre",
+				"frequencyText"
+			],
+			[
+				"we",
+				"weekly"
+			],
+			[
+				"DA",
+				"DAILY"
+			],
+			[
+				"RE",
+				"REPEAT"
+			],
+			[
+				"REPEAT_O",
+				"REPEAT_OCCURENCES"
+			],
+			[
+				"H_",
+				"H_TODAY"
+			],
+			[
+				"ng-",
+				"ng-model"
+			],
+			[
+				"ion",
+				"ion-item"
+			],
+			[
+				"ion-",
+				"ion-list"
+			],
+			[
+				"DU",
+				"DUE_DATE"
+			],
+			[
+				"max",
+				"max-height"
+			],
+			[
+				"outline",
+				"outline-style"
+			],
+			[
+				"font-s",
+				"font-style"
+			],
+			[
+				"daysin",
+				"days_in_month"
+			],
+			[
+				"mon",
+				"monthLocation"
+			],
+			[
+				"days_",
+				"days_in_months"
+			],
+			[
+				"THI",
+				"THIS_WEEK"
+			],
+			[
+				"de",
+				"delta"
+			],
+			[
+				"days",
+				"days_in_months"
+			],
+			[
+				"on",
+				"oneDay"
+			],
+			[
+				"THIS",
+				"THIS_WEEKEND"
+			],
+			[
+				"day",
+				"dayofWeek"
+			],
+			[
+				"getDa",
+				"getDate"
+			],
+			[
+				"dayofW",
+				"dayofWeekTemp"
+			],
+			[
+				"NEX",
+				"NEXT_MONTH"
+			],
+			[
+				"D",
+				"DATE_BUCKET"
+			],
+			[
+				"H_NEX",
+				"H_NEXT_WEEK"
+			],
+			[
+				"DEA",
+				"DEADLINE_EPOCH"
+			],
+			[
+				"DE",
+				"DEADLINE_DATE"
+			],
+			[
+				"set",
+				"setEarliestDeadline"
+			],
+			[
+				"push",
+				"pushObj"
+			],
+			[
+				"H_THIS",
+				"H_THIS_YEAR"
+			],
+			[
+				"H_NE",
+				"H_NEXT_WEEK"
+			],
+			[
+				"H",
+				"H_TOMORROW"
+			],
+			[
+				"T",
+				"TOMORROW"
+			],
+			[
+				"local",
+				"localstorage"
+			],
+			[
+				"date",
+				"dateCalcs"
+			],
+			[
+				"Menu",
+				"MENU_HASH"
+			],
+			[
+				"H_THI",
+				"H_THIS_QUARTER"
+			],
+			[
+				"H_TH",
+				"H_THIS_MONTH"
+			],
+			[
+				"H_T",
+				"H_TOMORROW"
+			],
+			[
+				"NE",
+				"NEXT_QUARTER"
+			],
+			[
+				"THIS_W",
+				"THIS_WEEKEND"
+			],
+			[
+				"N",
+				"NEXT_MONTH"
+			],
+			[
+				"bg",
+				"background-origin"
+			],
+			[
+				"SORT",
+				"SORT_TYPE"
+			],
+			[
+				"create",
+				"createdAt"
+			],
+			[
+				"time",
+				"timeout	setTimeout function"
+			],
+			[
+				"TOD",
+				"TODAY_DATE"
+			],
+			[
+				"M",
+				"Month"
+			],
+			[
+				"loca",
+				"localstorage"
+			],
+			[
+				"DATE_",
+				"DATE_HASH"
+			],
+			[
+				"dateFilter",
+				"dateFilterOption"
+			],
+			[
+				"deadline",
+				"deadlineEpoch"
+			],
+			[
+				"timeParts",
+				"timePartsMixed"
+			],
+			[
+				"hard",
+				"hardEpoch"
+			],
+			[
+				"dead",
+				"deadlineEpoch"
+			],
+			[
+				"creat",
+				"createMenuHash"
+			],
+			[
+				"Y",
+				"THIS_YEAR"
+			],
+			[
+				"menu",
+				"menuHash"
+			],
+			[
+				"complete",
+				"completedAt"
+			],
+			[
+				"complet",
+				"completedDate"
+			],
+			[
+				"dea",
+				"deadline"
+			],
+			[
+				"to",
+				"todo"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"soft",
+				"softdeadline"
+			],
+			[
+				"com",
+				"computeDeadline"
+			],
+			[
+				"get",
+				"getDate"
+			],
+			[
+				"items",
+				"itemsHash"
+			],
+			[
+				"obj",
+				"objectId"
+			],
+			[
+				"wee",
+				"week"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"state",
+				"stateParams"
+			],
+			[
+				"task",
+				"task_lists"
+			],
+			[
+				"proje",
+				"projects"
+			],
+			[
+				"remember",
+				"remember_digest"
+			],
+			[
+				"rememb",
+				"remember_token"
+			],
+			[
+				"remm",
+				"remember"
+			],
+			[
+				"rem",
+				"remember_token"
+			],
+			[
+				"remem",
+				"remember_digest"
+			],
+			[
+				"new",
+				"new_remember_token"
+			],
+			[
+				"coff",
+				"coffeeApp_development"
+			],
+			[
+				"project",
+				"project"
+			],
+			[
+				"rand",
+				"randomShop"
+			],
+			[
+				"cof",
+				"coffee_shops"
+			],
+			[
+				"ran",
+				"random"
+			],
+			[
+				"random",
+				"random_list"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "\nGoals:\n========================= v1.0\n1) Get todos fully functional\n	UX: Today at (Time) for (duration)\n	- in next 7 days => “someday in the nexd 7 days’\n	- someday by… => “someday in the next X days”  (inline jog wheel)\n	- today => “today...at any reasonable time”\n	- on… => “Friday, Jan 30th, 2015”  (inline jog wheel)\n	- 15min, 30min, 45min, 1hr, 1:30hrs, 2hrs, 3hrs, 4hrs (inline jog wheel)\n	- notifications on/off (default on)\n\n	UX: recurring\n	- every 2, every, twice a, 3 times, …, 6 times a [day, week, month]\n	- any day of the week, mondays, …, sundays (multi-select list)\n	- preferred times: anytime, morning, afternoon, evening, [spec time 15min]\n\n	- UX: make soft deadline selection an event, not a setting \n	- natural language todo creation (\"get milk today @ 4pm 30min\")\n	- self extinguishing tasks (simple reminders)\n	- recurring tasks\n		- daily/weekly\n		- Create hourly per day schedule (I.e. take 15min breaks during Biz hours)\n1.5) update ionic  npm update -g ionic\n\n2) Create lists\n	- add/view lists to todo\n	- view lists w/ full contents\n	- set done/not done w/ checkbox\n	- make goal\n	- set deadlines\n	- set active/inactive for filtering\n	- take a break menu <button on-hold=\"onHold()\" class=\"button\">Test</button>\n	- tags (todos and lists)\n	- types: checklist, tasks, bucketlist\n	- reordering items in current view \n3) Projects\n	- add/view lists to project\n	- view project for todos\n	- filter todos based on project\n	- filter lists based on \n	- color coding by project\n	- set active/inactive for filtering\n	- task and list dependency?\n	- Projects, lists and goals get stack ranked in priority order\n5) Collaboration\n	- authentication\n	- sharing\n	- assigning owners\n=========================== v1.5\n6) Calendaring\n	- reminder date/time alerts\n		- figure out how to trigger a local notif\n		- add new reminder timestamp field (date & time)\n		- automatically generate reminders for all tasks with deadline times\n			- use todo.deadline as reminder deadline\n			- 10min reminder default\n				- adjust quantity \n				- minutes/hours/days/weeks\n		- deadlines pushes should push reminders\n			- add swipes hourly time slot pushes\n		- show bell on item in list\n		- reminders view in menu\n		- Notifications area (read, clear, unread)\n	- create day dividers in \"this week\" view\n	- organize events by time into a time schedule. put non-time deadlined tasks back to back with 15min buffers in between\n	- by default, prevent tasks from overlapping specific time slots (unless manually overridden)\n	- show day planner view of tasks\n	- generate iCal feed for Google Calendar integration\n	- import phone calendars\n	- prevent collisions with 3rd party calendar elements (possible?)\n\n============================ v2.0\n7) Scheduler\n	- generating a day schedule \n		- parse recurrence table to look for pre-booked events\n	- UX: start day with \"moment\" review of everything planned or auto-scheduled for today and let's confirm, complete, defer, or delete them (any.do) \n	- Soft deadline needs time option\n	- basic schedule input (i.e. 14hrs per day)\n	- tracking schedule capacity limits\n		- update footer to compare time needed vs availabe\n	- generate computed start times for soft deadlines (visible)\n		- 15min buffer between each\n		- 30min after a task should be complete, auto-slip schedule\n	- schedule push (recursive rescheduling based on capacity)\n	- smart push:  priority, blocking tasks, day usage maximization\n	- alert: today's schedule isn't possible, show changes\n	- vacation mode (recurring reminder location setting?)\n	- enforcing deadlines & capacity limits on list contents\n	- project % schedule buckets\n	- auto-scheduling based on schedule + buckets\n	- Tasks can't go overdue, just get rescheduled (keep scheduling history)Unassigned \n\n\n==============================================\n\n- code/perf optimizations\n	- combine new and edit views\n	- use memory for date hash checks before deadline with local storage\n	- use local storage except for edits (maintain \"updated\" toggle variable).  only read from parse when changes have been made or on initial app load\n	- only read/write single records to DB instead of pulling down entire DB every list load\n	- ng-options simpler solution for collecting data for selects?\n	- collection-repeat (for search and “all” views)\n	Solution: I switched to a much more complete build system called ionic-generator which utilizes grunt js instead of gulp. Switching reduced the app from 10mb to 3mb, added support for multiple build environments, and provided js linting, ripple, and more.\n	- archive completed items > 30 days old\n		- set inactive, filter by active\n\n- bugs\n	P1 quick add items don't show up without a refresh\n	P1 bug: due date calendar broken on web (can’t select a date)\nhttps://github.com/joshilomas/DatePicker-IonicApp\nhttps://github.com/mrfoh/cordova-datepicker-plugin\n	P1 fix duration pre-select option \n	P2 after editing or updating the side menu functionality breaks\n	?? Timestamp comparisons are done in GMT, not local, could create issues on filtering?\n\n- polish\n	- with hard deadlines, auto set soft to \"someday\"\n	- make todo items aligned using Grid\n	- make checkboxes larger icons that toggle states\n	- move to slide boxes or gesture events\n	- pinchout to add item inline \n	- UX: make adding lots of items quickly super easy, primed\n	- gesture to take a break menu (pinch in, swipe right, or hold)\n	- UX: adjust to local timezone\n	- Ux: hold and move items \n		- create hour dividers in \"today\" view\n	- required field enforcement\n	- better cross-platform date and time selector (\"clear at top\"), \"cancel\"\n	- don't let filters get hidden by search\n	- add duration and deadline natural language reader/setter to title\n	- convert partial hours into minutes (i.e. .25 = 15min)\n	- allow for setting start of week day\n	- new task, set hard deadline move soft to “none”\n	- offline mode\n		- detect when offline and use local storage data\n		- add/edit new items to local storage\n		- parse items are uneditable (grey color?)\n		- back online, all items are synched\n	- live sync\n	- comments should open a modal to read/write\n	- start count-down timer (adjustable)\n		- and track time spent\n		- offer pause, play\n	- clicking search icon auto-opens keyboard\n	- UX: send emails to task@tinytask.com from registered email to create items \n\n========================\n- setup angularjs, phonegap templates for sublime\n- firebase backend for real-time data sync across devices (online/offline support)?\n\n- questions\n	- did calendar widget branch me off beta v14?\n\n\nng-click\nng-dbl-click\nng-mousedown\nng-mouseup\nng-mouseenter\nng-mouseleave\nng-mousemove\nng-mouseover\nng-keydown\nng-keyup\nng-keypress\nng-change\n",
+			"file": "NOTES_Shane.txt",
+			"file_size": 6621,
+			"file_write_time": 1423501339000000,
+			"settings":
+			{
+				"buffer_size": 6655,
+				"line_ending": "Unix",
+				"name": "- create UI for new app"
+			}
+		},
+		{
+			"file": "www/views/todos.html",
+			"settings":
+			{
+				"buffer_size": 13043,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "  <ion-modal-view>\n    <ion-header-bar>\n    <button class=\"button\" ng-click=\"closeCommentModal()\">Back</button>\n      <h1 class=\"title\">Comment</h1>\n<!--\n    <button class=\"button\" ng-click=\"setComment(todo.comments)\">Save</button>\n-->\n    </ion-header-bar>\n\n    <ion-content>\n      <ion-list>\n      <ion-item>\n        <textarea rows=\"32\" ng-model=\"todo.comments\" placeholder=\"Add commments here...\">\n        </textarea>\n      </ion-item>\n    </ion-list>\n    </ion-content>\n  </ion-modal-view> ",
+			"file": "www/views/comment.html",
+			"file_size": 493,
+			"file_write_time": 1423585038000000,
+			"settings":
+			{
+				"buffer_size": 494,
+				"line_ending": "Unix",
+				"name": "<div class=\"modal\">"
+			}
+		},
+		{
+			"file": "www/views/create-todo.html",
+			"settings":
+			{
+				"buffer_size": 8310,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/views/edit-todo.html",
+			"settings":
+			{
+				"buffer_size": 8653,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/views/search.html",
+			"settings":
+			{
+				"buffer_size": 8801,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/index.html",
+			"settings":
+			{
+				"buffer_size": 1360,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/js/services.js",
+			"settings":
+			{
+				"buffer_size": 35246,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/js/controllers.js",
+			"settings":
+			{
+				"buffer_size": 31131,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/js/app.js",
+			"settings":
+			{
+				"buffer_size": 1902,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/css/style.css",
+			"settings":
+			{
+				"buffer_size": 1516,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 316.0,
+		"selected_items":
+		[
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 347.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/ssareli/todoApp/config.xml",
+		"/Users/ssareli/todoApp/www/css/style.css",
+		"/Users/ssareli/todoApp/www/js/services.js",
+		"/Users/ssareli/myApp/www/js/app.js",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/task_lists/show.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/tasks/show.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/tasks/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140908235533_create_tasks.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/task_lists/_task_list.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/tasks/_task.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/show.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/layouts/_header.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/owners/show.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/_project.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/task_lists/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/helpers/task_lists_helper.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/_form.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/task_list.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/smart_lists/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/new.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/static_pages_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/static_pages/new_projects.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/static_pages/new_projects",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/static_pages/myprojects.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/owner.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/sessions_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/helpers/sessions_helper.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/application_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/shared/_owner_info.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/shared/_project_form.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/smart_lists/_login.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/owners/_form.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/shared/_error_messages.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/owners/new.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140909152313_create_shared_projects.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140908232357_create_projects.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/project.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/schema.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/seeds.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20141214214839_add_admin_to_owners.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/assets/stylesheets/custom.css.scss",
+		"/Users/ssareli/GitHub/coffeeApp/Gemfile",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/sessions/new.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140909142711_create_owners.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/assets/javascripts/application.js",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140915153617_add_remember_token_to_users.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140911013149_add_password_digest_to_owners.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140909142236_create_favorites.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140909154510_create_assigned_tasks.rb",
+		"/Users/ssareli/GitHub/coffeeApp/log/development.log",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/smart_lists_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/config/database.yml",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/owners_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/assets/stylesheets/scaffolds.css.scss",
+		"/Users/ssareli/GitHub/coffeeApp/app/assets/stylesheets/application.css",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/layouts/application.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/assets/stylesheets/coffee_shops.css.scss",
+		"/Users/ssareli/GitHub/coffeeApp/config/environments/test.rb",
+		"/Users/ssareli/GitHub/coffeeApp/config/application.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/task_lists_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/owners/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/controllers/comments_controller.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/show.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/task.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/_form.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/edit.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/show.json.jbuilder",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/new.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/projects/index.json.jbuilder",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/coffee_shop.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/shared_project.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140909154518_create_assigned_owners.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/assigned_task.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/assigned_owner.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/comment.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/favorite.rb",
+		"/Users/ssareli/GitHub/coffeeApp/db/migrate/20140908234843_create_task_lists.rb",
+		"/Users/ssareli/GitHub/coffeeApp/app/models/tweet.rb",
+		"/Users/ssareli/Downloads/test.xml",
+		"/Users/ssareli/Downloads/test",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/index.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/random_shop.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/app/views/coffee_shops/random.html.erb",
+		"/Users/ssareli/GitHub/coffeeApp/.gitignore",
+		"/Users/ssareli/GitHub/coffee/Gemfile",
+		"/Users/ssareli/Library/Application Support/Sublime Text 2/Packages/RubyTest/TestConsole.hidden-tmTheme",
+		"/Users/ssareli/Library/Application Support/Sublime Text 2/Packages/User/RubyTest.sublime-settings",
+		"/Users/ssareli/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"repeat",
+			"for",
+			"0.00",
+			"ng-change=\"updateSummary()\"",
+			"updateSummary()",
+			"pick-a-date",
+			"loaddate",
+			"duration",
+			"href",
+			"local",
+			"local time",
+			"setearliestdead",
+			"datetime",
+			"today_timestamp",
+			"add ",
+			"<i",
+			"newitem",
+			"addnewitem",
+			"addNew",
+			"quick",
+			"delete",
+			"dateFilter",
+			"updateFilter",
+			"inbox",
+			"priority",
+			"filters",
+			"priority",
+			"must",
+			"goal",
+			"zeroDuration",
+			"Someday",
+			"H_IN_P",
+			"today",
+			"dateFilter",
+			"today",
+			"offline",
+			"loadingDatecalcs",
+			"Anytime",
+			"SOMEDAY",
+			"someday",
+			"Anytime",
+			"ANYTIME",
+			"CALC",
+			"setDeadline",
+			"onItemDe",
+			"showSnooze",
+			"snooze",
+			"goal",
+			"remind",
+			"HARD_DATE",
+			"must",
+			"completedDate",
+			"goal",
+			"done",
+			"+ 1",
+			"within",
+			"DATE_HASH",
+			"compute",
+			"setDeadline",
+			"$todo",
+			"scope.",
+			"getItem",
+			"alert",
+			"set_pr",
+			"coffee_shop",
+			"project",
+			"coffee_shop"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"Someday",
+			"SOMEDAY",
+			"DEADLINE_PRIORITY",
+			"completedAt",
+			"DATE_NAME",
+			"todo",
+			"",
+			"project",
+			"coffee_shop",
+			"project"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "NOTES_Shane.txt",
+					"settings":
+					{
+						"buffer_size": 6655,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3745,
+								8
+							]
+						],
+						"settings":
+						{
+							"auto_name": "- create UI for new app",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "www/views/todos.html",
+					"settings":
+					{
+						"buffer_size": 13043,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5631,
+								5631
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2073.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "www/views/comment.html",
+					"settings":
+					{
+						"buffer_size": 494,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								494,
+								494
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<div class=\"modal\">",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "www/views/create-todo.html",
+					"settings":
+					{
+						"buffer_size": 8310,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3650,
+								3503
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 737.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "www/views/edit-todo.html",
+					"settings":
+					{
+						"buffer_size": 8653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7988,
+								8228
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2406.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "www/views/search.html",
+					"settings":
+					{
+						"buffer_size": 8801,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								281,
+								281
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "www/index.html",
+					"settings":
+					{
+						"buffer_size": 1360,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								594,
+								594
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "www/js/services.js",
+					"settings":
+					{
+						"buffer_size": 35246,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3386,
+								3386
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1316.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 8,
+					"file": "www/js/controllers.js",
+					"settings":
+					{
+						"buffer_size": 31131,
+						"regions":
+						{
+							"mark":
+							{
+								"flags": 144,
+								"icon": "dot",
+								"regions":
+								[
+								],
+								"scope": "mark"
+							}
+						},
+						"selection":
+						[
+							[
+								21984,
+								21984
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8957.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "www/js/app.js",
+					"settings":
+					{
+						"buffer_size": 1902,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "www/css/style.css",
+					"settings":
+					{
+						"buffer_size": 1516,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								458,
+								238
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.530891422701,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 151.0,
+	"status_bar_visible": true
+}

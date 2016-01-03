@@ -1,75 +1,20 @@
-<ion-header-bar class="bar-stable">
-    <div class="buttons">
-        <button class="button" ui-sref="todos">Back</button>
-        <h1 class="title">Edit Todo</h1>
-        <button class="button button-balanced" ng-click="edit()">Update</button>
-    </div>
+
+
+<ion-header-bar>
 </ion-header-bar>
 
 <ion-content>
     <div>
         <ion-list>
-            <li class="item item-input item-stacked-label">
-                <input type="text" ng-model="todo.content" class="text-input" required>
+            <li class="item item-input text-input">
+                <input type="text" ng-model="todo.content" class="item-inset" required>
             </li>  
 
             <label class="item item-input item-select">
                 <div class="input-label">
-                  Will Take Me (in hours)
+                  Takes
                 </div>
-                <select ng-model="todo.duration">
-                    <option>0.25</option>
-                    <option>0.50</option>
-                    <option>0.75</option>
-                    <option>1.00</option>
-                    <option>1.25</option>
-                    <option>1.50</option>
-                    <option>1.75</option>
-                    <option>2.00</option>
-                    <option>2.50</option>
-                    <option>3.00</option>
-                    <option>3.50</option>
-                    <option>4.00</option>
-                    <option>4.50</option>
-                    <option>5.00</option>
-                    <option>5.50</option>
-                    <option>6.00</option>
-                    <option>6.50</option>
-                    <option>7.00</option>
-                    <option>7.50</option>
-                    <option>8.00</option>
-                    <option>8.50</option>
-                    <option>9.00</option>
-                    <option>9.50</option>
-                    <option>10.00</option>
-                    <option>10.50</option>
-                    <option>11.00</option>
-                    <option>11.50</option>
-                    <option>12.00</option>
-                    <option>12.50</option>
-                    <option>13.00</option>
-                    <option>13.50</option>
-                    <option>14.00</option>
-                    <option>14.50</option>
-                    <option>15.00</option>
-                    <option>15.50</option>
-                    <option>16.00</option>
-                    <option>16.50</option>
-                    <option>17.00</option>
-                    <option>17.50</option>
-                    <option>18.00</option>
-                    <option>18.50</option>
-                    <option>19.00</option>
-                    <option>19.50</option>
-                    <option>20.00</option>
-                    <option>20.50</option>
-                    <option>21.00</option>
-                    <option>21.50</option>
-                    <option>22.00</option>
-                    <option>22.50</option>
-                    <option>23.00</option>
-                    <option>23.50</option>
-                    <option>24.00</option>
+                <select ng-model="todo.duration" ng-options="duration.name for duration in durations">
                 </select>
             </label>
 
@@ -81,12 +26,15 @@
                     <option value='3'>must complete</option>
                     <option value='5'>prefer to complete</option>
                     <option value='7'>reminder only</option>
+                    <option value=''>== Goals ==</option>
+                    <option value='2'>must complete</option>
+                    <option value='4'>prefer to complete</option>
                 </select>
             </label>    
 
             <label class="item item-input item-select">
                 <div class="input-label">
-                  Soft Deadline
+                  Schedule for<br>{{todo.deadline}} 
                 </div>
                 <select ng-model="todo.softdeadline" required>
                     <option>In Progress</option>
@@ -104,37 +52,153 @@
                 </select>
             </label>  
 
+            <i ng-model="hasDeadline" ng-click="hasDeadline=!hasDeadline"><ion-button class="button button-block button-stable icon ion-ios7-calendar-outline" ng-mouseleave="hover=false" ng-model="dueDate">&nbsp;&nbsp;&nbsp;{{dueDate}}</ion-button></i>
+
+            <div ng-show="hasDeadline">
+
+                 <ion-item>
+                   <table><tr><td>
+                    <!-- https://github.com/alongubkin/angular-datepicker -->
+                        <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="Select Date" ng-model="todo.deadlinedate" ng-change="setDueDate(todo)"/> 
+
+                        <input type="text" pick-a-time="time" placeholder="Select Time" ng-model="todo.deadlinetime" /> 
+                        </td>
+                   
+                    </td></tr></table>
+                    
+                </ion-item>
+
+            </div>
+
+            <ion-button class="button button-block button-stable icon ion-ios7-loop-strong" ng-click="openModal()">&nbsp;&nbsp;&nbsp;Repeat {{todo.repeat.type}}</ion-button>
+
+            <ion-button class="button button-block button-stable icon ion-ios7-alarm-outline" ng-click="">&nbsp;&nbsp;&nbsp;Reminder</ion-button>
+
+            <!--
             <ion-item>
-            Hard Deadline (optional)<br>
-            <!-- https://github.com/alongubkin/angular-datepicker -->
+            Hard Deadline (optional)<br> 
             <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="Select Date"  ng-model="todo.deadlinedate" ng-click="todo.deadlinetime=''" /> 
             <input type="text" pick-a-time="time" placeholder="Select Time" ng-model="todo.deadlinetime" ng-click="todo.deadlinetime=''" /> 
             </ion-item>
+            -->
 
             <ion-item>
             Comments:<br>
-                <textarea ng-model="todo.comments" rows="5" placeholder="Add commments here..."></textarea>
-            </ion-item>
-
-            <ion-item>
-                Computed Deadline  {{todo.deadline}}
+                <textarea ng-model="todo.comments" rows="1" placeholder="Add commments here..."></textarea>
             </ion-item>
 
             <ion-toggle ng-model="todo.goal" toggle-class="toggle-calm">Set As Goal</ion-toggle>
             
-            <ion-button class="button button-block button-balanced" ng-click="edit()">
-                Update
-            </ion-button>
+            <p/>
+            <div class="align-center">
+                <button class="button button-assertive" ng-click="onItemDelete()">delete</button>
+            </div>
         </ion-list>
     </div>
 </ion-content>
 
+
 <ion-footer-bar align-title="left" class="bar-stable">
   <div class="buttons">
-    <button class="button button-assertive" ng-click="onItemDelete()">delete</button>
-    <!-- Removing this for simplicity
-    <ion-checkbox ng-model="todo.done">Complete</ion-checkbox>
-    -->
+    <button class="button" ui-sref="todos">Back</button>
+    <h1 class="title"></h1>
+            <button class="button button-balanced" ng-click="edit()">Update</button>
   </div>
   <h1 class="title"></h1>
 </ion-footer-bar>
+
+<script id="repeat.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+    <button class="button" ng-click="closeModal()">Back</button>
+      <h1 class="title">Repeat Task</h1>
+    <button class="button" ng-click="clearRepeat()">Clear</button>
+    </ion-header-bar>
+
+    <ion-content>
+        <ion-list>
+            <ion-item>
+                <button ng-model="timer" ng-click="showSelected('Timer')">timer</button>
+                <button ng-model="daily" ng-click="showSelected('Daily')">daily</button>
+                <button ng-model="weekly" ng-click="showSelected('Weekly')">weekly</button>
+                <button ng-model="monthly" ng-click="showSelected('Monthly')">monthly</button> 
+                <button ng-model="yearly" ng-click="showSelected('Yearly')">yearly</button>
+            </ion-item>
+
+            <ion-item>
+            Starts on<br>
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="date" placeholder="{{startDate}}" ng-model="todo.repeat.startsOn" >
+            </label>
+            <!---
+            <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="{{startDate}}" ng-model="todo.repeat.startsOn"  />
+            --> 
+            <br>
+            Repeats Every
+                <select ng-model="todo.repeat.frequency" 
+                ng-options="num for num in nums" required>
+                </select>
+                {{frequencyText}}
+            <br>
+            <div ng-show="weekly">
+                Repeat on:<br>
+                <table><tr><td>
+                M </td><td>
+                T </td><td>
+                W</td><td>
+                TH</td><td>
+                F </td><td>
+                S </td><td>
+                Su</td></tr>
+                <tr><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.m" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.t" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.w" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.th" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.f" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.s" >
+                </td><td>
+                <input type="checkbox" ng-model="todo.repeat.repeatOn.su" >
+                </td></tr></table>
+            </div>
+            <br>
+            <div ng-show="monthly">
+                <form>Repeat by<br>
+                <input ng-model="todo.repeat.monthType" value="0" type="radio" > Day of the month<br>
+                <input ng-model="todo.repeat.monthType" value="1" type="radio" > Day of the week<br>
+                </form>
+            </div>
+
+            </ion-item>
+
+            <ion-item>
+                <form>
+                    Ends<br>
+                    <table><tr><td>
+                    <input ng-model="todo.repeat.endType" value="0" type="radio" > Never<br>
+                    </td></tr>
+                    <tr><td>
+                    <input ng-model="todo.repeat.endType" value="1" type="radio" > After <input type="text" ng-model="todo.repeat.occurences" maxlength="3" placeholder="" >Occurences<br>
+                    </td></tr>
+                    <tr><td>
+                    <label class="item item-input">
+                        <span class="input-label">Date</span>
+                        <input type="date" placeholder="{{startDate}}" ng-model="todo.repeat.startsOn" >
+                    </label>
+                    <!--
+                    <input ng-model="todo.repeat.endType" value="2" type="radio"> On <input type="text" pick-a-date="date" pick-a-date-options="{ format: 'm/d/yyyy' }" placeholder="" ng-model="todo.repeat.endsOn" > 
+                    -->
+                    </td></tr></table><br>
+                </form>
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+  </ion-modal-view>
+</script>

@@ -1,5 +1,5 @@
 
-<ion-side-menus>
+<ion-side-menus class="transparent">
 
     <!-- Center content -->
     <ion-side-menu-content ng-controller="ContentController">
@@ -47,9 +47,10 @@
         <!--
         </ion-header-bar>
     -->
+<ion-header-bar class="transparent">
+</ion-header-bar>
 
         <ion-content>
-                <br class="transparent">
 
             <ion-refresher
                 pulling-text="Pull to add item..."
@@ -136,12 +137,16 @@
                             <td>
                                 <span class="overflow" ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'reminder':item.priority==7}">
                                    
-                                {{item.content}}<br>
+                                {{shortMessage(item.content)}}
+                                <i ng-class="{'icon ion-ios7-more-outline':shortMessageNeeded(item.content),'fake':!shortMessageNeeded(item.content)}"></i>
+                                <br>
                                 </span>
 
                                 <table class="table item-headder"><tr>
-                                    <td> 
+                                    <td>
+                                        <span class="align-left">
                                         <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal, 'fake':item.priority==7}"></i>
+                                        </span
                                     </td>
                                     <td> 
                                     <!--
@@ -159,15 +164,12 @@
                                         
                                     </span>    
                                     -->        
-                                    <span class="align-right" ng-class="{'hard':item.hard,'fake':!item.hard}">
-                                    <i ng-class="{'hidden22':item.duration=='0.00','fake':item.duration!='0.00'}"> {{item.duration}}
-                                    </i>
-                                    <ng-pluralize count="item.duration" 
-                                        when="{
-                                            '0': '',
-                                            '1': 'hr',
-                                            'other': 'hrs'}">
-                                    </ng-pluralize>
+                                    <span class="align-left">
+                                        <i ng-class="{'hidden22':item.duration.value==0.00}">for {{item.duration.name}}
+                                        </i>
+                                    </span>
+                                    <span class="align-right" ng-class="{'fake':item.hard,'soft':!item.hard}">
+
                                         due {{item.deadline}}        
                                     </span>
                                 </td></tr></table>

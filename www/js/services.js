@@ -48,10 +48,13 @@ angular.module('todoApp.services',[]).factory('Todo',['$http','PARSE_CREDENTIALS
         }
     }
 }]).value('PARSE_CREDENTIALS',{
-//    APP_ID: 'xhTpJiNedJ7mmDj3LTTBUePqSVegcJHzEbh70Y0Q',
-//    REST_API_KEY:'XCfQDPODgNB1HqmaCQgKLPWGxQ0lCUxqffzzURJY'
+// production
     APP_ID: 'plvDtGUcGUmNqNuaIHxmEdOPlVpuPzEfOrf0kL9A',
     REST_API_KEY:'Wnav5R5ku3HQQfniFCoE1OREOaO3SGVL3M7BH960'
+// dev
+//    APP_ID: 'isCKihoiAm03zgM4GEL3l7PZiSkAMebDxlBL8Tqm',
+//    REST_API_KEY:'XsuiqDfXWJoiRPLbn2UPrOCO12mUFWTeCJDdYtY0'
+
 });
 
 
@@ -104,6 +107,20 @@ services.factory('$localstorage', ['$window', function($window) {
     }
 }]);
 
+services.factory('CommentModal', ['COMMENT',function() {
+    return {
+        setComment: function(message) {
+            COMMENT.COMMENT_TEXT = message;
+            console.log("COMMENT SAVED:"+COMMENT.COMMENT_TEXT);
+        },
+
+        getComment: function() {
+            console.log("COMMENT RETRIEVED:"+COMMENT.COMMENT_TEXT);
+            return (COMMENT.COMMENT_TEXT);
+        }
+    }
+}]);
+
 services.factory('FilterUtil', [function() {
     return {
         getSize: function(obj) {
@@ -114,6 +131,47 @@ services.factory('FilterUtil', [function() {
             }
             return size;
         }
+    }
+}]);
+
+services.factory('RepeatUtil', ['DATE_BUCKET',function() {
+    return {
+        showSelected: function(str) {
+           var repeatObj = {
+                timer: false,
+                daily: false,
+                weekly: false,
+                monthly: false,
+                yearly: false,
+                frequencyText: ""
+            };
+
+            switch(str.toLowerCase()) {
+                case "":
+                    return;
+                case "timer":
+                    repeatObj.timer = true;
+                    repeatObj.frequencyText = "minutes";
+                    return(repeatObj);
+                case "daily":
+                    repeatObj.daily = true;
+                    repeatObj.frequencyText = "days";
+                    return(repeatObj);
+                case "monthly":
+                    repeatObj.monthly = true;
+                    repeatObj.frequencyText = "months";
+                    return(repeatObj);
+                case "yearly":
+                    repeatObj.yearly = true;
+                    repeatObj.frequencyText = "years";
+                    return(repeatObj);
+                default: // "weekly":
+                    repeatObj.weekly = true;
+                    repeatObj.frequencyText = "weeks";
+                    return(repeatObj);
+            }
+        }
+
     }
 }]);
 
@@ -131,7 +189,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
 
             // non-related cleanup for reminder level priority   
             if(item.priority == DATE_NAME.REMINDER) {
-                item.duration = '0.00';            
+                item.duration = {name: 'reminder only', value:0.00};            
             }
 
             // if goal is set then priority should be even
@@ -416,10 +474,19 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             var days_in_months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             // for leap years, February has 29 days. Check whether
             // February, the 29th exists for the given year
-            if( (new Date(year, 1, 29)).getDate() == 29 ) days_in_month[1] = 29;
+            
+            if(this.isLeapYear(year)) {
+                days_in_months[1] = 29;
+            }
 
             return(days_in_months);
         },
+
+        isLeapYear: function(y) {
+            //var y = utc ? this.getUTCFullYear() : this.getFullYear();
+            return !(y % 4) && (y % 100) || !(y % 400);
+        },
+
 
         // calculate the end dates for all ranges based on today's date.
         computeTimeBuckets: function() {
@@ -856,6 +923,9 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
 }).value('CONFIG',{
     SHOW_COMPLETED: false,
     SORT_ORDER: 3
+
+}).value('COMMENT',{
+    COMMENT_TEXT: ''
 
 });
 

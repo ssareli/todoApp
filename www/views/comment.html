@@ -1,0 +1,18 @@
+  <ion-modal-view>
+    <ion-header-bar>
+    <button class="button" ng-click="closeCommentModal()">Back</button>
+      <h1 class="title">Comment</h1>
+<!--
+    <button class="button" ng-click="setComment(todo.comments)">Save</button>
+-->
+    </ion-header-bar>
+
+    <ion-content>
+      <ion-list>
+      <ion-item>
+        <textarea rows="32" ng-model="todo.comments" placeholder="Add commments here...">
+        </textarea>
+      </ion-item>
+    </ion-list>
+    </ion-content>
+  </ion-modal-view>

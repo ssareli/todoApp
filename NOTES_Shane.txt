@@ -2,6 +2,20 @@
 Goals:
 ========================= v1.0
 1) Get todos fully functional
+	UX: Today at (Time) for (duration)
+	- in next 7 days => “someday in the nexd 7 days’
+	- someday by… => “someday in the next X days”  (inline jog wheel)
+	- today => “today...at any reasonable time”
+	- on… => “Friday, Jan 30th, 2015”  (inline jog wheel)
+	- 15min, 30min, 45min, 1hr, 1:30hrs, 2hrs, 3hrs, 4hrs (inline jog wheel)
+	- notifications on/off (default on)
+
+	UX: recurring
+	- every 2, every, twice a, 3 times, …, 6 times a [day, week, month]
+	- any day of the week, mondays, …, sundays (multi-select list)
+	- preferred times: anytime, morning, afternoon, evening, [spec time 15min]
+
+	- UX: make soft deadline selection an event, not a setting 
 	- natural language todo creation ("get milk today @ 4pm 30min")
 	- self extinguishing tasks (simple reminders)
 	- recurring tasks
@@ -55,6 +69,8 @@ Goals:
 	- prevent collisions with 3rd party calendar elements (possible?)
 
 7) Scheduler
+	- generating a day schedule 
+		- parse recurrence table to look for pre-booked events
 	- UX: start day with "moment" review of everything planned or auto-scheduled for today and let's confirm, complete, defer, or delete them (any.do) 
 	- Soft deadline needs time option
 	- basic schedule input (i.e. 14hrs per day)
@@ -75,7 +91,8 @@ Goals:
 
 ==============================================
 
-- optimizations
+- code/perf optimizations
+	- combine new and edit views
 	- use memory for date hash checks before deadline with local storage
 	- use local storage except for edits (maintain "updated" toggle variable).  only read from parse when changes have been made or on initial app load
 	- only read/write single records to DB instead of pulling down entire DB every list load
@@ -87,12 +104,15 @@ Goals:
 
 - bugs
 	P1 quick add items don't show up without a refresh
-	P1 make checkbox bigger or shrink edit zone
-	P1 fix href fuckups
+	P1 bug: due date calendar broken on web (can’t select a date)
+https://github.com/joshilomas/DatePicker-IonicApp
+https://github.com/mrfoh/cordova-datepicker-plugin
+	P1 fix duration pre-select option 
 	P2 after editing or updating the side menu functionality breaks
 	?? Timestamp comparisons are done in GMT, not local, could create issues on filtering?
 
 - polish
+	- with hard deadlines, auto set soft to "someday"
 	- make todo items aligned using Grid
 	- make checkboxes larger icons that toggle states
 	- move to slide boxes or gesture events
