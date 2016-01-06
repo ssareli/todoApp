@@ -4,7 +4,7 @@
   "description": "todoApp: An Ionic project",
   "main": "index.js",
   "scripts": {
-    "start": "node web.js"
+    "start": "node app.js"
   },
   "engines": {
     "node": "4.2.4"
