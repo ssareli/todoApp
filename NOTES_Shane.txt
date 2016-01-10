@@ -3,7 +3,7 @@ Goals:
 ========================= v1.0
 1) Get todos fully functional
 	UX: Today at (Time) for (duration)
-	- in next 7 days => “someday in the nexd 7 days’
+	- in next 7 days => “someday in the next 7 days’
 	- someday by… => “someday in the next X days”  (inline jog wheel)
 	- today => “today...at any reasonable time”
 	- on… => “Friday, Jan 30th, 2015”  (inline jog wheel)
@@ -21,6 +21,8 @@ Goals:
 	- recurring tasks
 		- daily/weekly
 		- Create hourly per day schedule (I.e. take 15min breaks during Biz hours)
+1.5) update ionic  npm update -g ionic
+
 2) Create lists
 	- add/view lists to todo
 	- view lists w/ full contents
@@ -68,6 +70,7 @@ Goals:
 	- import phone calendars
 	- prevent collisions with 3rd party calendar elements (possible?)
 
+============================ v2.0
 7) Scheduler
 	- generating a day schedule 
 		- parse recurrence table to look for pre-booked events
@@ -145,6 +148,7 @@ https://github.com/mrfoh/cordova-datepicker-plugin
 ========================
 - setup angularjs, phonegap templates for sublime
 - firebase backend for real-time data sync across devices (online/offline support)?
+- upgrade to latest build version  “ionic lib update”
 
 - questions
 	- did calendar widget branch me off beta v14?

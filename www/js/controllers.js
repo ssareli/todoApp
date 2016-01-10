@@ -23,6 +23,35 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // set "show completed" to default value
     $scope.show = CONFIG.SHOW_COMPLETED;  
 
+
+   //populate filter selection
+    $scope.filters = [];  
+
+    // manually insert minutes
+    $scope.filters.push({name:'Inbox',value:'Inbox'});
+    $scope.filters.push({name:'In Progress',value:'In Progress'});
+    $scope.filters.push({name:'Today',value:'Today'});
+    $scope.filters.push({name:'Tomorrow',value:'Tomorrow'});
+
+    var weekDays = DateUtil.getRemainingWeekDays();
+    var i = 0;
+
+    console.log("weekdays:"+weekDays);
+
+    // add in options for remaining days in the week
+    for(i=0; i<weekDays.length; i++) {
+        $scope.filters.push({name: weekDays[i], value: weekDays[i]});
+    }
+
+    $scope.filters.push({name:'This Week',value:'This Week'});
+    $scope.filters.push({name:'Next Week',value:'Next Week'});
+    $scope.filters.push({name:'This Month',value:'This Month'});
+    $scope.filters.push({name:'This Quarter',value:'This Quarter'});
+    $scope.filters.push({name:'This Year',value:'This Year'});
+    $scope.filters.push({name:'Next Year',value:'Next Year'});
+
+
+
     $scope.addDividers=function(items) {
         
         for(item in items) {
@@ -78,11 +107,15 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
            { text: 'In Progress' },
            { text: 'Today' },
            { text: 'Tomorrow' },
-           { text: 'in 2 Days' },
+           { text: '+2 Days' },
+           { text: '+3 Days' },
            { text: 'This Weekend' },
            { text: 'Next Week' },
+           { text: '+2 Weeks' },           
            { text: 'Next Month' },
-           { text: 'Someday' }
+           { text: '+30 Days' },
+           { text: '+60 Days' },
+           { text: 'Next Year' }
 
          ],
          //destructiveText: 'Delete',
@@ -137,6 +170,14 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
                     $scope.saveSnoozedItem(item);
                     return(true);
 
+                case SNOOZE_TYPE.THREE_DAYS:
+                    pushObj.text = DATE_NAME.THREE_DAYS;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_THREE_DAYS];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.THREE_DAYS];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
+                    return(true);
+
                 case SNOOZE_TYPE.THIS_WEEKEND:
                     pushObj.text = DATE_NAME.THIS_WEEKEND;
                     pushObj.date = $scope.dateFilterHash[DATE_NAME.H_THIS_WEEKEND];
@@ -153,26 +194,50 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
                     $scope.saveSnoozedItem(item);
                     return(true); 
 
+                case SNOOZE_TYPE.TWO_WEEKS:
+                    pushObj.text = DATE_NAME.TWO_WEEKS;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_TWO_WEEKS];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TWO_WEEKS];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
+                    return(true); 
+
                 case SNOOZE_TYPE.NEXT_MONTH:
-                    pushObj.text = DATE_NAME.NEXT_WEEK;
+                    pushObj.text = DATE_NAME.NEXT_MONTH;
                     pushObj.date = $scope.dateFilterHash[DATE_NAME.H_NEXT_MONTH];
                     pushObj.epoch = $scope.dateFilterHash[DATE_NAME.NEXT_MONTH];
                     item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     $scope.saveSnoozedItem(item);
                     return(true);  
 
-                case SNOOZE_TYPE.SOMEDAY:
-                    pushObj.text = DATE_NAME.NEXT_WEEK;
-                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_SOMEDAY];
-                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.SOMEDAY];
+                case SNOOZE_TYPE._30_DAYS:
+                    pushObj.text = DATE_NAME._30_DAYS;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_30_DAYS];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME._30_DAYS];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
+                    return(true);
+
+                case SNOOZE_TYPE._60_DAYS:
+                    pushObj.text = DATE_NAME._60_DAYS;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_60_DAYS];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME._60_DAYS];
+                    item = DateUtil.updateSnoozedDeadlines(item,pushObj);
+                    $scope.saveSnoozedItem(item);
+                    return(true);
+
+                case SNOOZE_TYPE.NEXT_YEAR:
+                    pushObj.text = DATE_NAME.NEXT_YEAR;
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_NEXT_YEAR];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.NEXT_YEAR];
                     item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     $scope.saveSnoozedItem(item);
                     return(true);              
 
                 default:
                     pushObj.text = DATE_NAME.NEXT_WEEK;
-                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_SOMEDAY];
-                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.SOMEDAY];
+                    pushObj.date = $scope.dateFilterHash[DATE_NAME.H_NEXT_YEAR];
+                    pushObj.epoch = $scope.dateFilterHash[DATE_NAME.NEXT_YEAR];
                     item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     $scope.saveSnoozedItem(item);
                     return(true);
@@ -281,28 +346,27 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.dateFilterUpdate=function(selection){
         
         // save option
-        $localstorage.set("dateFilterOption",selection);
+        $localstorage.set("dateFilterOption",selection.value);
         // set option
-        $scope.dateFilterOption = selection;
+        $scope.dateFilterOption = selection.value;
 
-        //console.log("dateFilterOption"+selection);
-        //console.log("new filter saved!");
+        console.log("dateFilterOption"+selection.value);
+        console.log("new filter saved!");
     };
 
     // return a timestamp for filtering results
     $scope.dateFilter=function(item) {
      //   $scope.dateFilter=function(item) {
         // get saved dateFilter option or use defaults
- /*
-        CAN I REMOVE THIS DISK WRITE????
- */
+
         if($scope.dateFilterOption==null) {
             $scope.dateFilterOption = 
                 $localstorage.get("dateFilterOption",DEFAULTS.DATE_FILTER);
         }
 
+        // d = selected filter
         var d = $scope.dateFilterHash[$scope.dateFilterOption];
-        
+       
  //       console.log("item.content:"+item.content);
  //       console.log("item.timestamp:"+item.deadlineEpoch);
  //       console.log("filter.timestamp:"+d);
@@ -314,6 +378,58 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             } else {
                 return(false);
             }
+
+        // for tomorrow just show things after today
+        } else if($scope.dateFilterOption==DEFAULTS.TOMORROW_DEADLINE) {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }
+        } else if($scope.dateFilterOption=="Monday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }
+        } else if($scope.dateFilterOption=="Tuesday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }
+        } else if($scope.dateFilterOption=="Wednesday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }
+        } else if($scope.dateFilterOption=="Thursday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }   
+        } else if($scope.dateFilterOption=="Friday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }   
+        } else if($scope.dateFilterOption=="Saturday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }   
+
         } else {
             // normal behavior
             return(item.deadlineEpoch<=d);
@@ -870,6 +986,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     DURATION: {name:'15min', value:'0.25'},
     SOFT_DEADLINE: 'Today',
     QUICKADD_DEADLINE: 'Inbox',
+    TOMORROW_DEADLINE: 'Tomorrow',
     HARD: false,
     GOAL: false,
     ACTIVE: true,
@@ -909,11 +1026,16 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     TODAY: 1,
     TOMORROW: 2,
     TWO_DAYS: 3,
-    THIS_WEEKEND: 4,
-    NEXT_WEEK: 5,
-    NEXT_MONTH: 6,
-    SOMEDAY: 7,
-    DEADLINE: 8
+    THREE_DAYS: 4,
+    THIS_WEEKEND: 5,
+    NEXT_WEEK: 6,
+    TWO_WEEKS: 7,
+    NEXT_MONTH: 8,
+    _30_DAYS: 9,
+    _60_DAYS: 10,
+    NEXT_YEAR: 11,
+    DEADLINE: 12
+
 
 });
 

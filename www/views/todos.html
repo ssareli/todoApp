@@ -62,19 +62,27 @@
                 <div class="input-label">
                   Date Range:
                 </div>
+
+            <!--
                 <select ng-model="dateFilterOption" ng-change="dateFilterUpdate(dateFilterOption)">
                     <option>Inbox</option>
                     <option>In Progress</option>
                     <option>Today</option>
-                    <option>Tomorrow</option>
+                    <option>Tomorrow</option>                    
                     <option>This Week</option>
                     <option>Next Week</option>
                     <option>This Month</option>
                     <option>This Quarter</option>
                     <option>This Year</option>
-                    <option>Someday</option>
+                    <option>Next Year</option>
 
                 </select>
+-->
+
+                <select ng-model="dateFilterOption" ng-options="filter.name for filter in filters" ng-change="dateFilterUpdate(dateFilterOption)">
+
+                </select>
+
               </label>
               <label class="item item-input item-select">
                 <div class="input-label">
