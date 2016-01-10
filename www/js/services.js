@@ -49,11 +49,11 @@ angular.module('todoApp.services',[]).factory('Todo',['$http','PARSE_CREDENTIALS
     }
 }]).value('PARSE_CREDENTIALS',{
 // production
-//    APP_ID: 'plvDtGUcGUmNqNuaIHxmEdOPlVpuPzEfOrf0kL9A',
-//    REST_API_KEY:'Wnav5R5ku3HQQfniFCoE1OREOaO3SGVL3M7BH960'
+   APP_ID: 'plvDtGUcGUmNqNuaIHxmEdOPlVpuPzEfOrf0kL9A',
+    REST_API_KEY:'Wnav5R5ku3HQQfniFCoE1OREOaO3SGVL3M7BH960'
 // dev
-    APP_ID: 'isCKihoiAm03zgM4GEL3l7PZiSkAMebDxlBL8Tqm',
-    REST_API_KEY:'XsuiqDfXWJoiRPLbn2UPrOCO12mUFWTeCJDdYtY0'
+//    APP_ID: 'isCKihoiAm03zgM4GEL3l7PZiSkAMebDxlBL8Tqm',
+//    REST_API_KEY:'XsuiqDfXWJoiRPLbn2UPrOCO12mUFWTeCJDdYtY0'
 
 });
 
