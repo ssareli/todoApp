@@ -51,7 +51,6 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.filters.push({name:'Next Year',value:'Next Year'});
 
 
-
     $scope.addDividers=function(items) {
         
         for(item in items) {
@@ -725,7 +724,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // ############  comment modal  ########################
     $ionicModal.fromTemplateUrl('views/comment.html', {
         scope: $scope,
-        animation: 'slide-in-up'
+        animation: 'slide-in-up',
+        focusFirstInput: true
     }).then(function(modal) {
         $scope.commentModal = modal;
     });
@@ -923,7 +923,8 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // ############  comment modal  ########################
     $ionicModal.fromTemplateUrl('views/comment.html', {
         scope: $scope,
-        animation: 'slide-in-up'
+        animation: 'slide-in-up',
+        focusFirstInput: true
     }).then(function(modal) {
         $scope.commentModal = modal;
     });
@@ -1033,7 +1034,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     DEADLINE_TIME: null,
     DEADLINE_DATE: null,
     COMPLETED_DATE: 0,
-    DATE_FILTER: 'In Progress',
+    DATE_FILTER: 'Today',
     DEADLINE_EPOCH: 1,
     COMMENTS: '',
     ADD_NEW_PLACEHOLDER: 'Add an item...',

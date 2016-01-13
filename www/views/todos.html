@@ -143,6 +143,8 @@
                             <td>&nbsp;</td>
                             -->
                             <td>
+                                <i id="comment" ng-class="{'icon ion-ios7-stars': item.comments=='', 'icon ion-ios7-paper-outline': !item.comments==''}"></i>
+                                
                                 <span class="overflow" ng-class="{'must':(item.priority==2||item.priority==3),'should':(item.priority==4||item.priority==5),'like':(item.priority==6||item.priority==7),'reminder':item.priority==9}">
                                    
                                 {{shortMessage(item.content)}}
@@ -154,6 +156,8 @@
                                     <td>
                                         <span class="align-left">
                                         <i id="goal" ng-class="{'icon ion-ios7-star': item.goal, 'icon ion-ios7-star-outline': !item.goal, 'fake':item.priority==7}"></i>
+                                        
+                                        
                                         </span
                                     </td>
                                     <td> 

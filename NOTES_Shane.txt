@@ -10,6 +10,12 @@ Goals:
 	- 15min, 30min, 45min, 1hr, 1:30hrs, 2hrs, 3hrs, 4hrs (inline jog wheel)
 	- notifications on/off (default on)
 
+	- offline mode
+		- detect when offline and use local storage data
+		- add/edit new items to local storage
+		- parse items are uneditable (grey color?)
+		- back online, all items are synched
+
 	UX: recurring
 	- every 2, every, twice a, 3 times, …, 6 times a [day, week, month]
 	- any day of the week, mondays, …, sundays (multi-select list)
