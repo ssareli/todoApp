@@ -23,7 +23,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     // set "show completed" to default value
     $scope.show = CONFIG.SHOW_COMPLETED;  
 
-
+ 
    //populate filter selection
     $scope.filters = [];  
 
@@ -31,7 +31,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.filters.push({name:'Inbox',value:'Inbox'});
     $scope.filters.push({name:'In Progress',value:'In Progress'});
     $scope.filters.push({name:'Today',value:'Today'});
-    $scope.filters.push({name:'Tomorrow',value:'Tomorrow'});
+    //$scope.filters.push({name:'Tomorrow',value:'Tomorrow'});
 
     var weekDays = DateUtil.getRemainingWeekDays();
     var i = 0;
@@ -379,6 +379,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
                 return(false);
             }
 
+/*
         // for tomorrow just show things after today
         } else if($scope.dateFilterOption==DEFAULTS.TOMORROW_DEADLINE) {
             // return true when deadline is betwee tomorrow start and end
@@ -387,6 +388,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             } else {
                 return false;
             }
+*/
         } else if($scope.dateFilterOption=="Monday") {
             // return true when deadline is betwee tomorrow start and end
             if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
@@ -465,17 +467,17 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
     $scope.priorityText = function(priority) {
         //console.log(priority);
         switch(priority) {
-            // must
             case 2:
             case 3:
                 return("must complete");
             // prefer
             case 4:
             case 5:
-                return("prefer to complete");
-            // reminder
+                return("should to complete");
             case 6:
             case 7:
+                return("like to complete");           
+            case 9:
                 return("reminder only");
             default:  
                 return("ERROR");
@@ -982,7 +984,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
 
 
 }]).value('DEFAULTS',{
-    PRIORITY: 5, // prefer to complete (even #s are goals)
+    PRIORITY: 7, // prefer to complete (even #s are goals)
     DURATION: {name:'15min', value:'0.25'},
     SOFT_DEADLINE: 'Today',
     QUICKADD_DEADLINE: 'Inbox',

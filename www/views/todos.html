@@ -143,7 +143,7 @@
                             <td>&nbsp;</td>
                             -->
                             <td>
-                                <span class="overflow" ng-class="{'must':(item.priority==2||item.priority==3),'prefer':(item.priority==4||item.priority==5),'reminder':item.priority==7}">
+                                <span class="overflow" ng-class="{'must':(item.priority==2||item.priority==3),'should':(item.priority==4||item.priority==5),'like':(item.priority==6||item.priority==7),'reminder':item.priority==9}">
                                    
                                 {{shortMessage(item.content)}}
                                 <i ng-class="{'icon ion-ios7-more-outline':shortMessageNeeded(item.content),'fake':!shortMessageNeeded(item.content)}"></i>
