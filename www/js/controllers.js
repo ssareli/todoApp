@@ -831,7 +831,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         this.todo.repeat = {};
     }
 
-}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','RepeatUtil','$ionicModal',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,RepeatUtil,$ionicModal){
+}]).controller('TodoEditController',['$scope','Todo','$state','$stateParams','$localstorage','DateUtil','DEFAULTS','RepeatUtil','$ionicModal','CommentModal',function($scope,Todo,$state,$stateParams,$localstorage,DateUtil,DEFAULTS,RepeatUtil,$ionicModal,CommentModal){
 
     // get todo id from params
     $scope.todo={ objectId:$stateParams.id };
@@ -917,6 +917,42 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         });
     };
 
+
+// Modal methods
+
+    // ############  comment modal  ########################
+    $ionicModal.fromTemplateUrl('views/comment.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.commentModal = modal;
+    });
+      
+    $scope.openCommentModal = function() {
+        $scope.commentModal.show();
+
+        //this.showSelected($scope.todo.repeat.type);
+    };
+
+   $scope.closeCommentModal = function() {
+        $scope.commentModal.hide();
+    };
+
+    $scope.getComment = function() {
+        CommentModal.getComment();
+    }
+    
+    $scope.setComment = function(message) {
+        CommentModal.setComment(message);
+    }
+
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.commentModal.remove();
+    });
+
+
+    // ############  repeat modal  ########################
 
    $ionicModal.fromTemplateUrl('repeat.html', {
         scope: $scope,

@@ -69,11 +69,11 @@ td {
   color: red;
 }
 
-.prefer {
-  /*color: blue;*/
+.should {
+  color: blue;
 }
 
-.reminder {
+.reminder .like {
   color: grey;
 }
 
