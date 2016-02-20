@@ -4,7 +4,7 @@
 angular.module('todoApp.services',[]).factory('Todo',['$http','PARSE_CREDENTIALS',function($http,PARSE_CREDENTIALS){
     return {
         getAll:function(){
-            return $http.get('https://api.parse.com/1/classes/Todo',{
+            return $http.get('https://api.parse.com/1/classes/Todo/?limit=1000',{
                 headers:{
                     'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
                     'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
@@ -734,8 +734,11 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             // set timestamp
             // add in timezone offsite 
             DATE_BUCKET.TODAY = offset + Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
+            //DATE_BUCKET.TODAY = Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
             // set human friendly time
-            DATE_BUCKET.H_TODAY = [m, d, y].join("/");
+            DATE_BUCKET.H_TODAY = this.createDate(DATE_BUCKET.TODAY);
+
+            DATE_BUCKET.TODAY_TIMESTAMP = Number($localstorage.get(DATE_NAME.TODAY_TIMESTAMP));
 
             // figure out calendar days based on Today's date
             this.setRemainingWeekDays();
@@ -869,7 +872,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 // if saturday, add 2 days to the date
                 dd =+ 2;
             }
-            DATE_BUCKET.H_NEXT_MONTH = [mm, dd, yy].join("/");
+            DATE_BUCKET.H_NEXT_MONTH = this.createDate(DATE_BUCKET.NEXT_MONTH);
 
             // #####################################################
             // In 30 Days
@@ -1045,8 +1048,9 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 d = parts.getDate();
                 y = parts.getFullYear();
                 m = parts.getMonth(); // january is month 0 in javascript
+                //o = 60000 * parts.getTimezoneOffset();
                 // UTC yyyy/mm/dd  m=0-11, d=1-31
-                timestamp = Date.UTC(y,m,d);
+                timestamp = Date.UTC(y,m,d);// + o;
 
                 return(timestamp);
         },
@@ -1153,6 +1157,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     MENU_HASH: null,
     IN_PROGRESS: -1,
     TODAY: -1,
+    TODAY_TIMESTAMP: -1,
     TOMORROW: -1,
     TWO_DAYS: -1,
     THREE_DAYS: -1,

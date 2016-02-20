@@ -1,35 +1,48 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1347\cocoasubrtf570
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue;\f2\fswiss\fcharset0 ArialMT;
-\f3\fnil\fcharset0 Menlo-Regular;}
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fswiss\fcharset0 ArialMT;}
 {\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red242\green242\blue242;}
 \margl1440\margr1440\vieww10320\viewh15080\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 build notes:\
+\
+git add .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf0 \CocoaLigature0 git commit -m "fixed comment modal focus. added comment icon to feed"
+\f0\fs24 \CocoaLigature1 \
+
+\f1\fs22 \CocoaLigature0 git push heroku master\
+git push origin master\
+
+\f0\fs24 \CocoaLigature1 \
+ionic serve\
+ionic upload\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 - default to \'93today\'94 view in main feed\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+- bug:  sort doesn\'92t work \
+	- epoch and written date don\'92t match\
+\
+1452729600000 today | create\
+1452751200000 setSoftDeadline | push today | storagetimetamp\
 \
 1) upgrade comments\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+\
 - [comments] show first line of text with \'93\'85\'94\
 - immediately show keyboard\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 \
 \pard\pardeftab720\sl420
 
-\f1\fs32 \cf0 \expnd0\expndtw0\kerning0
+\f2\fs32 \cf0 \expnd0\expndtw0\kerning0
 2) add projects!!!
 \f0\fs24 \kerning1\expnd0\expndtw0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 \
 \pard\pardeftab720\sl420
 
-\f1\fs32 \cf0 \expnd0\expndtw0\kerning0
+\f2\fs32 \cf0 \expnd0\expndtw0\kerning0
 - add different list types\
 - add reusable checklists\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
@@ -37,6 +50,9 @@
 \f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
 \
 ==================================\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 - default to \'93today\'94 view in main feed\
+- default show minutes in todo view\
 \
 2) clean up recurring UX \
 \
@@ -50,14 +66,14 @@
 \
 \pard\pardeftab720\sl420
 
-\f2\fs26 \cf2 \expnd0\expndtw0\kerning0
+\f3\fs26 \cf2 \expnd0\expndtw0\kerning0
 get ionic dashboard working:\
 \pard\pardeftab720\sl348
 
-\f3\fs22 \cf0 \cb3 \expnd0\expndtw0\kerning0
+\f1\fs22 \cf0 \cb3 \expnd0\expndtw0\kerning0
 ionic add ionic-platform-web-client\
 ionic io init
-\f2\fs26 \cf2 \cb1 \expnd0\expndtw0\kerning0
+\f3\fs26 \cf2 \cb1 \expnd0\expndtw0\kerning0
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 

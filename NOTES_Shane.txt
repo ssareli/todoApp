@@ -1,6 +1,9 @@
 
 Goals:
 ========================= v1.0
+
+Fix 100 items limit for localstorage!!!
+
 1) Get todos fully functional
 	UX: Today at (Time) for (duration)
 	- in next 7 days => “someday in the next 7 days’

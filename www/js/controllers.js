@@ -147,8 +147,10 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
                     pushObj.text = DATE_NAME.TODAY;
                     pushObj.date = $scope.dateFilterHash[DATE_NAME.H_TODAY];
                     pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TODAY];
+                    //pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TODAY_TIMESTAMP];
                     item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     console.log("snooze:item.deadline:"+item.deadline);
+                    console.log("snooze:item.deadlineEpoch:"+$scope.dateFilterHash[DATE_NAME.TODAY]);
                     $scope.saveSnoozedItem(item);
                     return(true);
 
@@ -326,7 +328,7 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
         //$scope.listFilterOption = projectFilter;
 
         // update sorting temporarily
-        CONFIG.SORT_ORDER = SORT_TYPE.CREATION_DATE;
+        CONFIG.SORT_ORDER = SORT_TYPE.DEADLINE_PRIORITY;
         console.log($scope.dateFilterOption);
     };
 
