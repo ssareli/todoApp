@@ -147,7 +147,6 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
                     pushObj.text = DATE_NAME.TODAY;
                     pushObj.date = $scope.dateFilterHash[DATE_NAME.H_TODAY];
                     pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TODAY];
-                    //pushObj.epoch = $scope.dateFilterHash[DATE_NAME.TODAY_TIMESTAMP];
                     item = DateUtil.updateSnoozedDeadlines(item,pushObj);
                     console.log("snooze:item.deadline:"+item.deadline);
                     console.log("snooze:item.deadlineEpoch:"+$scope.dateFilterHash[DATE_NAME.TODAY]);
@@ -432,7 +431,13 @@ angular.module('todoApp.controllers',[]).controller('TodoListController',['$scop
             } else {
                 return false;
             }   
-
+        } else if($scope.dateFilterOption=="Sunday") {
+            // return true when deadline is betwee tomorrow start and end
+            if((item.deadlineEpoch>=d) && (item.deadlineEpoch<(d+86400000)))  {
+                return true;
+            } else {
+                return false;
+            }   
         } else {
             // normal behavior
             return(item.deadlineEpoch<=d);

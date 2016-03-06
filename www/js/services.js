@@ -263,11 +263,11 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
 
             console.log("[setRemainingWeekDays] day:"+day);
 
-            // start with tomorrow, loop until Sunday (6)
-            for(i=day; i<6; i++) {
+            // start with tomorrow, loop until Saturday (6)
+            for(i=day; i<=6; i++) {
 
                 switch(i) {
-                    case (0):
+                    case (0): // Sunday
                         weekDays[index++] = "Monday";
                         if(day==0) { // Sunday is 1 day from Monday
                             delta = 1;  
@@ -278,7 +278,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         DATE_BUCKET.H_MONDAY = this.createDate(DATE_BUCKET.MONDAY);
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
-                    case (1):
+                    case (1): // Monday
                         weekDays[index++] = "Tuesday";
                         if(day==0) { 
                             delta = 2;
@@ -291,7 +291,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         DATE_BUCKET.H_TUESDAY = this.createDate(DATE_BUCKET.TUESDAY);
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
-                    case (2):
+                    case (2): // Tuesday
                         weekDays[index++] = "Wednesday";
                         if(day==0) { 
                             delta = 3;
@@ -306,7 +306,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         DATE_BUCKET.H_WEDNESDAY = this.createDate(DATE_BUCKET.WEDNESDAY);                        
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
-                    case (3):
+                    case (3): // Wednesday
                         weekDays[index++] = "Thursday";
                         if(day==0) { 
                             delta = 4;
@@ -323,7 +323,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         DATE_BUCKET.H_THURSDAY = this.createDate(DATE_BUCKET.THURSDAY);
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
-                    case (4):
+                    case (4): // Thursday
                         weekDays[index++] = "Friday";
                         if(day==0) { 
                             delta = 5;
@@ -342,7 +342,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         DATE_BUCKET.H_FRIDAY = this.createDate(DATE_BUCKET.FRIDAY);                                          
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
-                    case (5):
+                    case (5): // Friday
                         weekDays[index++] = "Saturday";
                         if(day==0) { 
                             delta = 6;
@@ -361,6 +361,31 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                         }          
                         DATE_BUCKET.SATURDAY= DATE_BUCKET.TODAY + (delta * 86400000);
                         DATE_BUCKET.H_SATURDAY = this.createDate(DATE_BUCKET.SATURDAY);               
+                        console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
+                        break;
+                    case (6): // Saturday
+                        weekDays[index++] = "Sunday";
+                        /*if(day==0) { 
+                            delta = 0;
+                        } else 
+                        */
+                        if(day==1) {
+                            delta = 6;
+                        } else if(day==2) {
+                            delta = 5;
+                        } else if(day==3) {
+                            delta = 4;
+                        } else if(day==4) {
+                            delta = 3;
+                        } else if(day==5) {
+                            delta = 2 ;
+                        } else if(day==6) {
+                            delta = 1 ;                            
+                        } else { 
+                            delta = 0;
+                        }          
+                        DATE_BUCKET.SUNDAY= DATE_BUCKET.TODAY + (delta * 86400000);
+                        DATE_BUCKET.H_SUNDAY = this.createDate(DATE_BUCKET.SUNDAY);               
                         console.log("[setRemainingWeekDays] remainingDay:"+weekDays[index - 1]);
                         break;
                     default:
@@ -645,6 +670,9 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             DATE_BUCKET.SATURDAY = dates[DATE_NAME.SATURDAY];
             DATE_BUCKET.H_SATURDAY = dates[DATE_NAME.H_SATURDAY];
 
+            // SUNDAY
+            DATE_BUCKET.SUNDAY = dates[DATE_NAME.SUNDAY];
+            DATE_BUCKET.H_SUNDAY = dates[DATE_NAME.H_SUNDAY];
         },
 
         createDate: function(epoch) {
@@ -765,7 +793,11 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             // THIS WEEK
             // random day between today and friday
             // 6 - (day of week + 1) = days delta
-            delta = 6 - (dayofWeek+1); // days until friday after today
+            if(dayofWeek == 0) {
+                delta = 1;
+            } else {
+                delta = 6 - (dayofWeek+1); // days until friday after today  
+            } 
             //console.log("days until friday (random)"+delta);
             DATE_BUCKET.THIS_WEEK = DATE_BUCKET.TODAY + (delta * oneDay);
             //console.log("this week epoch:"+DATE_BUCKET.THIS_WEEK);
@@ -807,7 +839,11 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
             // determine this saturday(7) + 2 
             // caculate differ between saturday and today
             delta = 0;
-            delta = 7 + 2 - (dayofWeek+1);
+            if(dayofWeek==0) { 
+                delta = 1; 
+            } else {
+                delta = 7 + 2 - (dayofWeek+1);                
+            }
             // if 0, then this weekend (saturday) is today
             // if 7, then today is sunday
             // assume days start at 12am localtime
@@ -1089,6 +1125,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 "Thursday": DATE_BUCKET.THURSDAY,
                 "Friday": DATE_BUCKET.FRIDAY,
                 "Saturday": DATE_BUCKET.SATURDAY,
+                "Sunday": DATE_BUCKET.SUNDAY,
                 "H_In Progress": DATE_BUCKET.H_IN_PROGRESS,
                 "H_Today": DATE_BUCKET.H_TODAY,
                 "H_Tomorrow": DATE_BUCKET.H_TOMORROW,
@@ -1113,7 +1150,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
                 "H_WEDNESDAY": DATE_BUCKET.H_WEDNESDAY,
                 "H_THURSDAY": DATE_BUCKET.H_THURSDAY,
                 "H_FRIDAY": DATE_BUCKET.H_FRIDAY,
-                "H_SATURDAY": DATE_BUCKET.H_SATURDAY
+                "H_SATURDAY": DATE_BUCKET.H_SATURDAY,
+                "H_SUNDAY": DATE_BUCKET.H_SUNDAY
 
                 /*  why won't this work?
                 DATE_NAME.TODAY: DATE_BUCKET.TODAY,
@@ -1181,6 +1219,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     THURSDAY: -1,
     FRIDAY: -1,
     SATURDAY: -1,
+    SUNDAY: -1,
     H_IN_PROGRESS: "",
     H_TODAY: "",
     H_TOMORROW: "",
@@ -1205,7 +1244,8 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     H_WEDNESDAY: "",
     H_THURSDAY: "",
     H_FRIDAY: "",
-    H_SATURDAY: ""
+    H_SATURDAY: "",
+    H_SUNDAY: ""
 
 }).constant('DATE_NAME',{
     MENU_HASH: "menuHash",
@@ -1236,6 +1276,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     THURSDAY: "Thursday",
     FRIDAY: "Friday",
     SATURDAY: "Saturday",
+    SUNDAY: "Sunday",
     H_IN_PROGRESS: "H_In Progress",
     H_TODAY: "H_Today", 
     H_TOMORROW: "H_Tomorrow",
@@ -1262,6 +1303,7 @@ services.factory('DateUtil', ['DATE_BUCKET','DATE_NAME','$localstorage',function
     H_THURSDAY: "H_THURSDAY",
     H_FRIDAY: "H_FRIDAY",
     H_SATURDAY: "H_SATURDAY",
+    H_SUNDAY: "H_SUNDAY",
     TODAY_TIMESTAMP: "today_timestamp",
     TODAY_DATE: "today_date",
     MUST: 3,
